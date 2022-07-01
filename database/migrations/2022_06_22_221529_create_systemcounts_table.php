@@ -22,7 +22,7 @@ class CreateSystemcountsTable extends Migration
                         
             $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
             $table->foreign('disciplina_id')->references('id')->on('disciplinas')->onDelete('cascade');
-            $table->unique('module_id', 'disciplina_id');
+            $table->unique(['module_id', 'disciplina_id']);
             
         });
     }

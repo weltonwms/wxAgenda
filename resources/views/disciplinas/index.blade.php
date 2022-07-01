@@ -30,7 +30,7 @@
     <tr>
         <td></td>
         <td><a href="{{route('disciplinas.edit', $disciplina->id)}}">{{$disciplina->nome}}</a></td>
-        <td>{{$disciplina->base}}</td>
+        <td>{!!$disciplina->getNomeBase()!!}</td>
         <td>{{$disciplina->id}}</td>
     </tr>
     @endforeach

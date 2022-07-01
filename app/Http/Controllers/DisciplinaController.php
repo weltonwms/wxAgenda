@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Disciplina;
 use Illuminate\Http\Request;
+use App\Http\Requests\DisciplinaRequest;
 
 class DisciplinaController extends Controller
 {
@@ -34,9 +35,10 @@ class DisciplinaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DisciplinaRequest $request)
     {
         $disciplina = Disciplina::create($request->all());
+        Disciplina::updateBases($disciplina); 
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect('disciplinas');
@@ -73,9 +75,10 @@ class DisciplinaController extends Controller
      * @param  \App\Models\Disciplina  $disciplina
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Disciplina $disciplina)
+    public function update(DisciplinaRequest $request, Disciplina $disciplina)
     {
         $disciplina->update($request->all());
+        Disciplina::updateBases($disciplina); 
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('disciplinas.index');

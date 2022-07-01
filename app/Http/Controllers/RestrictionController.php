@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Restriction;
 use Illuminate\Http\Request;
+use App\Http\Requests\RestrictionRequest;
 
 class RestrictionController extends Controller
 {
@@ -39,7 +40,7 @@ class RestrictionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RestrictionRequest $request)
     {
         $restriction = Restriction::create($request->all());
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
@@ -85,7 +86,7 @@ class RestrictionController extends Controller
      * @param  \App\Models\Restriction  $restriction
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Restriction $restriction)
+    public function update(RestrictionRequest $request, Restriction $restriction)
     {
         $restriction->update($request->all());
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);

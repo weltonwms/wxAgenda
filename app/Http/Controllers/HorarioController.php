@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Horario;
 use Illuminate\Http\Request;
+use App\Http\Requests\HorarioRequest;
 
 class HorarioController extends Controller
 {
@@ -27,7 +28,7 @@ class HorarioController extends Controller
     public function create()
     {
         $dados = [
-            'turnosList'=> Horario::getTurnosList(),
+            'turnosList' => Horario::getTurnosList(),
         ];
         return view('horarios.create', $dados);
     }
@@ -38,14 +39,14 @@ class HorarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HorarioRequest $request)
     {
-      
-        try{
-            $horario=\DB::transaction(function () use ($request){
+
+        try {
+            $horario = \DB::transaction(function () use ($request) {
                 $horario = new Horario;
                 $horario->horario = $request->horario;
-                $horario->turno_id=$request->turno_id;
+                $horario->turno_id = $request->turno_id;
                 $horario->save();
                 return $horario;
             });
@@ -54,15 +55,13 @@ class HorarioController extends Controller
             if ($request->input('fechar') == 1):
                 return redirect()->route('horarios.index');
             endif;
-            return redirect()->route('horarios.edit',$horario->horario);
+            return redirect()->route('horarios.edit', $horario->horario);
         }
-        catch(\Exception $e){
+        catch (\Exception $e) {
             \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $this->getMessageError($e)]);
             return redirect()->route('horarios.index');
         }
 
-
-  
     }
 
     /**
@@ -85,8 +84,8 @@ class HorarioController extends Controller
     public function edit(Horario $horario)
     {
         $dados = [
-            'turnosList'=> Horario::getTurnosList(),
-            'horario'=>$horario
+            'turnosList' => Horario::getTurnosList(),
+            'horario' => $horario
         ];
         return view('horarios.edit', $dados);
     }
@@ -98,27 +97,26 @@ class HorarioController extends Controller
      * @param  \App\Models\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Horario $horario)
+    public function update(HorarioRequest $request, Horario $horario)
     {
-       
-        try{
-            \DB::transaction(function () use ($horario,$request){
-                $horario->horario=$request->horario;
-                $horario->turno_id=$request->turno_id;
+        try {
+            \DB::transaction(function () use ($horario, $request) {
+                $horario->horario = $request->horario;
+                $horario->turno_id = $request->turno_id;
                 $horario->save();
                 \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
 
             });
         }
-        catch(\Exception $e){
+        catch (\Exception $e) {
             \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $this->getMessageError($e)]);
         }
-        
+
         if ($request->input('fechar') == 1):
             return redirect()->route('horarios.index');
         endif;
-        return redirect()->route('horarios.edit',$horario->horario);
-       
+        return redirect()->route('horarios.edit', $horario->horario);
+
     }
 
     /**
@@ -138,19 +136,19 @@ class HorarioController extends Controller
 
     public function destroyBath()
     {
-        
         $retorno = Horario::verifyAndDestroy(request('ids'));
-        
+
         if ($retorno):
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans_choice('messages.actionDelete', $retorno)]);
         endif;
         return redirect()->route('horarios.index');
-        
+
     }
 
-    private function getMessageError($e){
+    private function getMessageError($e)
+    {
         $errorCode = $e->errorInfo[1];
-        if($errorCode == 1062){
+        if ($errorCode == 1062) {
             return "Horário Duplicado";
         }
         return $e->getMessage();
