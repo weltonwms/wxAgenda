@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Http\Requests\StudentRequest;
+use App\Models\User;
 
 class StudentController extends Controller
 {
@@ -34,9 +36,10 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StudentRequest $request)
     {
         $student = Student::create($request->all());
+        User::saveUser($request->all(),$student); //gatilho para User;
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect('students');
@@ -52,7 +55,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        return $student;
+        return $student->load('user');
     }
 
     /**
@@ -73,9 +76,10 @@ class StudentController extends Controller
      * @param  \App\Models\Student  $student
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Student $student)
+    public function update(StudentRequest $request, Student $student)
     {
         $student->update($request->all());
+        User::saveUser($request->all(),$student); //gatilho para User;
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('students.index');
@@ -93,6 +97,7 @@ class StudentController extends Controller
     {
         $retorno = $student->delete();
         if ($retorno):
+            User::destroyUser($student->user_id); //gatilho para User
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionDelete')]);
         endif;
         return redirect()->route('students.index');
@@ -100,8 +105,10 @@ class StudentController extends Controller
 
     public function destroyBath()
     {
+        $users_ids=Student::whereIn('id',request('ids'))->pluck('user_id');//gatilho para User
         $retorno = Student::verifyAndDestroy(request('ids'));
         if ($retorno):
+            User::destroyUserBath($users_ids); //gatilho para User
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans_choice('messages.actionDelete', $retorno)]);
         endif;
         return redirect()->route('students.index');

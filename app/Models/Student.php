@@ -11,6 +11,11 @@ class Student extends Model
     protected $fillable = ['nome', 'email','telefone','modulo_id','cidade',
     'endereco','cidade','uf'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
     public static function verifyAndDestroy(array $ids)
     {
@@ -24,5 +29,13 @@ class Student extends Model
                   
             return [$item->id => $item->nome];
         });
+    }
+
+    public function getUsernameAttribute($value)
+    {
+        if($this->user){
+            return $this->user->username;
+        }
+       
     }
 }

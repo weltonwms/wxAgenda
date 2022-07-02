@@ -142,7 +142,7 @@ return [
         'subject'               => 'assunto',
         'time'                  => 'hora',
         'title'                 => 'título',
-        'username'              => 'usuário',
+        'username'              => 'username',
         'year'                  => 'ano',
         
     ],

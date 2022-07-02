@@ -14,8 +14,8 @@
   <div class="row">
     <div class="col-lg-12">
         {{ Form::bsText('nome',null,['label'=>"Nome *",'class'=>""]) }}
-        {{ Form::bsText('email',null,['label'=>"Email *",'class'=>""]) }}
-        {{ Form::bsText('telefone',null,['label'=>"Telefone *",'class'=>""]) }}  
+        {{ Form::bsText('email',null,['label'=>"Email ",'class'=>""]) }}
+        {{ Form::bsText('telefone',null,['label'=>"Telefone ",'class'=>""]) }}  
     
     </div>
 

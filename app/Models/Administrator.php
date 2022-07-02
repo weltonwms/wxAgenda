@@ -4,12 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+
 
 class Administrator extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'user_id'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public static function verifyAndDestroy(array $ids)
     {
@@ -23,6 +29,14 @@ class Administrator extends Model
                   
             return [$item->id => $item->nome];
         });
+    }
+
+     public function getUsernameAttribute($value)
+    {
+        if($this->user){
+            return $this->user->username;
+        }
+       
     }
 
 }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-    @breadcrumbs(['title'=>' Admnistradores', 'icon'=>'fa-user-secret', 'route'=>route('administrators.index'),'subtitle'=>'Gerenciamento de  Administradores'])
+    @breadcrumbs(['title'=>' Administradores', 'icon'=>'fa-user-secret', 'route'=>route('administrators.index'),'subtitle'=>'Gerenciamento de  Administradores'])
 
     @endbreadcrumbs
 @endsection
@@ -20,7 +20,7 @@
     <tr>
         <th width="4%"><input class="checkall" type="checkbox"></th>
         <th>Nome</th>
-        
+        <th>Username</th>
         <th>ID</th>
     </tr>
 </thead>
@@ -30,7 +30,7 @@
     <tr>
         <td></td>
         <td><a href="{{route('administrators.edit', $administrator->id)}}">{{$administrator->nome}}</a></td>
-       
+        <td>{{$administrator->username}}</td>
         <td>{{$administrator->id}}</td>
     </tr>
     @endforeach
@@ -46,7 +46,7 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:2}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:3}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 </script>

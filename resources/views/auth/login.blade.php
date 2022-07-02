@@ -18,8 +18,8 @@
     </section>
     <section class="login-content">
       <div class="logo">
-        {{-- <h1>{{ config('app.name', 'Laravel') }}</h1> --}}
-      <img src="{{asset('img/logo.png')}}" alt="logo {{ config('app.name', 'Laravel') }}">
+        <h1>{{ config('app.name', 'Laravel') }}</h1> 
+      <!-- <img src="{{asset('img/logo.png')}}" alt="logo {{ config('app.name', 'Laravel') }}"> -->
       </div>
       <div class="login-box">
         <form method="POST" class="login-form" action="{{ route('login') }}">

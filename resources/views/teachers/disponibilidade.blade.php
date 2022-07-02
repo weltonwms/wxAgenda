@@ -4,6 +4,7 @@
 $dias_semana=['dom','seg','ter', 'qua','qui','sex','sab'];
 $horarios_escola=$horariosList;
 ?>
+<div class="table-responsive col-lg-8">
 <table class="table table-bordered table-sm">
     <thead>
         <tr>
@@ -20,9 +21,10 @@ $horarios_escola=$horariosList;
         <tr>
         <td>{{$horario}}</td>
             @foreach($dias_semana as $keyDay=>$dia)
-            <td>
-            
-                <input type="checkbox" data-hour="{{$horario}}" data-day="{{$keyDay}}" >
+            <td class=""> 
+           
+                    
+                <input type="checkbox" data-hour="{{$horario}}" data-day="{{$keyDay}}" class="checkbox-lg">
                 
             </td>
             @endforeach
@@ -32,6 +34,7 @@ $horarios_escola=$horariosList;
     </tbody>
 
 </table>
+</div>
 
 
 {{ Form::hidden('disponibilidade',null,['class'=>"form-control", 'id'=>'disponibilidade']) }}

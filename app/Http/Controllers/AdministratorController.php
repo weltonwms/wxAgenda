@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdministratorRequest;
 use App\Models\Administrator;
+use App\Models\User;
+
 
 class AdministratorController extends Controller
 {
@@ -36,7 +38,15 @@ class AdministratorController extends Controller
      */
     public function store(AdministratorRequest $request)
     {
-        //
+       
+
+       $administrator=Administrator::create($request->all());
+        User::saveUser($request->all(),$administrator); //gatilho para User;
+       \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
+       if ($request->input('fechar') == 1):
+           return redirect()->route('administrators.index');
+       endif;
+       return redirect()->route('administrators.edit',$administrator->id);
     }
 
     /**
@@ -47,7 +57,7 @@ class AdministratorController extends Controller
      */
     public function show(Administrator $administrator)
     {
-        //
+        return $administrator->load('user');
     }
 
     /**
@@ -58,7 +68,8 @@ class AdministratorController extends Controller
      */
     public function edit(Administrator $administrator)
     {
-        //
+       
+        return view('administrators.edit', compact('administrator'));
     }
 
     /**
@@ -70,7 +81,13 @@ class AdministratorController extends Controller
      */
     public function update(AdministratorRequest $request, Administrator $administrator)
     {
-        //
+        $administrator->update($request->all());
+        User::saveUser($request->all(),$administrator); //gatilho para User;
+        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
+        if ($request->input('fechar') == 1):
+            return redirect()->route('administrators.index');
+        endif;
+        return redirect()->route('administrators.edit',$administrator->id);
     }
 
     /**
@@ -81,13 +98,20 @@ class AdministratorController extends Controller
      */
     public function destroy(Administrator $administrator)
     {
-        //
+       $retorno = $administrator->delete();
+        if ($retorno):
+            User::destroyUser($administrator->user_id); //gatilho para User
+            \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionDelete')]);
+        endif;
+        return redirect()->route('administrators.index');
     }
 
     public function destroyBath()
     {
-        $retorno = Administrator::verifyAndDestroy(request('ids'));
+       $users_ids=Administrator::whereIn('id',request('ids'))->pluck('user_id');//gatilho para User
+       $retorno = Administrator::verifyAndDestroy(request('ids'));
         if ($retorno):
+            User::destroyUserBath($users_ids); //gatilho para User
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans_choice('messages.actionDelete', $retorno)]);
         endif;
         return redirect()->route('administrators.index');

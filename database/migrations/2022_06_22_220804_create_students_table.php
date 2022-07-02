@@ -21,8 +21,8 @@ class CreateStudentsTable extends Migration
             $table->string('endereco')->nullable();
             $table->string('cidade')->nullable();
             $table->string('uf')->nullable();
-            $table->unsignedBigInteger('module_id');
-            $table->unsignedBigInteger('user_id')->unique();
+            $table->unsignedBigInteger('module_id')->nullable();
+            $table->unsignedBigInteger('user_id')->unique()->nullable();
             $table->timestamps();
                         
             $table->foreign('module_id')->references('id')->on('modules');

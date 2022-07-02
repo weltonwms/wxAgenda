@@ -34,3 +34,6 @@
 
     
 </div>
+
+<hr>
+@include('users.form')
