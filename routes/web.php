@@ -48,3 +48,7 @@ Route::delete('/administrators_bath','\App\Http\Controllers\AdministratorControl
 
 Route::resource('horarios', '\App\Http\Controllers\HorarioController'); 
 Route::delete('/horarios_bath','\App\Http\Controllers\HorarioController@destroyBath' )->name('horarios_bath.destroy');
+
+Route::get('credits/{student_id}','\App\Http\Controllers\CreditController@getCredits');
+
+Route::post('credits','\App\Http\Controllers\CreditController@store')->name('credits.store');

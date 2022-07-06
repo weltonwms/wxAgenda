@@ -21,6 +21,7 @@ class CreateStudentsTable extends Migration
             $table->string('endereco')->nullable();
             $table->string('cidade')->nullable();
             $table->string('uf')->nullable();
+            $table->integer('saldo_atual')->nullable()->comment('Créditos para marcar aula');
             $table->unsignedBigInteger('module_id')->nullable();
             $table->unsignedBigInteger('user_id')->unique()->nullable();
             $table->timestamps();

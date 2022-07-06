@@ -36,7 +36,7 @@
         <td><a href="{{route('students.edit', $student->id)}}">{{$student->nome}}</a></td>
         <td>{{$student->email}}</td>
         <td>{{$student->telefone}}</td>
-        <td>{{$student->modulo_id}}</td>
+        <td>{{$student->getModuleNome()}}</td>
         <td>{{$student->cidade}}</td>
         <td>{{$student->uf}}</td>
         <td>{{$student->id}}</td>
@@ -44,6 +44,8 @@
     @endforeach
 </tbody>
 @enddatatables
+
+
 @endsection
 
 @push('scripts')
@@ -59,4 +61,5 @@ $(document).ready(function() {
    //fim start Datatable//
 </script>
 @endpush
+
 

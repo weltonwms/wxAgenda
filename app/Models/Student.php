@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome', 'email','telefone','modulo_id','cidade',
+    protected $fillable = ['nome', 'email','telefone','module_id','cidade',
     'endereco','cidade','uf'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
     }
 
 
@@ -37,5 +42,12 @@ class Student extends Model
             return $this->user->username;
         }
        
+    }
+
+    public function getModuleNome()
+    {
+        if($this->module){
+            return $this->module->nome;
+        }
     }
 }

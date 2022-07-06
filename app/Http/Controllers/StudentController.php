@@ -16,7 +16,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        //\DB::enableQueryLog();
+        //use \DB::getQueryLog() no ponto da view que deseja;
+        $students = Student::with('module')->get();
         return view("students.index", compact('students'));
     }
 
@@ -27,7 +29,10 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('students.create');
+        $dados=[
+            'modulesList'=> \App\Models\Module::getList(),
+        ];
+        return view('students.create',$dados);
     }
 
     /**
@@ -66,7 +71,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        return view('students.edit', compact('student'));
+        $modulesList= \App\Models\Module::getList();
+        return view('students.edit', compact('student','modulesList'));
     }
 
     /**
