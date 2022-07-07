@@ -1,6 +1,3 @@
-
-
-
 @if(isset($student))
 
 <div class="row">
@@ -24,7 +21,7 @@
 <hr>
 <div class="table-responsive">
 
-<table id="example" class="table table-hover table-bordered nowrap" style="width:100%">
+<table id="tableCreditsStudent" class="table table-hover table-bordered nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>Data Acao</th>
@@ -46,10 +43,13 @@
 
 <script>
    
-var tableS;
+var tableCreditsStudent=null;
 var student_id=$("input[name=student_id]").val();    
-         tableS = $('#example').DataTable( {
-            ajax: '/credits/'+student_id,
+tableCreditsStudent = $('#tableCreditsStudent').DataTable( {
+        ajax: asset+'credits/'+student_id,
+        language:{
+            url: asset+"json/languageDataTable.json",
+        },
         columns: [
             { data: 'data_acao' },
             { data: 'qtd' },

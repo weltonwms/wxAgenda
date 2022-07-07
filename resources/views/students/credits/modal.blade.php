@@ -31,10 +31,9 @@
 
 <script>
 function saveNewCredit(e) {
-    
     e.preventDefault();
     $.ajax({
-        url: '/credits',
+        url: asset+'credits',
         type: "POST",
         data: $('#adminForm2').serialize(),
         success: function(resp) {
@@ -61,10 +60,8 @@ function saveNewCredit(e) {
 
 function closeModal(){
         $('#adminForm2')[0].reset();
-        
         $('#ModalFormCredito').modal('hide');
-        console.log('datatable',tableS);
-        tableS.ajax.reload();
+        tableCreditsStudent.ajax.reload();
     }
 $("#btnSaveNewCredit").click(saveNewCredit);
 </script>

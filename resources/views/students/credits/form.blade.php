@@ -1,5 +1,5 @@
 <?php
-$operacoes=['+'=>'+','-'=>'-']
+$operacoes=['+'=>'Add +','-'=>'Retirar -']
 ?>
 
 <input type="hidden" name="student_id" value="{{$student->id}}">

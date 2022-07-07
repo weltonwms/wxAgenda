@@ -1,36 +1,4 @@
 $.fn.dataTable.moment( 'DD/MM/YYYY' );
-var languageDatatable = {
-    "sEmptyTable": "Nenhum registro encontrado",
-    "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-    "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-    "sInfoFiltered": "<span class='text-danger'>(Filtrados de _MAX_ registros)</span>",
-    "sInfoPostFix": "",
-    "sInfoThousands": ".",
-    "sLengthMenu": "_MENU_ resultados por página",
-    "sLoadingRecords": "Carregando...",
-    "sProcessing": "Processando...",
-    "sZeroRecords": "Nenhum registro encontrado",
-    "sSearch": "<i class='fa fa-search' aria-hidden='true'></i> Pesquisar",
-    "oPaginate": {
-        "sNext": "<i class='fa fa-forward' aria-hidden='true'></i>",
-        "sPrevious": "<i class='fa fa-backward' aria-hidden='true'></i>",
-        "sFirst": "Primeiro",
-        "sLast": "Último"
-    },
-    "decimal": ",",
-    "thousands": ".",
-    "oAria": {
-        "sSortAscending": ": Ordenar colunas de forma ascendente",
-        "sSortDescending": ": Ordenar colunas de forma descendente"
-    },
-    "select": {
-        "rows": {
-            "_": "Selecionado %d linhas",
-            "0": "Nenhuma linha selecionada",
-            "1": "Selecionado 1 linha"
-        }
-    }
-};
 
 var Tabela = (function () {
     var instance;
@@ -46,7 +14,9 @@ var Tabela = (function () {
             colId=1;
         }
         var config= {
-            language: languageDatatable,
+            language:{
+                url: asset+"json/languageDataTable.json",
+            },
             "bStateSave": true,
             select: {
                 style: 'multi',

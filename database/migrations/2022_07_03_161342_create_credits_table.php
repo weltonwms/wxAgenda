@@ -23,7 +23,7 @@ class CreateCreditsTable extends Migration
             $table->string('obs');
             $table->unsignedBigInteger('student_id');
 
-            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

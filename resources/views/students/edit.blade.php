@@ -7,4 +7,6 @@
 
 
 {!! Form::close() !!}
+
+@include('students.credits.modal')
 @endsection

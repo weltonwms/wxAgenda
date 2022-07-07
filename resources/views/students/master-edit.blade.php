@@ -28,7 +28,4 @@
 
 </div>
 
-@if(isset($student))
-@include('students.credits.modal')
-@endif
 @endsection
