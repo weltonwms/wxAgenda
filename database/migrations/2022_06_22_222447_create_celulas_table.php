@@ -22,6 +22,7 @@ class CreateCelulasTable extends Migration
             $table->integer('aula_level')->nullable();
 
             $table->timestamps();
+            $table->unique(['horario', 'dia','teacher_id']);
 
             $table->foreign('teacher_id')->references('id')->on('teachers');
             $table->foreign('horario')->references('horario')->on('horarios');

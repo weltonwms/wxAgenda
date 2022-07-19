@@ -47,12 +47,19 @@
 
     
     <li>
-      <a class="app-menu__item {{Request::segment(1)=='vendas'?'active':null}}" href="{{route('students.index')}}">
+      <a class="app-menu__item {{Request::segment(1)=='students'?'active':null}}" href="{{route('students.index')}}">
         <i class="app-menu__icon fa fa-graduation-cap"></i><span class="app-menu__label">Alunos</span>
       </a>
     </li>
 
-    <li class="treeview">
+
+    <li>
+      <a class="app-menu__item {{Request::segment(1)=='celulas'?'active':null}}" href="{{route('celulas.index')}}">
+        <i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Células</span>
+      </a>
+    </li>
+
+    <!-- <li class="treeview">
       <a class="app-menu__item {{Request::segment(1)=='relatorio'?'active':null}}" href="#" data-toggle="treeview">
         <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Relatórios</span>
         <i class="treeview-indicator fa fa-angle-right"></i>
@@ -85,7 +92,7 @@
         </li>
 
       </ul>
-    </li>
+    </li> -->
 
     <li>
       <a class="app-menu__item {{Request::segment(1)=='administrators'?'active':null}}" href="{{route('administrators.index')}}">

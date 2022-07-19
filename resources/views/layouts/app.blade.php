@@ -17,7 +17,7 @@
    <!--CSS Datatables Responsive-->
   <link rel="stylesheet" type="text/css" href="{{ asset('template/css/responsive.bootstrap.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('template/css/select.dataTables.min.css') }}">
-
+@stack('styles')
   <!--CSS APP-->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 

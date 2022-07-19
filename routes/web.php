@@ -17,11 +17,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-//Auth::routes(['register' => false]);
+Auth::routes(['register' => false]);
 
 
 
-Auth::routes();
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -52,3 +52,10 @@ Route::delete('/horarios_bath','\App\Http\Controllers\HorarioController@destroyB
 Route::get('credits/{student_id}','\App\Http\Controllers\CreditController@getCredits');
 
 Route::post('credits','\App\Http\Controllers\CreditController@store')->name('credits.store');
+
+Route::get('celulas','\App\Http\Controllers\CelulaController@index')->name('celulas.index');
+Route::get('getEventsCelula','\App\Http\Controllers\CelulaController@getEventsCelula');
+Route::get('celulas/{celula}','\App\Http\Controllers\CelulaController@show')->name('celulas.show');;
+Route::post('celulasBath','\App\Http\Controllers\CelulaController@celulasBath')->name('celulasBath.store');
+Route::post('celulas','\App\Http\Controllers\CelulaController@store')->name('celulas.store');
+Route::delete('celulas/{celula}','\App\Http\Controllers\CelulaController@destroy')->name('celulas.destroy');
