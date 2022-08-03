@@ -57,7 +57,7 @@ class User extends Authenticatable
         else{
             //create
             $reflect = new \ReflectionClass($entidade);
-            $request['tipo']= $reflect->getShortName();
+            $request['tipo']= strtolower($reflect->getShortName());
             $user=self::createUser($request);
             //update entidade com user_id
             $entidade->user_id=$user->id;
@@ -99,5 +99,9 @@ class User extends Authenticatable
     {
         $user= User::find($user_id);
         $user->delete();   
+    }
+    public function getIsAdmAttribute()
+    {
+        return strtolower($this->tipo) == 'administrator'; //retorna true se for Adm
     }
 }

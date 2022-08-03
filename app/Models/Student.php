@@ -21,6 +21,11 @@ class Student extends Model
         return $this->belongsTo(Module::class);
     }
 
+    public function celulas()
+    {
+        return $this->belongsToMany(Celula::class);
+    }
+
 
     public static function verifyAndDestroy(array $ids)
     {

@@ -9,6 +9,7 @@
       </a>
     </li>
 
+    @if(auth()->user()->isAdm)
     <li>
       <a class="app-menu__item {{Request::segment(1)=='modules'?'active':null}}" href="{{route('modules.index')}}">
         <i class="app-menu__icon fa fa-cubes"></i><span class="app-menu__label">Módulos</span>
@@ -98,6 +99,19 @@
       <a class="app-menu__item {{Request::segment(1)=='administrators'?'active':null}}" href="{{route('administrators.index')}}">
         <i class="app-menu__icon fa fa-user-secret"></i>
         <span class="app-menu__label">Administradores</span>
+      </a>
+    </li>
+    @endif
+
+    <li>
+      <a class="app-menu__item {{Request::segment(1)=='agenda'?'active':null}}" href="{{route('agenda.index')}}">
+        <i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Marcar Aula</span>
+      </a>
+    </li>
+
+    <li>
+      <a class="app-menu__item {{Request::segment(1)=='agendados'?'active':null}}" href="{{route('agendados.index')}}">
+        <i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Aula Agendadas</span>
       </a>
     </li>
 
