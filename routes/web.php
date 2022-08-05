@@ -53,10 +53,15 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::delete('celulas/{celula}', '\App\Http\Controllers\CelulaController@destroy')->name('celulas.destroy');
 });
 
-Route::get('/agenda',[App\Http\Controllers\AgendaController::class , 'index'])->name('agenda.index');
-Route::get('/getEventsAgenda',[App\Http\Controllers\AgendaController::class , 'getEventsAgenda']);
-Route::get('/getEventsAgendados',[App\Http\Controllers\AgendaController::class , 'getEventsAgendados']);
-Route::get('/getDadosToAgenda',[App\Http\Controllers\AgendaController::class , 'getDadosToAgenda']);
-Route::post('/agenda',[App\Http\Controllers\AgendaController::class , 'store'])->name('agenda.store');
-//Route::get('/teste',[App\Http\Controllers\AgendaController::class , 'teste']);
-Route::get('/agendados',[App\Http\Controllers\AgendadosController::class , 'index'])->name('agendados.index');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/agenda', [App\Http\Controllers\AgendaController::class , 'index'])->name('agenda.index');
+    Route::get('/getEventsAgenda', [App\Http\Controllers\AgendaController::class , 'getEventsAgenda']);
+    Route::get('/getEventsAgendados', [App\Http\Controllers\AgendaController::class , 'getEventsAgendados']);
+    Route::get('/getDadosToAgenda', [App\Http\Controllers\AgendaController::class , 'getDadosToAgenda']);
+    Route::post('/agenda', [App\Http\Controllers\AgendaController::class , 'store'])->name('agenda.store');
+    //Route::get('/teste',[App\Http\Controllers\AgendaController::class , 'teste']);
+    Route::get('/agendados', [App\Http\Controllers\AgendadosController::class , 'index'])->name('agendados.index');
+    Route::get('/aulasToAgenda', [App\Http\Controllers\AgendaController::class , 'aulasToAgenda']);
+
+});

@@ -16,14 +16,40 @@ class AgendaController extends Controller
 
     public function index()
     {
+       
         //$x=\App\Models\Systemcount::run(10);
-        //dd($x);
+        /*
+        $x=Celula::
+            join('horarios', 'horarios.horario', 'celulas.horario')
+            ->leftJoin('aulas', 'aulas.id', 'celulas.aula_id')
+            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id')
+            ->with('students')
+            ->orderBy('celulas.dia')
+            ->orderBy('celulas.horario')
+            ->get();
+
+        foreach($x as $z):
+            echo "celula ".$z->id. " possui ".$z->students->count();
+            echo "<br>";
+        endforeach;
+        dd($x->toArray());
+        */
+
+       
+        return view('agenda.index');
+
+    }
+
+    public function aulasToAgenda()
+    {
+        $student=auth()->user()->student;
         $aulaHelper = new AulaHelper();
-        $aulaHelper->module_id = 2;
-        $aulaHelper->student_id = 3;
+        $aulaHelper->module_id =$student->module_id;
+        $aulaHelper->student_id = $student->id;
         $aulaHelper->start();
         $resp = $aulaHelper->filtrar();
-        return view('agenda.index', compact('resp'));
+        //dd($resp->toArray());
+        return view('agenda.aulasToAgenda', compact('resp'));
 
     }
     public function teste()
@@ -86,13 +112,15 @@ class AgendaController extends Controller
 
     public function getEventsAgenda(Request $request)
     {
+       
         \DB::enableQueryLog();
+        $student=auth()->user()->student;
         $agendaHelper=new AgendaHelper();
         $agendaHelper->setStart(request('start'));
         $agendaHelper->setEnd(request('end'));
         $agendaHelper->aula_id=request('aula_id');
-        $agendaHelper->student_id=3;
-        $agendaHelper->module_id=2;
+        $agendaHelper->student_id=$student->id;
+        $agendaHelper->module_id=$student->module_id;
        
        
 
@@ -109,7 +137,8 @@ class AgendaController extends Controller
 
     public function getEventsAgendados(Request $request)
     {
-        $student_id=3;
+        $student=auth()->user()->student;
+        $student_id=$student->id;
         $start=$request->start;
         $end= $request->end;
 
@@ -150,7 +179,8 @@ class AgendaController extends Controller
         //validar se pode
         //ações em créditos
         //ações em systemCount
-        $student_id=3;
+        $student=auth()->user()->student;
+        $student_id = $student->id;
         $celula= Celula::find($request->celula_id);
         if(!$celula->aula_id){
            //abrindo célula para aula 

@@ -19,8 +19,8 @@ class AgendadosController extends Controller
 
     private function getCelulasAgendadas()
     {
-        
-        $student_id=3;
+        $student=auth()->user()->student;
+        $student_id=$student->id;
         $module_id=request('module_id');
         $disciplina_id=request('disciplina_id');
         $teacher_id=request('teacher_id');

@@ -1,5 +1,5 @@
 <!-- Modal -->
-<h2>Modal Agenda</h2>
+
 
 <div class="modal fade" id="modalAgenda" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="modalAgendaLabel" aria-hidden="true">

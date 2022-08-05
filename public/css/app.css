@@ -134,6 +134,12 @@ input[type=checkbox].checkbox-lg
   cursor: pointer;
 }
 
+
+.jstree-default .jstree-anchor.aula_realizada {
+  text-decoration: line-through;
+  
+}
+
 /*
 @media screen and (max-width:767px) { .fc-toolbar.fc-header-toolbar {font-size: 60%}}
 */

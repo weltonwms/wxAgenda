@@ -9,26 +9,12 @@ Aulas'])
 
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
 <input type="text"  id="aula_id" value="" class="form-control">
 <div class="tile row">
 
-    <div class="col-sm-3">
-        <ul>
-            @foreach($resp as $rp)
-
-            <li class="">
-                <span class="" href="#">{{$rp->nome}}</span>
-                <ul class="">
-                    @foreach($rp->aulasShow as $aula)
-                    <li><a class="aulas" href="#" data-aula_id="{{$aula->id}}">{{$aula->sigla}}</a></li>
-                    @endforeach
-                </ul>
-
-            </li>
-
-
-            @endforeach
-        </ul>
+    <div class="col-sm-3" id="jstree_demo_div">
+        
     </div>
 
     <div class="col-sm-9">
@@ -50,9 +36,20 @@ Aulas'])
 
 @push('scripts')
 <script src="{{ asset('template/js/plugins/fullcalendar.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 <script src="{{ asset('js/agenda.js') }}"></script>
 <script>
 
+$('#jstree_demo_div').jstree({
+  'core' : {
+    'data' : {
+      'url' : asset+'aulasToAgenda',
+      'data' : function (node) {
+        return { 'id' : node.id };
+      }
+    }
+  }
+});
 
 
 </script>

@@ -33,13 +33,13 @@ class AulaHelper
             ->get();
         $this->systemCounts = Systemcount::where('module_id', $this->module_id)->get();
 
-        $this->celulasAbertas=\DB::table('celulas')
-        ->leftJoin('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
-        ->select(\DB::raw('celulas.id, dia, horario, aula_id, COUNT(celula_student.student_id) as ct'))
-        ->groupBy('celulas.id')
-        ->havingBetween('ct', [1, 4])
-        ->get();
-        //dd($this->celulasAbertas->pluck('aula_id'));
+        $this->celulasAbertas = \DB::table('celulas')
+            ->leftJoin('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
+            ->select(\DB::raw('celulas.id, dia, horario, aula_id, COUNT(celula_student.student_id) as ct'))
+            ->groupBy('celulas.id')
+            ->havingBetween('ct', [1, 4])
+            ->get();
+    //dd($this->celulasAbertas->pluck('aula_id'));
 
     }
 
@@ -48,17 +48,22 @@ class AulaHelper
         $list = collect();
         foreach ($this->base as $base) {
             if ($base->aulas->isNotEmpty()) {
-                $base->base ? $this->tratarBase($base) : $this->tratarNaoBase($base);
-                $list->push($base);
+                $retorno = $base->base ? $this->tratarBase($base) : $this->tratarNaoBase($base);
+                $list->push($retorno);
 
 
             }
         }
-       return $list;
+       
+        return $list;
     }
 
     private function tratarBase($base)
     {
+
+        $obj = new \stdClass();
+        $obj->id = $base->id;
+        $obj->nome = $base->nome;
 
         $aulasFeitasDisciplina = $this->aulasFeitas->filter(function ($value) use ($base) {
             return $value->disciplina_id == $base->id;
@@ -68,16 +73,37 @@ class AulaHelper
         $nextAula = $base->aulas->first(function ($value) use ($maxOrdemFeito) {
             return $value->ordem == $maxOrdemFeito + 1;
         });
-        //add aulas que serão usadas
-        $base->aulasShow = $aulasFeitasDisciplina->unique('id');
-        $base->aulasShow->push($nextAula);
 
-        $base->tipoTeste = 'trataBase';
+        //add aulas que serão usadas
+        $aulasShow = $aulasFeitasDisciplina->unique('id')->map(function ($aula) {
+            $objAula = new \stdClass();
+            $objAula->id = $aula->id;
+            $objAula->sigla = $aula->sigla;
+            $objAula->ordem = $aula->ordem;
+            $objAula->realizada = 1;
+
+            return $objAula;
+        });
+        if ($nextAula):
+            $objAula = new \stdClass();
+            $objAula->id = $nextAula->id;
+            $objAula->sigla = $nextAula->sigla;
+            $objAula->ordem = $nextAula->ordem;
+            $objAula->realizada = 0;
+            $aulasShow->push($objAula);
+        endif;
+
+       $obj->aulas=$aulasShow->sortBy('ordem');
+       return $obj;
     }
 
     private function tratarNaoBase($base)
     {
-        $countDisciplina = 0;
+        $obj = new \stdClass();
+        $obj->id = $base->id;
+        $obj->nome = $base->nome;
+
+        $countDisciplina = 1;
         foreach ($this->systemCounts as $systemCount) {
             if ($systemCount->disciplina_id == $base->id) {
                 $countDisciplina = $systemCount->contador;
@@ -89,14 +115,34 @@ class AulaHelper
             return $value->ordem == $countDisciplina;
         });
 
-        $aulasAbertas=$base->aulas->whereIn('id',$this->celulasAbertas->pluck('aula_id'));
-       
-        $base->aulasShow = $aulasAbertas;
-        $base->aulasShow->push($aulaCurrent);
+        $aulasAbertas = $base->aulas->whereIn('id', $this->celulasAbertas->pluck('aula_id'));
 
-        $base->tipoTeste = 'noteBase';
-       
-       
+        $aulasShow = $aulasAbertas->map(function($aula){
+            $objAula = new \stdClass();
+            $objAula->id = $aula->id;
+            $objAula->sigla = $aula->sigla;
+            $objAula->ordem = $aula->ordem;
+            $objAula->realizada = $this->isAulaFeita($aula->id);
+
+            return $objAula;
+        });
+        if ($aulaCurrent) {
+            $objAula = new \stdClass();
+            $objAula->id = $aulaCurrent->id;
+            $objAula->sigla = $aulaCurrent->sigla;
+            $objAula->ordem = $aulaCurrent->ordem;
+            $objAula->realizada =  $this->isAulaFeita($aulaCurrent->id);
+            $aulasShow->push($objAula);
+        }
+
+        $obj->aulas=$aulasShow->unique('id')->sortBy('ordem');
+        return $obj;
+
+    }
+
+    private function isAulaFeita($aula_id)
+    {
+        return $this->aulasFeitas->contains('id',$aula_id)?1:0;
     }
 
 }

@@ -84,7 +84,7 @@
     $("#teacher_id").on('change', function () {
         instanceCalendar.refetchEvents();
     })
-    $('.aulas').on('click', function () {
+    $('#jstree_demo_div').on('click', '.aulas',function () {
         var data = this.dataset;
         $("#aula_id").val(data.aula_id);
         instanceCalendar.refetchEvents();
@@ -151,6 +151,7 @@
                 //calendar.unselect()
                 instanceCalendar.refetchEvents();
                 $("#modalAgenda").modal('hide');
+                $('#jstree_demo_div').jstree(true).refresh()
             }
       
         });

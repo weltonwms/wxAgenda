@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Celula extends Model
 {
@@ -25,5 +26,14 @@ class Celula extends Model
     {
        $date=new \DateTime($value);
 	    return $date->format("H:i");
+    }
+
+    public function getDiaFormatado()
+    {
+        if ($this->dia):
+            //evitando fazer um parse em nada. Não seria necessário se campo fosse obrigatório
+            return Carbon::parse($this->dia)->format('d/m/Y');
+            //return Carbon::parse($value)->format('Y-m-d');
+        endif;
     }
 }

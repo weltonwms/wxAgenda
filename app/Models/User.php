@@ -44,6 +44,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function administrator()
+    {
+        return $this->hasOne(Administrator::class);
+    }
+
+    public function entidade()
+    {
+        return $this->isAdm?$this->administrator():$this->student();
+    }
+
     public static function saveUser($request,$entidade)
     {
         if(!isset($request['username']) || !$request['username']){
@@ -103,5 +118,13 @@ class User extends Authenticatable
     public function getIsAdmAttribute()
     {
         return strtolower($this->tipo) == 'administrator'; //retorna true se for Adm
+    }
+
+    public function getNomeAttribute()
+    {
+        if($this->entidade){
+            return $this->entidade->nome;
+        }
+        return $this->username;
     }
 }

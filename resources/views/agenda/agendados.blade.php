@@ -11,42 +11,61 @@
 @section('content')
 <div class="tile tile-nomargin">
     <form action="{{route('agendados.index')}}">
-        <label class="text-primary">Módulo</label>
-        {!!Form::select('module_id', $modulesList,
-        request('module_id'),
-        ['onchange'=>"this.form.submit()","class"=>"select2","placeholder"=>"-Selecione-"]
-        )!!}
-        &nbsp;&nbsp;
+        <div class='row'>
+            <div class="col-sm-2">
 
-        <label class="text-primary">Professores</label>
-        {!!Form::select('teacher_id', $teachersList,
-        request('teacher_id'),
-        ['onchange'=>"this.form.submit()","class"=>"select2","placeholder"=>"-Selecione-"]
-        )!!}
-        &nbsp;&nbsp;
+                {!!Form::bsSelect('module_id', $modulesList,
+                request('module_id'),
+                ['onchange'=>"this.form.submit()","class"=>"select2",
+                "placeholder"=>"-Selecione-","label"=>"Módulo"]
+                )!!}
+            </div>
+
+            <div class="col-sm-2">
+
+                {!!Form::bsSelect('teacher_id', $teachersList,
+                request('teacher_id'),
+                ['onchange'=>"this.form.submit()","class"=>"select2",
+                "placeholder"=>"-Selecione-","label"=>"Professor"]
+                )!!}
+            </div>
 
 
-        <label class="text-primary">Disciplina</label>
-        {!!Form::select('disciplina_id', $disciplinasList,
-        request('disciplina_id'),
-        ['onchange'=>"this.form.submit()","class"=>"select2","placeholder"=>"-Selecione-"]
-        )!!}
-        &nbsp;&nbsp;
+            <div class="col-sm-2">
 
-        {{ Form::bsDate('start', request('start'),['label'=>'Período >=', 
+                {!!Form::bsSelect('disciplina_id', $disciplinasList,
+                request('disciplina_id'),
+                ['onchange'=>"this.form.submit()","class"=>"select2",
+                "placeholder"=>"-Selecione-","label"=>"Disciplina"]
+                )!!}
+            </div>
+
+
+            <div class="col-sm-3">
+                {{ Form::bsDate('start', request('start'),['label'=>'Período >=', 
             'class'=>'form-control-sm','onchange'=>"this.form.submit()"]) }}
+            </div>
 
-            {{ Form::bsDate('end', request('end'),['label'=>'Período <=', 
+
+            <div class="col-sm-3">
+                {{ Form::bsDate('end', request('end'),['label'=>'Período <=', 
             'class'=>'form-control-sm','onchange'=>"this.form.submit()"]) }}
+            </div>
 
-        
-       
+
+        </div>
+
+
+
+
+
+
 
     </form>
 </div>
 
 <div class="tile">
-
+<div class="table-responsive">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -61,7 +80,7 @@
         <tbody>
             @foreach($celulas as $celula)
             <tr>
-                <td>{{$celula->dia}}</td>
+                <td>{{$celula->getDiaFormatado()}}</td>
                 <td>{{$celula->horario}}</td>
                 <td>{{$celula->aula_sigla}}</td>
                 <td>{{$celula->module_nome}}</td>
@@ -73,7 +92,7 @@
 
         </tbody>
     </table>
-
+</div>
 </div>
 
 

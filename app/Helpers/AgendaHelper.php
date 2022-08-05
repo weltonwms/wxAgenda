@@ -25,6 +25,7 @@ class AgendaHelper
     private $systemCounts;
 
     private $aulaRequest;
+    private $celulasMarcadas;
 
     public function start()
     {
@@ -37,6 +38,13 @@ class AgendaHelper
             ->orderBy('celulas.horario')
             ->get();
 
+            $this->celulasMarcadas = Celula::join('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
+            ->select('celula_id','celulas.horario', 'celulas.dia')
+            ->where('celula_student.student_id', $this->student_id)
+            ->get();
+
+           
+            
         $this->systemCounts = Systemcount::where('module_id', $this->module_id)->get();
 
         $this->aulaRequest= Aula::find($this->aula_id);
@@ -70,9 +78,9 @@ class AgendaHelper
     {
         $base=$this->aulaRequest->disciplina->base;
         $resp=$this->celulasBase->filter(function($celula) use($base){
-            $studentOnCelula=$celula->students->contains('id',$this->student_id);
-            if($studentOnCelula){
-                return false; //Se estudante já está na celula não pode entrar de novo na célula
+            $diaHorarioJaMarcado=$this->filtroDiaHorario($celula->dia,$celula->horario);
+            if($diaHorarioJaMarcado->isNotEmpty()){
+                return false; //Não pode estar em 2 lugares ao mesmo tempo.
             }
             if($base){
                 return $this->isCelulaDisponivelForAulaBase($celula);
@@ -100,6 +108,11 @@ class AgendaHelper
             $end=$endCarbon->format('Y-m-d');
             
             $resp=$this->filtroAula($this->aula_id,$start,$end,$celula->turno_id);
+            $output = new \Symfony\Component\Console\Output\ConsoleOutput();
+            $output->writeln("<info>{$celula->id} {$this->aula_id} $start $end {$celula->turno_id}</info>");
+            $output->writeln("<info>Resposta filtro: {$resp}</info>");
+            $output->writeln("<info>celulas base: {$this->celulasBase->pluck('id')}</info>");
+            
             return $resp->isEmpty();
             
         }
@@ -150,12 +163,25 @@ class AgendaHelper
         //dd($aula_id, $start, $end, $turno_id);
         $filtered = $this->celulasBase
             ->filter(function ($celula) use ($aula_id, $start, $end, $turno_id) {
+              
             return $celula->aula_id == $aula_id &&
             $celula->turno_id == $turno_id &&
             $celula->dia >= $start &&
             $celula->dia <= $end;
         });
         return $filtered;
+    }
+
+    private function filtroDiaHorario($dia,$horario)
+    {
+        $filtered = $this->celulasMarcadas
+            ->filter(function ($celula) use ($dia,$horario) {
+              
+            return $celula->dia == $dia &&
+            $celula->horario == $horario;
+        });
+        return $filtered;
+
     }
 
     private function getSystemCount($disciplina_id)

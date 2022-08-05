@@ -101,6 +101,9 @@ class CelulaController extends Controller
             if($celula->students_count){
                 $obj->backgroundColor='red';
             }
+            if($celula->students_count>3){
+                $obj->backgroundColor='#6c757d';
+            }
             return $obj;
         });
 
