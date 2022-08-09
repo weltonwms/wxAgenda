@@ -22,6 +22,11 @@ class Celula extends Model
         return $this->belongsTo(Aula::class);
     }
 
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
     public function getHorarioAttribute($value)
     {
        $date=new \DateTime($value);
@@ -35,5 +40,16 @@ class Celula extends Model
             return Carbon::parse($this->dia)->format('d/m/Y');
             //return Carbon::parse($value)->format('Y-m-d');
         endif;
+    }
+
+    public function info()
+    {
+        $info=new \stdClass();
+        $info->id=$this->id;
+        $info->horario=$this->horario;
+        $info->dia=$this->getDiaFormatado();
+        $info->teacher=$this->teacher->nome;
+        
+        return $info;
     }
 }

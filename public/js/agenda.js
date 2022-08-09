@@ -84,7 +84,7 @@
     $("#teacher_id").on('change', function () {
         instanceCalendar.refetchEvents();
     })
-    $('#jstree_demo_div').on('click', '.aulas',function () {
+    $('#jstree_list_aulas').on('click', '.aulas',function () {
         var data = this.dataset;
         $("#aula_id").val(data.aula_id);
         instanceCalendar.refetchEvents();
@@ -151,7 +151,10 @@
                 //calendar.unselect()
                 instanceCalendar.refetchEvents();
                 $("#modalAgenda").modal('hide');
-                $('#jstree_demo_div').jstree(true).refresh()
+                $('#jstree_list_aulas').jstree(true).refresh();
+                var message="Aula Agendada Com Sucesso:<br>";
+                message+='Dia: '+resp.dia+' '+resp.horario+', Professor: '+resp.teacher;
+                showGlobalMessage(message,'success');
             }
       
         });

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-@breadcrumbs(['title'=>' Aulas Agendadas', 'icon'=>'fa-calendar', 'route'=>route('agendados.index'),
-'subtitle'=>'Aulas Agendadas'])
+@breadcrumbs(['title'=>' Aulas Marcadas', 'icon'=>'fa-calendar-check-o', 'route'=>route('agendados.index'),
+'subtitle'=>'Aulas Marcadas'])
 
 @endbreadcrumbs
 @endsection

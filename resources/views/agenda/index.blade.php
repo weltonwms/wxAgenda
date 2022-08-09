@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-@breadcrumbs(['title'=>' Marcar Aula', 'icon'=>'fa-calendar', 'route'=>route('agenda.index'),'subtitle'=>'Marcação de
+@breadcrumbs(['title'=>' Agendar Aula', 'icon'=>'fa-calendar', 'route'=>route('agenda.index'),'subtitle'=>'Agendamento de
 Aulas'])
 
 @endbreadcrumbs
@@ -9,11 +9,11 @@ Aulas'])
 
 
 @section('content')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-<input type="text"  id="aula_id" value="" class="form-control">
-<div class="tile row">
 
-    <div class="col-sm-3" id="jstree_demo_div">
+
+<div class="tile row">
+<input type="hidden"  id="aula_id" value="" class="form-control">
+    <div class="col-sm-3" id="jstree_list_aulas">
         
     </div>
 
@@ -32,15 +32,16 @@ Aulas'])
 
 @push('styles')
 <link rel="stylesheet" type="text/css" href="{{ asset('template/css/fullcalendar.min.css') }}">
+<link rel="stylesheet" href="{{ asset('template/css/jstree/jstree.min.css') }}" />
 @endpush
 
 @push('scripts')
 <script src="{{ asset('template/js/plugins/fullcalendar.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+<script src="{{ asset('template/js/plugins/jstree.min.js') }}"></script>
 <script src="{{ asset('js/agenda.js') }}"></script>
 <script>
 
-$('#jstree_demo_div').jstree({
+$('#jstree_list_aulas').jstree({
   'core' : {
     'data' : {
       'url' : asset+'aulasToAgenda',

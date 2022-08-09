@@ -125,6 +125,7 @@ $("#btnDeleteCelula").on('click', function() {
             console.log(resp)
             instanceCalendar.refetchEvents();
             $("#modalDeleteCelula").modal('hide');
+            showGlobalMessage(resp.message,'success');
         }
     });
 });

@@ -36,17 +36,22 @@
 
   <main class="app-content">
     @yield('breadcrumb')
-    <div class="tile tile-mensagens">
-
+   
+      <div class="globalMessages">
       @if(Request::session()->has('mensagem'))
-      
-            <div class="alert alert-{{session('mensagem.type')}} alert-dismissable ">
+      <?php
+        $classRow=session('mensagem.larger')?'row':'';
+      ?>
+      <div class="tile tile-mensagens {{$classRow}}">
+            <div class="alert alert-{{session('mensagem.type')}} alert-dismissable " style="width:100%">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {!!session('mensagem.conteudo')!!}
             </div>
+      </div>
      @endif
+     </div>
 
-    </div>
+  
 
     @yield('toolbar')
     @yield('content')

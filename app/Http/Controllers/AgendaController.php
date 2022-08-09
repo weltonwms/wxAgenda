@@ -191,7 +191,7 @@ class AgendaController extends Controller
         }
        $celula->students()->attach($student_id);
         //dd($celula->toArray());
-        return response()->json($request->all());
+        return response()->json($celula->info());
     }
 
     public function getDadosToAgenda(Request $request)

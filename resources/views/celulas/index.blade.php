@@ -24,13 +24,13 @@
 
             <div class="form-group">
                 <label for="periodo_inicio" class="mb-1">Início:</label>
-                <input type="date" name="periodo_inicio" id="periodo_inicio" class="form-control form-control-sm">
+                <input type="date" name="periodo_inicio" id="periodo_inicio" class="form-control form-control-sm" required>
 
             </div>
 
             <div class="form-group">
                 <label for="periodo_fim" class="mb-1">Fim:</label>
-                <input type="date" name="periodo_fim" id="periodo_fim" class="form-control form-control-sm">
+                <input type="date" name="periodo_fim" id="periodo_fim" class="form-control form-control-sm" required>
 
             </div>
 

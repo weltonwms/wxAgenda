@@ -88,12 +88,7 @@ $(document).ready(function () {
     //FIM BUSCA CEP
 
     $('.select2').select2();
-    $('#formProduto_produto_id').select2({
-         dropdownParent: $('#ModalFormProduto'),
-         //theme: "bootstrap",
-          width: 'style' 
-        //width:auto
-     });
+   
 
 });
 
@@ -143,6 +138,18 @@ function lerInputNumber(campo){
         return false;	
     }
     return parseFloat(val);
+}
+
+function showGlobalMessage(conteudo,tipo='info',larger=true){
+    var row=larger?'row':'';
+    var string=' <div class="'+row+' tile tile-mensagens">'+
+        '<div class="alert alert-'+tipo+ ' alert-dismissable " style="width:100%">'+
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
+        conteudo+
+        '</div>'+
+    '</div>';
+    $('.globalMessages').html(string);
+
 }
 
 

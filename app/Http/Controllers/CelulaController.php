@@ -69,7 +69,7 @@ class CelulaController extends Controller
         //print_r($resultado);
         //print_r($inserts);
         //dd($disponibilidade);
-        
+        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => 'Disponibilidade de Células  Criada com Sucesso!','larger'=>true]);
         return redirect()->back()->withInput($request->input());
     }
 
@@ -156,6 +156,6 @@ class CelulaController extends Controller
 
         //destruir a célula
         $celula->delete();
-        return response()->json(['mensage'=>'Deletado com sucesso!']);
+        return response()->json(['message'=>'Célula destruída com sucesso!']);
     }
 }
