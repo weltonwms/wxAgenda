@@ -1,6 +1,6 @@
 
         <ul >
-            @foreach($resp as $disciplina)
+            @foreach($disciplinasWithAulas as $disciplina)
 
             <li class="jstree-open" data-jstree='{"disabled":true}'>
                 <span class="" href="#">{{$disciplina->nome}}</span>

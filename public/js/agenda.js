@@ -2,7 +2,7 @@
     let instanceCalendar = null;
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
-        // var minMaxHorarioValido=getMinMaxHorarioValido();
+        var minMaxHorarioValido=getMinMaxHorarioValido();
         var calendar = new FullCalendar.Calendar(calendarEl, {
             //timeZone: 'UTC',
             height: 'auto',
@@ -17,14 +17,14 @@
             themeSystem: "bootstrap",
             navLinks: false, // can click day/week names to navigate views
             editable: false,
-            selectable: true,
+            selectable: false,
             selectMirror: false,
             dayMaxEvents: true, // allow "more" link when too many events,
             allDaySlot: false,
             locale: "pt-br",
 
-            slotMinTime: '07:00', //minMaxHorarioValido.min,
-            slotMaxTime: '23:00', //minMaxHorarioValido.max,
+            slotMinTime: minMaxHorarioValido.min,
+            slotMaxTime: minMaxHorarioValido.max,
 
 
             selectLongPressDelay: 1,

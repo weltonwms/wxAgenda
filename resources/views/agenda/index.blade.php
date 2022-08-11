@@ -13,6 +13,7 @@ Aulas'])
 
 <div class="tile row">
 <input type="hidden"  id="aula_id" value="" class="form-control">
+<input type="hidden" id="horarios_validos" value="{{$horariosList}}" class="form-control">
     <div class="col-sm-3" id="jstree_list_aulas">
         
     </div>

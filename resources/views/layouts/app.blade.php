@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=0">
   <!-- CSRF Token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>{{ config('app.name', 'Laravel') }} - Sistema</title>
+  <title>{{ config('app.name', 'Wx Agenda') }} - Sistema</title>
 
   <meta name="description"  content="Sistema {{ config('app.name', 'Laravel') }} - Venda de Produtos">
   
