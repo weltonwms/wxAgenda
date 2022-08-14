@@ -12,7 +12,7 @@
           <i class="fa fa-user fa-lg"></i> {{ Auth::user()->username }} <i class="fa fa-caret-down" aria-hidden="true"></i>
         </a>
         <ul class="dropdown-menu settings-menu dropdown-menu-right">
-        <li><a class="dropdown-item" href="{{route('home')}}"><i class="fa fa-user fa-lg"></i> Perfil</a></li>
+        <li><a class="dropdown-item" href="{{route('changePassword.show')}}"><i class="fa fa-user fa-lg"></i> Perfil</a></li>
           <li>
               <a class="dropdown-item" href="{{ route('logout') }}"
               onclick="event.preventDefault();

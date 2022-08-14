@@ -64,4 +64,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/agendados', [App\Http\Controllers\AgendadosController::class , 'index'])->name('agendados.index');
     Route::get('/aulasToAgenda', [App\Http\Controllers\AgendaController::class , 'aulasToAgenda']);
 
+    Route::get('perfil/changePassword','\App\Http\Controllers\PerfilController@showChangePassword')->name('changePassword.show');
+    Route::post('perfil/changePassword','\App\Http\Controllers\PerfilController@updatePassword')->name('changePassword.update');
+
 });

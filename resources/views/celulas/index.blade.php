@@ -8,11 +8,12 @@
 @endsection
 
 @section('content')
+
 <input type="hidden" id="horarios_validos" value="{{$horariosList}}" class="form-control">
 <div class="tile row">
 
     <div class="col-sm-3">
-        {!! Form::open(['route'=>'celulasBath.store','class'=>'','id'=>'adminForm'])!!}
+        {!! Form::open(['route'=>'celulasBath.store','class'=>'formDisponibilidade','id'=>'adminForm'])!!}
 
         {{ Form::bsSelect('teacher_id',$teachersList,old('teacher_id'),['label'=>"Escolha o Professor:"]) }}
 
@@ -22,17 +23,9 @@
                 <h6 class="text-center">Construtor de Disponibilidade</h6>
             </div>
 
-            <div class="form-group">
-                <label for="periodo_inicio" class="mb-1">Início:</label>
-                <input type="date" name="periodo_inicio" id="periodo_inicio" class="form-control form-control-sm" required>
-
-            </div>
-
-            <div class="form-group">
-                <label for="periodo_fim" class="mb-1">Fim:</label>
-                <input type="date" name="periodo_fim" id="periodo_fim" class="form-control form-control-sm" required>
-
-            </div>
+            {{ Form::bsDate('periodo_inicio',null,['label'=>"Início:",'class'=>'form-control-sm ']) }}
+            {{ Form::bsDate('periodo_fim',null,['label'=>"Fim:",'class'=>'form-control-sm ']) }}
+            
 
             <div class="form-group">
                 <button class="btn btn-outline-primary">Executar</button>

@@ -73,6 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log(resp)
                     //calendar.unselect()
                     instanceCalendar.refetchEvents();
+                },
+                error:function(resp){
+                    var resposta= resp.responseJSON.error;
+                    $.notify(resposta,{type:'danger'})
+                   //showGlobalMessage(resposta,'danger');
                 }
             });
 

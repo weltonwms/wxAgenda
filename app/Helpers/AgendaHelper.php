@@ -113,11 +113,7 @@ class AgendaHelper
             $end = $endCarbon->format('Y-m-d');
 
             $resp = $this->filtroAula($this->aula_id, $start, $end, $celula->turno_id);
-            $output = new \Symfony\Component\Console\Output\ConsoleOutput();
-            $output->writeln("<info>{$celula->id} {$this->aula_id} $start $end {$celula->turno_id}</info>");
-            $output->writeln("<info>Resposta filtro: {$resp}</info>");
-            $output->writeln("<info>celulas base: {$this->celulasBase->pluck('id')}</info>");
-
+            
             return $resp->isEmpty();
 
         }
