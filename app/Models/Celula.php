@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Models\Systemcount;
+use App\Helpers\StoreStudentHelper;
 
 class Celula extends Model
 {
@@ -33,6 +34,11 @@ class Celula extends Model
     {
         $date = new \DateTime($value);
         return $date->format("H:i");
+    }
+
+    public function horarioObj()
+    {
+        return $this->belongsTo(Horario::class,'horario');   
     }
 
     public function getDiaFormatado()
@@ -162,13 +168,16 @@ class Celula extends Model
 
     }
 
-    public static function storeStudent($student_id, $celula_id, $aula_id)
+    public static function storeStudent($student, $celula_id, $aula_id)
     {
         //validar se pode
         //ações em créditos
         //ações em systemCount
 
         $celula = Celula::find($celula_id);
+        $helper= new StoreStudentHelper();
+        $helper->validarStore($student,$celula,$aula_id);
+        
         if (!$celula->aula_id) {
             //abrindo célula para aula 
             $celula->aula_id = $aula_id;
@@ -176,7 +185,7 @@ class Celula extends Model
             //rodar o systemCount 
             Systemcount::run($celula->aula_id);
         }
-        $celula->students()->attach($student_id);
+        $celula->students()->attach($student->id);
         return $celula->info();
     }
 

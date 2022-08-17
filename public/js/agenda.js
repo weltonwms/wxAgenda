@@ -155,6 +155,16 @@
                 var message="Aula Agendada Com Sucesso:<br>";
                 message+='Dia: '+resp.dia+' '+resp.horario+', Professor: '+resp.teacher;
                 showGlobalMessage(message,'success');
+                $.notify(message,{type:'success'});
+            },
+            error:function(resp){
+                var msg= resp.responseJSON.error;
+                $("#modalAgenda").modal('hide');
+                $.notify(msg,{type:'danger'});
+                showGlobalMessage(msg,'danger');
+                instanceCalendar.refetchEvents();
+                $('#jstree_list_aulas').jstree(true).refresh();
+                
             }
       
         });

@@ -26,43 +26,60 @@ class AgendaHelper
     private $aulaRequest;
     private $celulasMarcadas;
     private $levelStudent;
-   
+
 
     public function start()
     {
-        $this->celulasBase = Celula::has('students', '<', 4)
+        $queryBase = Celula::has('students', '<', 4)
             ->join('horarios', 'horarios.horario', 'celulas.horario')
             ->leftJoin('aulas', 'aulas.id', 'celulas.aula_id')
-            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id')
-            ->with('students')
+            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id');
+        if ($this->start) {
+            $queryBase->where('celulas.dia', '>=', $this->start);
+        }
+        if ($this->end) {
+            $queryBase->where('celulas.dia', '<=', $this->end);
+        }
+        $this->celulasBase = $queryBase->with('students')
             ->orderBy('celulas.dia')
             ->orderBy('celulas.horario')
             ->get();
 
-        $this->celulasMarcadas = Celula::join('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
+        $queryMarcadas = Celula::join('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
             ->select('celula_id', 'celulas.horario', 'celulas.dia')
-            ->where('celula_student.student_id', $this->student_id)
-            ->get();
+            ->where('celula_student.student_id', $this->student_id);
+        if ($this->start) {
+            $queryMarcadas->where('celulas.dia', '>=', $this->start);
+        }
+        if ($this->end) {
+            $queryMarcadas->where('celulas.dia', '<=', $this->end);
+        }
+        $this->celulasMarcadas = $queryMarcadas->get();
 
-        $this->levelStudent= new LevelStudentHelper($this->student_id,$this->module_id);
+        $this->levelStudent = new LevelStudentHelper($this->student_id, $this->module_id);
 
         $this->systemCounts = Systemcount::where('module_id', $this->module_id)->get();
 
         $this->aulaRequest = Aula::find($this->aula_id);
+
 
     }
 
     public function setStart($start)
     {
         if ($start) {
-            $this->start = Carbon::createFromDate($start)->format('Y-m-d');
+            $carbonStart = Carbon::createFromDate($start);
+            $carbonStart->subDay(); //Filtro pode necessitar pesquisar 1 dia antes
+            $this->start = $carbonStart->format('Y-m-d');
         }
     }
 
     public function setEnd($end)
     {
         if ($end) {
-            $this->end = Carbon::createFromDate($end)->format('Y-m-d');
+            $carbonEnd = Carbon::createFromDate($end);
+            $carbonEnd->addDay(); //Filtro pode necessitar pesquisar 1 dia depois
+            $this->end = $carbonEnd->format('Y-m-d');
         }
     }
 
@@ -79,9 +96,14 @@ class AgendaHelper
     {
         $base = $this->aulaRequest->disciplina->base;
         $resp = $this->celulasBase->filter(function ($celula) use ($base) {
+
             $diaHorarioJaMarcado = $this->filtroDiaHorario($celula->dia, $celula->horario);
+            $isDateFuture = $this->isDateFuture($celula->dia, $celula->horario);
             if ($diaHorarioJaMarcado->isNotEmpty()) {
                 return false; //Não pode estar em 2 lugares ao mesmo tempo.
+            }
+            if (!$isDateFuture) {
+                return false; //Agendamento apenas de datas futuras.
             }
             if ($base) {
                 return $this->isCelulaDisponivelForAulaBase($celula);
@@ -97,7 +119,7 @@ class AgendaHelper
 
     private function isCelulaDisponivelForAulaBase($celula)
     {
-        if(!$this->isValidOrdemBase($celula) ){
+        if (!$this->isValidOrdemBase($celula)) {
             return false;
         }
 
@@ -113,7 +135,7 @@ class AgendaHelper
             $end = $endCarbon->format('Y-m-d');
 
             $resp = $this->filtroAula($this->aula_id, $start, $end, $celula->turno_id);
-            
+
             return $resp->isEmpty();
 
         }
@@ -147,7 +169,7 @@ class AgendaHelper
 
     }
 
-    private function filtroDisciplina($disciplina_id, $start, $end, $turno_id)
+    public function filtroDisciplina($disciplina_id, $start, $end, $turno_id)
     {
         $filtered = $this->celulasBase
             ->filter(function ($celula) use ($disciplina_id, $start, $end, $turno_id) {
@@ -159,7 +181,7 @@ class AgendaHelper
         return $filtered;
     }
 
-    private function filtroAula($aula_id, $start, $end, $turno_id)
+    public function filtroAula($aula_id, $start, $end, $turno_id)
     {
         //dd($aula_id, $start, $end, $turno_id);
         $filtered = $this->celulasBase
@@ -173,7 +195,7 @@ class AgendaHelper
         return $filtered;
     }
 
-    private function filtroDiaHorario($dia, $horario)
+    public function filtroDiaHorario($dia, $horario)
     {
         $filtered = $this->celulasMarcadas
             ->filter(function ($celula) use ($dia, $horario) {
@@ -185,7 +207,14 @@ class AgendaHelper
 
     }
 
-    private function getSystemCount($disciplina_id)
+    private function isDateFuture($dia, $horario)
+    {
+        $dateHourNow = date('Y-m-d H:i');
+        $dateToCompare = $dia . ' ' . $horario;
+        return $dateToCompare >= $dateHourNow;
+    }
+
+    public function getSystemCount($disciplina_id)
     {
         $resp = $this->systemCounts->firstWhere('disciplina_id', $disciplina_id);
         if ($resp) {
@@ -195,7 +224,7 @@ class AgendaHelper
 
     }
 
-    public function mapToEvents($celulas)
+    public function mapToEvents($celulas, $background = '#28a745')
     {
         $list = [];
         foreach ($celulas as $celula):
@@ -204,7 +233,7 @@ class AgendaHelper
             $obj->id = $celula->id;
             $obj->title = '';
             $obj->start = $celula->dia . " " . $celula->horario;
-
+            $obj->backgroundColor = $background;
 
             if (isset($list[$key])) {
                 $list[$key]->teachers[] = $celula->teacher_id;
@@ -226,13 +255,19 @@ class AgendaHelper
         return array_values($list);
     }
 
-    private function isValidOrdemBase($celula)
+    public function isValidOrdemBase($celula)
     {
-        $level=$this->levelStudent->getLevel($celula->dia,$celula->horario);
-        $ordemAulaTarget=($this->aulaRequest->ordem -1);
-        return $level >=$ordemAulaTarget;
+        $level = $this->levelStudent->getLevel($celula->dia, $celula->horario);
+        $ordemAulaTarget = ($this->aulaRequest->ordem - 1);
+        return $level >= $ordemAulaTarget;
     }
 
-   
+    public function getAulaRequest()
+    {
+        return $this->aulaRequest;
+    }
+
+
+
 
 }

@@ -62,17 +62,19 @@ class AgendaController extends Controller
 
     public function store(Request $request)
     {
-        try{
-            $student = auth()->user()->student;
-            $celulaInfo = Celula::storeStudent($student->id, $request->celula_id, $request->aula_id);
+        try {
+            $celulaInfo=\DB::transaction(function () use ($request) {
+                $student = auth()->user()->student;
+                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $request->aula_id);
+                return $celulaInfo;
+            });
             return response()->json($celulaInfo);
-
         }
-        catch(\Exception $e){
-            return response()->json(['error'=>$e->getMessage()],500);
+        catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
 
-        
+
     }
 
     public function getDadosToAgenda(Request $request)
