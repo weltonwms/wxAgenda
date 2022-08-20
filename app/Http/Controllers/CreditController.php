@@ -11,16 +11,25 @@ class CreditController extends Controller
 {
     public function getCredits($student_id)
     {
-        $credits=Credit::where('student_id',$student_id)
-        ->orderBy('data_acao','desc')
-        ->get();
-        return response()->json(["data"=>$credits]);
+        $credits = Credit::where('student_id', $student_id)
+            ->orderBy('data_acao', 'desc')
+            ->get();
+        return response()->json(["data" => $credits]);
     }
 
     public function store(CreditRequest $request)
     {
-        $credit=Credit::storeCredit($request);
-        return response()->json($credit);
+        try {
+            $credit = \DB::transaction(function () use ($request) {
+                $credit = Credit::storeCredit($request);
+                return $credit;
+            });
+            return response()->json($credit);
+        }
+        catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
 
     }
 }

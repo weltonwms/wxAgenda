@@ -182,11 +182,27 @@ class Celula extends Model
             //abrindo célula para aula 
             $celula->aula_id = $aula_id;
             $celula->save();
-            //rodar o systemCount 
             Systemcount::run($celula->aula_id);
         }
+        
         $celula->students()->attach($student->id);
+        $student->onMarcacaoAula($celula);
         return $celula->info();
+    }
+
+    public static function desmarcarStudent($student,$celula)
+    {       
+        $celula->students()->detach($student->id);
+        $student->onDesmarcacaoAula($celula);
+        if($celula->students->count() ==0){
+            //Se célula ficar vazia retirar aula_id e level 
+            $celula->aula_id=null;
+            $celula->aula_level=null;
+            $celula->save();
+        }
+       
+        
+
     }
 
     public static function getDadosToAgenda($celulas_id)
@@ -201,5 +217,50 @@ class Celula extends Model
         endif;
         return $resp;
 
+    }
+
+    public function getCelulasAgendadas($student)
+    {        
+        $student_id=$student->id;
+        $module_id=request('module_id');
+        if(!$module_id):
+            //pesquisa padrao == current module do student
+            $module_id=$student->module_id;
+        endif;
+        $disciplina_id=request('disciplina_id');
+        $teacher_id=request('teacher_id');
+        $start=request('start');
+        $end=request('end');
+       $query=Celula::join('celula_student','celulas.id','=','celula_student.celula_id')
+       ->join('aulas','celulas.aula_id','=','aulas.id')
+       ->join('disciplinas','aulas.disciplina_id','=','disciplinas.id')
+       ->join('modules','aulas.module_id','=','modules.id')
+       ->join('teachers','celulas.teacher_id','=','teachers.id')
+       ->select('celulas.id', 'celulas.dia','celulas.horario','celulas.aula_id','celulas.teacher_id',
+       'aulas.sigla as aula_sigla','aulas.module_id','aulas.disciplina_id',
+       'disciplinas.nome as disciplina_nome','modules.nome as module_nome',
+       'teachers.nome as teacher_nome')
+       ->where('celula_student.student_id',$student_id);
+
+       if($disciplina_id){
+            $query->where('aulas.disciplina_id',$disciplina_id);
+       }
+
+       if( is_numeric($module_id) ){
+        $query->where('aulas.module_id',$module_id);
+       }
+       
+       if($teacher_id){
+        $query->where('celulas.teacher_id',$teacher_id);
+       }
+
+       if($start){
+        $query->where('celulas.dia','>=',$start);
+       }
+       if($end){
+        $query->where('celulas.dia','<=',$end);
+       }
+       $result=$query->orderBy('celulas.dia')->orderBy('celulas.horario')->get();
+       return $result;
     }
 }

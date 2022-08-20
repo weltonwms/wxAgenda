@@ -14,7 +14,7 @@ class AgendaController extends Controller
 
     public function index()
     {
-        $horariosList = Horario::getList()->values();
+        $horariosList = Horario::getList()->values();       
         return view('agenda.index', compact('horariosList'));
     }
 

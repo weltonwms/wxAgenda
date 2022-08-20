@@ -10,7 +10,7 @@ function confirmDelete(callback) {
     });
 }
 
-function confirm(callback, title="Deseja Realmente  ?", content="") {
+function wxConfirm(callback, title="Deseja Realmente  ?", content="") {
     swal({
         title: title,
         type: "warning",

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Celula;
+use App\Models\Cancellation;
 
 class Student extends Model
 {
@@ -54,5 +56,34 @@ class Student extends Model
         if($this->module){
             return $this->module->nome;
         }
+    }
+
+    public function onMarcacaoAula(Celula $celula)
+    {
+        $this->saldo_atual--;
+        $this->save();
+    }
+
+    public function onDesmarcacaoAula(Celula $celula)
+    {
+        $this->saldo_atual++;
+        $this->save();
+        $cancellation= new Cancellation();
+        $cancellation->student_id=$this->id;
+        $cancellation->data_acao=date('Y-m-d H:i:s');
+        $cancellation->horario=$celula->horario;
+        $cancellation->dia=$celula->dia;
+        $cancellation->teacher_id=$celula->teacher_id;
+        $cancellation->aula_id=$celula->aula_id;
+        $cancellation->save();
+    }
+
+    public function save(array $options = array())
+    {
+        if($this->saldo_atual < 0):
+            throw new \Exception('Saldo Atual inválido.');
+        endif;
+
+        return parent::save($options);
     }
 }

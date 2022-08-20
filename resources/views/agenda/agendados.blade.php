@@ -9,15 +9,33 @@
 
 
 @section('content')
+<?php
+$requestModuleId=request('module_id');
+if(!$requestModuleId):
+    //pesquisa padrao == current module do student
+    $requestModuleId=$student->module_id;
+endif;
+$modulesList->prepend('Todos','all');
+?>
+
+<div class="tile tile-nomargin">
+    <label class="text-primary">Créditos Atuais:</label>
+    <button type="button" class="btn btn-outline-info btn-sm"> {{$student->saldo_atual}}</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <label class="text-primary">Módulo Corrente:</label>
+    <button type="button" class="btn btn-outline-info btn-sm"> {{$student->module->nome}}</button>
+</div>
+
+
 <div class="tile tile-nomargin">
     <form action="{{route('agendados.index')}}">
         <div class='row'>
             <div class="col-sm-2">
 
                 {!!Form::bsSelect('module_id', $modulesList,
-                request('module_id'),
+                $requestModuleId,
                 ['onchange'=>"this.form.submit()","class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Módulo"]
+                "label"=>"Módulo"]
                 )!!}
             </div>
 
@@ -57,43 +75,77 @@
 
 
 
-
-
-
-
     </form>
 </div>
 
 <div class="tile">
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Dia</th>
-                <th>Horário</th>
-                <th>Aula Sigla</th>
-                <th>Módulo</th>
-                <th>Disciplina</th>
-                <th>Professor</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($celulas as $celula)
-            <tr>
-                <td>{{$celula->getDiaFormatado()}}</td>
-                <td>{{$celula->horario}}</td>
-                <td>{{$celula->aula_sigla}}</td>
-                <td>{{$celula->module_nome}}</td>
-                <td>{{$celula->disciplina_nome}}</td>
-                <td>{{$celula->teacher_nome}}</td>
-            </tr>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Dia</th>
+                    <th>Horário</th>
+                    <th>Aula Sigla</th>
+                    <th>Módulo</th>
+                    <th>Disciplina</th>
+                    <th>Professor</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($celulas as $celula)
+                <tr>
+                    <td>{{$celula->getDiaFormatado()}}</td>
+                    <td>{{$celula->horario}}</td>
+                    <td>{{$celula->aula_sigla}}</td>
+                    <td>{{$celula->module_nome}}</td>
+                    <td>{{$celula->disciplina_nome}}</td>
+                    <td>{{$celula->teacher_nome}}</td>
+                    <td>
+                        <a href="#" class="desmarcarAula text-danger" title="Desmarcar" data-celula_id="{{$celula->id}}"
+                            data-aula_sigla="{{$celula->aula_sigla}}" data-horario="{{$celula->horario}}"
+                            data-dia="{{$celula->getDiaFormatado()}}" data-teacher_nome="{{$celula->teacher_nome}}">
+                            <i class="fa fa-trash"></i>
 
-            @endforeach
+                        </a>
+                    </td>
+                </tr>
 
-        </tbody>
-    </table>
+                @endforeach
+
+            </tbody>
+        </table>
+    </div>
 </div>
-</div>
+
+<form id="desmarcar-aula-form" action="" data-route="{{ route('agendados.desmarcar','celula_id') }}" method="POST"
+    style="display: none;">
+    @csrf
+    <input type='hidden' name='_method' value='DELETE'>
+</form>
 
 
 @endsection
+
+@push('scripts')
+<script>
+function desmarcarAula(event) {
+    event.preventDefault();
+    var target = event.currentTarget;
+    var dados = target.dataset;
+    var content = 'Aula: ' + dados.aula_sigla + '; ' +
+        'Dia: ' + dados.dia + ' ; Horário: ' + dados.horario +
+        '\n Professor: ' + dados.teacher_nome;
+    wxConfirm(function() {
+        var form = $('#desmarcar-aula-form');
+        var route = form.attr('data-route');
+        route = route.replace('celula_id', dados.celula_id);
+        form.attr('action', route);
+        console.log(route);
+        form.submit();
+    }, "Deseja Realmente Desmarcar?", content);
+}
+$('.desmarcarAula').click(desmarcarAula);
+</script>
+
+@endpush

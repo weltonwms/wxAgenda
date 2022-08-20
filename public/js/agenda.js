@@ -156,6 +156,7 @@
                 message+='Dia: '+resp.dia+' '+resp.horario+', Professor: '+resp.teacher;
                 showGlobalMessage(message,'success');
                 $.notify(message,{type:'success'});
+                setDadosAluno();
             },
             error:function(resp){
                 var msg= resp.responseJSON.error;
@@ -164,14 +165,16 @@
                 showGlobalMessage(msg,'danger');
                 instanceCalendar.refetchEvents();
                 $('#jstree_list_aulas').jstree(true).refresh();
-                
+                setDadosAluno();
             }
       
         });
         //alert('marcar aula')
     }
 
-    $("#btnAgendar").on('click',marcarAula)
+
+    $("#btnAgendar").on('click',marcarAula);
+    setDadosAluno(); //Coloca na tela no começo do load os dados do aluno
 })();
 
 function getNomeAulaAtiva() {
@@ -181,4 +184,21 @@ function getNomeAulaAtiva() {
         return $(query).text();
     }
     return '';
+}
+
+function setDadosAluno(){
+    $.ajax({
+        url: asset+"getAuthStudent",
+        success: function(resp) {
+            
+            $("#student_saldo_atual").text(resp.saldo_atual);
+            if(resp.module)  {
+                $("#student_module_nome").text(resp.module.nome); 
+            }
+                      
+        },
+        error:function(resp){
+           console.log(resp)                
+        }      
+    });
 }

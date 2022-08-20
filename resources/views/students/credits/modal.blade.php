@@ -10,6 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="ajaxError" style="color:red"></div>
                 {!! Form::open(['route'=>'credits.store','class'=>'','id'=>'adminForm2'])!!}
                 
                     @include('students.credits.form')
@@ -44,6 +45,9 @@ function saveNewCredit(e) {
         error: function(err) {
             //console.log('errors' , err)
             console.log(err.responseJSON.errors)
+            if(err.responseJSON.error){
+                $('.ajaxError').html(err.responseJSON.error);
+            }
             $.each(err.responseJSON.errors, function(i, error) {
                 console.log('i ', i)
                 console.log('erro ', error)
@@ -53,6 +57,7 @@ function saveNewCredit(e) {
         },
         beforeSend: function() {
             $(".ajaxErros").remove();
+            $('.ajaxError').html(' ');
         }
     })
 

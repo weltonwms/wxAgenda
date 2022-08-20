@@ -22,4 +22,13 @@ class PerfilController extends Controller
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('Senha Alterada com Sucesso!')]);
         return back();
     }
+
+    public function getAuthStudent()
+    {
+        $student=auth()->user()->student;
+        if($student){
+            $student->load('module');
+        }
+        return response()->json($student);
+    }
 }

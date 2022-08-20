@@ -9,7 +9,13 @@ Aulas'])
 
 
 @section('content')
-
+<div class="tile row tile-nomargin">
+    <label class="text-primary">Créditos Atuais:</label>
+    <button type="button" class="btn btn-outline-info btn-sm"> <span id="student_saldo_atual"></span></button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <label class="text-primary">Módulo Corrente:</label>
+    <button type="button" class="btn btn-outline-info btn-sm"> <span id="student_module_nome"></span></button>
+</div>
 
 <div class="tile row">
 <input type="hidden"  id="aula_id" value="" class="form-control">

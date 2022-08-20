@@ -85,11 +85,19 @@ class CelulaController extends Controller
      */
     public function destroy(Celula $celula)
     {
-        //destruir as celula_student e adicionar créditos aos alunos
-        $celula->students()->detach();
-
-        //destruir a célula
-        $celula->delete();
-        return response()->json(['message' => 'Célula destruída com sucesso!']);
+        try {
+            \DB::transaction(function () use($celula){
+                foreach($celula->students as $student):
+                    Celula::desmarcarStudent($student,$celula);
+                endforeach;
+                $celula->delete();
+            });
+            return response()->json(['message' => 'Célula destruída com sucesso!']);
+        }
+        catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+
+    
 }
