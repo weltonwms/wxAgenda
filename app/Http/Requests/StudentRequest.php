@@ -23,11 +23,14 @@ class StudentRequest extends FormRequest
      */
     public function rules()
     {
+        $student=$this->route('student');
+        $id=$student?$student->id:'null';
+        $userId=$student?$student->user_id:'null';
         return [
             "nome"=>"required",
             "telefone"=>"required",
-            "email"=>"required",
-            'username'=>"required"
+            "email"=>"required|email|unique:students,email,$id",
+            'username'=>"required|unique:users,username,$userId"
         ];
     }
 }

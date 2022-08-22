@@ -9,8 +9,7 @@ use App\Models\Student;
 class AgendadosController extends Controller
 {
     public function index()
-    {
-        
+    {        
         $student = auth()->user()->student;
         $celulas = Celula::getCelulasAgendadas($student);
         $modulesList = \App\Models\Module::getList();
@@ -23,9 +22,9 @@ class AgendadosController extends Controller
 
     public function desmarcar(Celula $celula)
     {
-        //verify regras de desmarcação;
         try {
             $student = auth()->user()->student;
+            $this->verifyRegrasDesmarcacao($student,$celula);
             \DB::transaction(function () use($celula, $student){               
                 Celula::desmarcarStudent($student,$celula);               
             });
@@ -40,8 +39,15 @@ class AgendadosController extends Controller
 
     }
 
-    private function verifyRegrasDesmarcacao()
+    private function verifyRegrasDesmarcacao($student,$celula)
     {
+        if(!$celula->isOnLimitHoursToStart()){
+             throw new \Exception("Desmarcação deverá ser feita com antecedência");
+        }
+
+        if(!$student->isOnLimitCancellationsByMonth()){
+            throw new \Exception("Limite Estourado de Desmarcações por mês ");
+        }
 
     }
 }

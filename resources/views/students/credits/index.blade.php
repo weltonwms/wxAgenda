@@ -60,6 +60,14 @@ tableCreditsStudent = $('#tableCreditsStudent').DataTable( {
         ],
         order: [0, 'desc'],
     });
+$('#ModalFormCredito').on('shown.bs.modal', function () {
+  var horasContratadas= $('#horas_contratadas').val();
+  if(!$('#qtd').val()){
+    //facilitar preenchimento caso o campo qtd esteja vazio
+    $('#qtd').val(horasContratadas);
+  }
+  
+})
      
 </script>
 

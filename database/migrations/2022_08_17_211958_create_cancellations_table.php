@@ -21,7 +21,7 @@ class CreateCancellationsTable extends Migration
             $table->date('dia');
             $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('aula_id');
-
+            $table->boolean('by_adm')->default(false);
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');;
            

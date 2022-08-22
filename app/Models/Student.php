@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Celula;
 use App\Models\Cancellation;
+use Carbon\Carbon;
 
 class Student extends Model
 {
     use HasFactory;
     protected $fillable = ['nome', 'email','telefone','module_id','cidade',
-    'endereco','cidade','uf'];
+    'endereco','cidade','uf','horas_contratadas'];
 
     public function user()
     {
@@ -25,7 +26,7 @@ class Student extends Model
 
     public function celulas()
     {
-        return $this->belongsToMany(Celula::class);
+        return $this->belongsToMany(Celula::class)->withTimestamps();
     }
 
 
@@ -64,7 +65,7 @@ class Student extends Model
         $this->save();
     }
 
-    public function onDesmarcacaoAula(Celula $celula)
+    public function onDesmarcacaoAula(Celula $celula,$byAdm=0)
     {
         $this->saldo_atual++;
         $this->save();
@@ -75,6 +76,7 @@ class Student extends Model
         $cancellation->dia=$celula->dia;
         $cancellation->teacher_id=$celula->teacher_id;
         $cancellation->aula_id=$celula->aula_id;
+        $cancellation->by_adm=$byAdm;
         $cancellation->save();
     }
 
@@ -85,5 +87,28 @@ class Student extends Model
         endif;
 
         return parent::save($options);
+    }
+
+    public function countCancellationsByMonth($date=null,$byAdm=0)
+    {
+        if(!$date):
+            $date= date('Y-m-d');
+        endif;
+        $carbonDate=Carbon::createFromDate($date);
+        $query=\DB::table('cancellations')
+        ->whereYear('data_acao', $carbonDate->format('Y'))
+        ->whereMonth('data_acao', $carbonDate->format('m'))
+        ->where('student_id',$this->id);
+       if(is_numeric($byAdm)):
+            $query->where('by_adm',$byAdm);
+        endif;
+        return $query->count();
+      
+    }
+
+    public function isOnLimitCancellationsByMonth($date=null)
+    {
+        $limitCancellationsByMonth=4;
+        return $this->countCancellationsByMonth($date) < $limitCancellationsByMonth;
     }
 }

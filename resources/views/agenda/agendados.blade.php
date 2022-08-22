@@ -23,7 +23,7 @@ $modulesList->prepend('Todos','all');
     <button type="button" class="btn btn-outline-info btn-sm"> {{$student->saldo_atual}}</button>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <label class="text-primary">Módulo Corrente:</label>
-    <button type="button" class="btn btn-outline-info btn-sm"> {{$student->module->nome}}</button>
+    <button type="button" class="btn btn-outline-info btn-sm"> @if($student->module){{$student->module->nome}}@endif</button>
 </div>
 
 
@@ -102,10 +102,12 @@ $modulesList->prepend('Todos','all');
                     <td>{{$celula->disciplina_nome}}</td>
                     <td>{{$celula->teacher_nome}}</td>
                     <td>
+                        @if($celula->isOnLimitHoursToStart())
                         <a href="#" class="desmarcarAula text-danger" title="Desmarcar" data-celula_id="{{$celula->id}}"
                             data-aula_sigla="{{$celula->aula_sigla}}" data-horario="{{$celula->horario}}"
                             data-dia="{{$celula->getDiaFormatado()}}" data-teacher_nome="{{$celula->teacher_nome}}">
                             <i class="fa fa-trash"></i>
+                        @endif
 
                         </a>
                     </td>

@@ -16,7 +16,7 @@ class Celula extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class);
+        return $this->belongsToMany(Student::class)->withTimestamps();;
 
     }
 
@@ -190,18 +190,16 @@ class Celula extends Model
         return $celula->info();
     }
 
-    public static function desmarcarStudent($student,$celula)
+    public static function desmarcarStudent($student,$celula,$byAdm=0)
     {       
         $celula->students()->detach($student->id);
-        $student->onDesmarcacaoAula($celula);
+        $student->onDesmarcacaoAula($celula,$byAdm);
         if($celula->students->count() ==0){
             //Se célula ficar vazia retirar aula_id e level 
             $celula->aula_id=null;
             $celula->aula_level=null;
             $celula->save();
         }
-       
-        
 
     }
 
@@ -262,5 +260,25 @@ class Celula extends Model
        }
        $result=$query->orderBy('celulas.dia')->orderBy('celulas.horario')->get();
        return $result;
+    }
+
+    /**
+     * Método que informa quantas horas para iniciar
+     * @return float tanto de horas para iniciar célula de aula
+     */
+    
+    public function HoursToStart()
+    {
+        $dateNow=Carbon::now();
+        //$dateNow=Carbon::createFromDate('2022-08-23 04:00'); //uso de teste
+        $dateStart=Carbon::createFromDate($this->dia.' '.$this->horario);
+        return $dateStart->floatDiffInHours($dateNow);
+       
+    }
+
+    public function isOnLimitHoursToStart()
+    {
+        $limitHoursToStart=3; //trazer do config
+        return $this->HoursToStart() >=$limitHoursToStart;
     }
 }

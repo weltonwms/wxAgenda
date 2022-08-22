@@ -16,6 +16,7 @@ class CreateCelulaStudentTable extends Migration
         Schema::create('celula_student', function (Blueprint $table) {
             $table->unsignedBigInteger('celula_id');
             $table->unsignedBigInteger('student_id');
+            $table->timestamps();
             $table->primary(['celula_id', 'student_id']);
 
             $table->foreign('celula_id')->references('id')->on('celulas');

@@ -22,6 +22,7 @@ class CreateStudentsTable extends Migration
             $table->string('cidade')->nullable();
             $table->string('uf')->nullable();
             $table->integer('saldo_atual')->default('0')->comment('Créditos para marcar aula');
+            $table->integer('horas_contratadas')->nullable();
             $table->unsignedBigInteger('module_id')->nullable();
             $table->unsignedBigInteger('user_id')->unique()->nullable();
             $table->timestamps();

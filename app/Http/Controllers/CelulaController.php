@@ -87,8 +87,9 @@ class CelulaController extends Controller
     {
         try {
             \DB::transaction(function () use($celula){
+                $byAdm=1; //Informar na desmarcação que a ação é feito por um adm.
                 foreach($celula->students as $student):
-                    Celula::desmarcarStudent($student,$celula);
+                    Celula::desmarcarStudent($student,$celula,$byAdm);
                 endforeach;
                 $celula->delete();
             });

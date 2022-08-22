@@ -52,8 +52,11 @@ $estadosBrasileiros = array(
 
     </div>
 
-    <div class="col md-6">
+    <div class="col md-4">
         {{ Form::bsSelect('module_id',$modulesList,null,['label'=>"Módulo Corrente", 'placeholder' => '--Selecione--','class'=>'select2']) }}
+    </div>
+    <div class="col-md-2">
+    {{ Form::bsNumber('horas_contratadas')}}
     </div>
 
     <div class="col-md-6">
