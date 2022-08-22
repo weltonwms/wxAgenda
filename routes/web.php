@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::post('celulasBath', '\App\Http\Controllers\CelulaController@celulasBath')->name('celulasBath.store');    
     Route::post('celulas', '\App\Http\Controllers\CelulaController@store')->name('celulas.store');    
     Route::delete('celulas/{celula}', '\App\Http\Controllers\CelulaController@destroy')->name('celulas.destroy');
+    Route::get('configurations',[App\Http\Controllers\ConfigurationController::class , 'index'])->name('configurations.index');
+    Route::post('confgurations',[App\Http\Controllers\ConfigurationController::class , 'save'])->name('configurations.save');
 });
 
 

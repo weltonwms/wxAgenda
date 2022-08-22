@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        October\Rain\Config\ServiceProvider::class,
 
         /*
          * Application Service Providers...

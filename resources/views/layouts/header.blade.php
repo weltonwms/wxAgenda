@@ -5,7 +5,13 @@
     <ul class="app-nav">
 
       <!--Notification Menu-->
-
+      @if(auth()->user()->isAdm)
+        <li>
+          <a href="{{ route('configurations.index') }}" class="app-nav__item" title="Configurações"> 
+            <i class="fa fa-cog fa-lg" aria-hidden="true"></i>
+          </a>
+        </li>
+      @endif
       <!-- User Menu-->
       <li class="dropdown">
         <a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu">
