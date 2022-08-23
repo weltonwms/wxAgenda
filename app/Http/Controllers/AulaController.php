@@ -11,7 +11,6 @@ class AulaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -22,7 +21,6 @@ class AulaController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -38,7 +36,6 @@ class AulaController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(AulaRequest $request)
     {
@@ -54,7 +51,6 @@ class AulaController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Aula  $aula
-     * @return \Illuminate\Http\Response
      */
     public function show(Aula $aula)
     {
@@ -65,7 +61,6 @@ class AulaController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Aula  $aula
-     * @return \Illuminate\Http\Response
      */
     public function edit(Aula $aula)
     {

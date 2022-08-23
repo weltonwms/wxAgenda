@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\Models\Systemcount;
 use App\Helpers\StoreStudentHelper;
+use App\Helpers\ConfiguracoesHelper;
 
 class Celula extends Model
 {
@@ -102,7 +103,8 @@ class Celula extends Model
     {
         $start = Carbon::createFromDate($start)->format('Y-m-d');
         $end = Carbon::createFromDate($end)->format('Y-m-d');
-       
+        $celula_limit= ConfiguracoesHelper::celula_limit();
+
         $celulas = Celula::where('dia', '>=', $start)->where('dia', '<=', $end)
             ->where('teacher_id', $teacher_id)
             ->withCount('students')
@@ -110,7 +112,7 @@ class Celula extends Model
             ->get();
 
         
-        $mapCelulas = $celulas->map(function ($celula) {
+        $mapCelulas = $celulas->map(function ($celula) use($celula_limit){
             $obj = new \stdClass();
             $obj->id = $celula->id;
             $title = '';
@@ -128,7 +130,8 @@ class Celula extends Model
                 $obj->backgroundColor = '#ffc107';
                 $obj->textColor='#343a40';
             }
-            if ($celula->students_count > 3) {
+            
+            if ($celula->students_count >= $celula_limit) {
                 $obj->backgroundColor = '#dc3545';
                 $obj->textColor='#fff';
             }
@@ -270,15 +273,15 @@ class Celula extends Model
     public function HoursToStart()
     {
         $dateNow=Carbon::now();
-        //$dateNow=Carbon::createFromDate('2022-08-23 04:00'); //uso de teste
+        //$dateNow=Carbon::createFromDate('2022-08-21 10:00'); //uso de teste
         $dateStart=Carbon::createFromDate($this->dia.' '.$this->horario);
-        return $dateStart->floatDiffInHours($dateNow);
+        return $dateNow->floatDiffInHours($dateStart, false);
        
     }
 
     public function isOnLimitHoursToStart()
     {
-        $limitHoursToStart=3; //trazer do config
+        $limitHoursToStart=ConfiguracoesHelper::desmarcacao_hours_before(); //trazer do config
         return $this->HoursToStart() >=$limitHoursToStart;
     }
 }

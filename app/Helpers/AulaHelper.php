@@ -6,7 +6,7 @@ use App\Models\Celula;
 use App\Models\Aula;
 use App\Models\Student;
 use App\Models\Systemcount;
-
+use App\Helpers\ConfiguracoesHelper;
 
 class AulaHelper
 {
@@ -19,7 +19,7 @@ class AulaHelper
 
     public function start()
     {
-
+        $celula_limit= ConfiguracoesHelper::celula_limit();
         $this->base = Disciplina::with(['aulas' => function ($query) {
             $query->where('module_id', $this->module_id);
         }])->get();
@@ -37,7 +37,7 @@ class AulaHelper
             ->leftJoin('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
             ->select(\DB::raw('celulas.id, dia, horario, aula_id, COUNT(celula_student.student_id) as ct'))
             ->groupBy('celulas.id')
-            ->havingBetween('ct', [1, 4])
+            ->havingBetween('ct', [1, $celula_limit])
             ->get();
     //dd($this->celulasAbertas->pluck('aula_id'));
 

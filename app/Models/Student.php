@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Celula;
 use App\Models\Cancellation;
 use Carbon\Carbon;
+use App\Helpers\ConfiguracoesHelper;
 
 class Student extends Model
 {
@@ -108,7 +109,7 @@ class Student extends Model
 
     public function isOnLimitCancellationsByMonth($date=null)
     {
-        $limitCancellationsByMonth=4;
+        $limitCancellationsByMonth=ConfiguracoesHelper::desmarcacao_limit_by_month();
         return $this->countCancellationsByMonth($date) < $limitCancellationsByMonth;
     }
 }

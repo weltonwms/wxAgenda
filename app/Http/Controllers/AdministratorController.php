@@ -12,7 +12,6 @@ class AdministratorController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -23,7 +22,6 @@ class AdministratorController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -53,7 +51,6 @@ class AdministratorController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Administrator  $administrator
-     * @return \Illuminate\Http\Response
      */
     public function show(Administrator $administrator)
     {
@@ -64,7 +61,6 @@ class AdministratorController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Administrator  $administrator
-     * @return \Illuminate\Http\Response
      */
     public function edit(Administrator $administrator)
     {

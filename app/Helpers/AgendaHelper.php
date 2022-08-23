@@ -5,6 +5,7 @@ use App\Models\Celula;
 use App\Models\Systemcount;
 use App\Models\Aula;
 use App\Helpers\LevelStudentHelper;
+use App\Helpers\ConfiguracoesHelper;
 
 /**
  * Pendente:
@@ -30,7 +31,8 @@ class AgendaHelper
 
     public function start()
     {
-        $queryBase = Celula::has('students', '<', 4)
+        $celula_limit= ConfiguracoesHelper::celula_limit();
+        $queryBase = Celula::has('students', '<', $celula_limit)
             ->join('horarios', 'horarios.horario', 'celulas.horario')
             ->leftJoin('aulas', 'aulas.id', 'celulas.aula_id')
             ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id');

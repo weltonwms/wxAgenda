@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Celula;
 use App\Models\Student;
+use App\Helpers\ConfiguracoesHelper;
+
 
 class AgendadosController extends Controller
 {
     public function index()
     {        
+       
         $student = auth()->user()->student;
         $celulas = Celula::getCelulasAgendadas($student);
         $modulesList = \App\Models\Module::getList();
@@ -41,6 +44,11 @@ class AgendadosController extends Controller
 
     private function verifyRegrasDesmarcacao($student,$celula)
     {
+        $desmarcarcaoPermitida=ConfiguracoesHelper::desmarcacao_permitida();
+        if(!$desmarcarcaoPermitida){
+            throw new \Exception("Desmarcação Bloqueada por Administrador");
+       }
+
         if(!$celula->isOnLimitHoursToStart()){
              throw new \Exception("Desmarcação deverá ser feita com antecedência");
         }

@@ -2,6 +2,7 @@
 namespace App\Helpers;
 use App\Helpers\AgendaHelper;
 use Carbon\Carbon;
+use App\Helpers\ConfiguracoesHelper;
 
 class StoreStudentHelper
 {
@@ -17,6 +18,7 @@ class StoreStudentHelper
         $this->agendaHelper->setEnd($celula->dia);
         $this->agendaHelper->start();
         // throw new \Exception('Testando um erro');
+        $this->isActiveAgendamento();
         $this->hasCredit($student);
         $this->limiteCelula($celula);
         $this->mesmoDiaHorario($celula);
@@ -28,6 +30,14 @@ class StoreStudentHelper
 
     }
 
+    private function isActiveAgendamento()
+    {
+        $isActiveAgendamento=ConfiguracoesHelper::agendamento_ativo();
+        if (!$isActiveAgendamento):
+            throw new \Exception("Agendamento Bloqueado por Administrador!");
+        endif;
+    }
+
     private function hasCredit($student)
     {
         if ($student->saldo_atual < 1):
@@ -37,9 +47,9 @@ class StoreStudentHelper
 
     private function limiteCelula($celula)
     {
-        $limite = 4;
-        if ($celula->students->count() >= $limite):
-            throw new \Exception("Limite de $limite alunos por sala de Aula Estourado!");
+        $celula_limit= ConfiguracoesHelper::celula_limit();
+        if ($celula->students->count() >= $celula_limit):
+            throw new \Exception("Limite de $celula_limit alunos por sala de Aula Estourado!");
         endif;
     }
 
