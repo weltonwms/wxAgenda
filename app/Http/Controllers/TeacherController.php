@@ -10,8 +10,7 @@ class TeacherController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     *     
      */
     public function index()
     {
@@ -21,8 +20,7 @@ class TeacherController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     *     
      */
     public function create()
     {
@@ -34,8 +32,7 @@ class TeacherController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request     
      */
     public function store(TeacherRequest $request)
     {
@@ -50,8 +47,7 @@ class TeacherController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Teacher  $teacher     
      */
     public function show(Teacher $teacher)
     {
@@ -61,8 +57,7 @@ class TeacherController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Teacher  $teacher
-     * @return \Illuminate\Http\Response
+     * @param  \App\Models\Teacher  $teacher     
      */
     public function edit(Teacher $teacher)
     {

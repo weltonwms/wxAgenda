@@ -184,6 +184,7 @@ class Celula extends Model
         if (!$celula->aula_id) {
             //abrindo célula para aula 
             $celula->aula_id = $aula_id;
+            $celula->aula_level=$helper->getLevelStudent($celula);
             $celula->save();
             Systemcount::run($celula->aula_id);
         }

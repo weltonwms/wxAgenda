@@ -30,6 +30,14 @@ class StoreStudentHelper
 
     }
 
+    public function getLevelStudent($celula)
+    {
+        if(!$this->agendaHelper):
+            throw new \Exception("Não é possível chamar getLevelStudent() sem chamar validarStore()");
+        endif;
+        return $this->agendaHelper->getLevelStudent($celula);
+    }
+
     private function isActiveAgendamento()
     {
         $isActiveAgendamento=ConfiguracoesHelper::agendamento_ativo();

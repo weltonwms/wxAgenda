@@ -269,6 +269,12 @@ class AgendaHelper
         return $this->aulaRequest;
     }
 
+    public function getLevelStudent($celula)
+    {
+        $level = $this->levelStudent->getLevel($celula->dia, $celula->horario);
+        return $level;
+    }   
+
 
 
 
