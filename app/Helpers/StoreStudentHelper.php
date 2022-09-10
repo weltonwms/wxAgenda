@@ -112,7 +112,8 @@ class StoreStudentHelper
         else {
             $xpt = "Disciplina";
             $disciplina_id = $aulaRequest->disciplina_id;
-            $filter = $this->agendaHelper->filtroDisciplina($disciplina_id, $start, $end, $turno_id);
+            $module_id = $aulaRequest->module_id;
+            $filter = $this->agendaHelper->filtroDisciplina($disciplina_id, $start, $end, $turno_id,$module_id);
         }
         if (!$filter->isEmpty()):
             //Não pode ter já marcado Aula/Disciplina no mesmo turno 1 dia trás e 1 para frente.

@@ -35,7 +35,7 @@ class AgendaHelper
         $queryBase = Celula::has('students', '<', $celula_limit)
             ->join('horarios', 'horarios.horario', 'celulas.horario')
             ->leftJoin('aulas', 'aulas.id', 'celulas.aula_id')
-            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id');
+            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id','aulas.module_id');
         if ($this->start) {
             $queryBase->where('celulas.dia', '>=', $this->start);
         }
@@ -161,9 +161,9 @@ class AgendaHelper
                 $endCarbon = Carbon::createFromDate($celula->dia)->addDay();
                 $start = $startCarbon->format('Y-m-d');
                 $end = $endCarbon->format('Y-m-d');
+                $module_id=$this->aulaRequest->module_id;
 
-
-                $resp = $this->filtroDisciplina($disciplina_id, $start, $end, $celula->turno_id);
+                $resp = $this->filtroDisciplina($disciplina_id, $start, $end, $celula->turno_id,$module_id);
                 return $resp->isEmpty();
             endif;
             return false;
@@ -171,14 +171,19 @@ class AgendaHelper
 
     }
 
-    public function filtroDisciplina($disciplina_id, $start, $end, $turno_id)
+    public function filtroDisciplina($disciplina_id, $start, $end, $turno_id,$module_id=null)
     {
+        
         $filtered = $this->celulasBase
-            ->filter(function ($celula) use ($disciplina_id, $start, $end, $turno_id) {
-            return $celula->disciplina_id == $disciplina_id &&
+            ->filter(function ($celula) use ($disciplina_id, $start, $end, $turno_id,$module_id) {
+            $result=$celula->disciplina_id == $disciplina_id &&
             $celula->turno_id == $turno_id &&
             $celula->dia >= $start &&
             $celula->dia <= $end;
+            if($module_id):
+                return $result && $celula->module_id==$module_id;
+            endif;
+            return $result;
         });
         return $filtered;
     }
