@@ -36,7 +36,7 @@ class AulaHelper
         $this->celulasAbertas = \DB::table('celulas')
             ->leftJoin('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
             ->select(\DB::raw('celulas.id, dia, horario, aula_id, COUNT(celula_student.student_id) as ct'))
-            ->groupBy('celulas.id')
+            ->groupBy('celulas.id','dia','horario','aula_id')
             ->havingBetween('ct', [1, $celula_limit])
             ->get();
     //dd($this->celulasAbertas->pluck('aula_id'));
