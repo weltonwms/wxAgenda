@@ -116,6 +116,12 @@
         <i class="app-menu__icon fa fa-calendar-check-o"></i><span class="app-menu__label">Aulas Marcadas</span>
       </a>
     </li>
+
+    <li>
+      <a class="app-menu__item {{Request::segment(1)=='gradeEscola'?'active':null}}" href="{{route('gradeEscola.index')}}">
+        <i class="app-menu__icon fa fa-map"></i><span class="app-menu__label">Grade da Escola</span>
+      </a>
+    </li>
     @endif
   </ul>
 
