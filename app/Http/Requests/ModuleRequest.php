@@ -27,7 +27,8 @@ class ModuleRequest extends FormRequest
         $id=$module?$module->id:'null';
         
         return [
-            "nome"=>"required|unique:modules,nome,$id"
+            "nome"=>"required|unique:modules,nome,$id",
+            'ordem' => 'required|integer',
         ];
     }
 }

@@ -178,8 +178,9 @@ class Celula extends Model
         //ações em systemCount
 
         $celula = Celula::find($celula_id);
+        $aulaRequest=Aula::find($aula_id);
         $helper= new StoreStudentHelper();
-        $helper->validarStore($student,$celula,$aula_id);
+        $helper->validarStore($student,$celula,$aulaRequest);
         
         if (!$celula->aula_id) {
             //abrindo célula para aula 

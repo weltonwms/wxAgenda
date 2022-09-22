@@ -15,6 +15,8 @@ class Student extends Model
     protected $fillable = ['nome', 'email','telefone','module_id','cidade',
     'endereco','cidade','uf','horas_contratadas'];
 
+    private $modules;
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -111,5 +113,26 @@ class Student extends Model
     {
         $limitCancellationsByMonth=ConfiguracoesHelper::desmarcacao_limit_by_month();
         return $this->countCancellationsByMonth($date) < $limitCancellationsByMonth;
+    }
+
+    /**
+     * Retornas os módulos em que o aluno pode alternar.
+     */
+    public function getModules()
+    {
+        if($this->module){
+            if(!$this->modules){
+                $this->modules=\DB::table('modules')
+                ->where('ordem','<=',$this->module->ordem)
+                ->get();
+            }
+            return $this->modules;
+        }
+        return collect([]);
+    }
+
+    public function isModuleAllowed($module_id)
+    {
+        return $this->getModules()->contains('id',$module_id);
     }
 }

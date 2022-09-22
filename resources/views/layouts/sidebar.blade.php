@@ -28,11 +28,11 @@
       </a>
     </li>
 
-    <li>
+    <!-- <li>
       <a class="app-menu__item {{Request::segment(1)=='restrictions'?'active':null}}" href="{{route('restrictions.index')}}">
         <i class="app-menu__icon fa fa-lock"></i><span class="app-menu__label">Restrições</span>
       </a>
-    </li>
+    </li> -->
 
     <li>
       <a class="app-menu__item {{Request::segment(1)=='horarios'?'active':null}}" href="{{route('horarios.index')}}">
@@ -60,41 +60,7 @@
       </a>
     </li>
 
-    <!-- <li class="treeview">
-      <a class="app-menu__item {{Request::segment(1)=='relatorio'?'active':null}}" href="#" data-toggle="treeview">
-        <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Relatórios</span>
-        <i class="treeview-indicator fa fa-angle-right"></i>
-      </a>
-      <ul class="treeview-menu">
-       
-        <li>
-          <a class="treeview-item {{Request::segment(2)=='vendas'?'active':null}}" href="{{route('home')}}">
-            <i class="icon fa fa-circle-o"></i> Vendas
-          </a>
-        </li>
-
-        <li>
-          <a class="treeview-item {{Request::segment(2)=='produtos'?'active':null}}" href="{{route('home')}}">
-            <i class="icon fa fa-circle-o"></i> Produtos
-          </a>
-        </li>
-
-        <li>
-          <a class="treeview-item {{Request::segment(2)=='produtoVenda'?'active':null}}"
-            href="{{route('home')}}">
-            <i class="icon fa fa-circle-o"></i> Produtos Vendidos
-          </a>
-        </li>
-
-        <li>
-          <a class="treeview-item {{Request::segment(2)=='sellers'?'active':null}}" href="{{route('home')}}">
-            <i class="icon fa fa-circle-o"></i> Vendedores
-          </a>
-        </li>
-
-      </ul>
-    </li> -->
-
+   
     <li>
       <a class="app-menu__item {{Request::segment(1)=='administrators'?'active':null}}" href="{{route('administrators.index')}}">
         <i class="app-menu__icon fa fa-user-secret"></i>

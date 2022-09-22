@@ -14,15 +14,17 @@ class AgendaController extends Controller
 
     public function index()
     {
-        $horariosList = Horario::getList()->values();       
-        return view('agenda.index', compact('horariosList'));
+        $horariosList = Horario::getList()->values(); 
+        $student = auth()->user()->student;
+        //dd($student->getModules()->pluck('nome','id'));
+        return view('agenda.index', compact('horariosList', 'student'));
     }
 
     public function aulasToAgenda()
     {
         $student = auth()->user()->student;
         $aulaHelper = new AulaHelper();
-        $aulaHelper->module_id = $student->module_id;
+        $aulaHelper->module_id = request('module_id');
         $aulaHelper->student_id = $student->id;
         $aulaHelper->start();
         $disciplinasWithAulas = $aulaHelper->filtrar();
@@ -39,7 +41,7 @@ class AgendaController extends Controller
         $agendaHelper->setEnd(request('end'));
         $agendaHelper->aula_id = request('aula_id');
         $agendaHelper->student_id = $student->id;
-        $agendaHelper->module_id = $student->module_id;
+        $agendaHelper->module_id = request('module_id');
 
         if (!$agendaHelper->isRequestValid()) {
             return []; //impedir de ações desnecessárias

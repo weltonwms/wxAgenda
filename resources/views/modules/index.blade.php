@@ -20,6 +20,7 @@
     <tr>
         <th><input class="checkall" type="checkbox"></th>
         <th width="90%">Nome</th>
+        <th>Ordem</th>
         <th>ID</th>
     </tr>
 </thead>
@@ -28,7 +29,8 @@
    @foreach($modules as $module)
     <tr>
         <td></td>
-        <td><a href="{{route('modules.edit', $module->id)}}">{{$module->nome}}</a></td>
+        <td><a href="{{route('modules.edit', $module->id)}}">{{$module->nome}}</a></td>       
+        <td>{{$module->ordem}}</td>
         <td>{{$module->id}}</td>
     </tr>
     @endforeach
@@ -44,7 +46,7 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:2}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:3}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 </script>

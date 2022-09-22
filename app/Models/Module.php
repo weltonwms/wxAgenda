@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Module extends Model
 {
     use HasFactory;
-     protected $fillable = ['nome'];
+     protected $fillable = ['nome','ordem'];
 
      public function aulas()
      {
@@ -34,11 +34,16 @@ class Module extends Model
     {
         //realizar alguma validação antes caso seja necessário!!
         $nrAulas = \App\Models\Aula::whereIn("module_id", $ids)->count();
-        $nrTotal = $nrAulas +0;
+        $nrStudents = \App\Models\Student::whereIn("module_id", $ids)->count();
+        $nrTotal = $nrAulas + $nrStudents +0;
         $msg = [];
        
         if ($nrAulas > 0):
             $msg[] = "Aula(s) Relacionada(s) ao Módulo";
+        endif;
+
+        if ($nrStudents > 0):
+            $msg[] = "Aluno(s) Relacionado(s) ao Módulo";
         endif;
         if ($nrTotal > 0):
             \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => implode("<br>", $msg)]);

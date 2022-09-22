@@ -34,8 +34,10 @@
                     method: 'GET',
                     extraParams: function () {
                         var aula_id = $("#aula_id").val();
+                        var module_id = $("#module_id").val();
                         return {
-                            aula_id: aula_id
+                            aula_id: aula_id,
+                            module_id: module_id
                         }
                     },
                     failure: function () {
@@ -175,6 +177,14 @@
 
     $("#btnAgendar").on('click',marcarAula);
     setDadosAluno(); //Coloca na tela no começo do load os dados do aluno
+    $("#module_id").on('change', function () {
+          //ao trocar modulo atualizar árvore e zerar seleção de aulas
+        $('#jstree_list_aulas').jstree(true).refresh(false,true);      
+        $('#aula_id').val(''); 
+        //atualizar eventos
+        instanceCalendar.refetchEvents();
+    })
+
 })();
 
 function getNomeAulaAtiva() {

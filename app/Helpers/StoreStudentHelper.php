@@ -8,12 +8,12 @@ class StoreStudentHelper
 {
     private $agendaHelper;
 
-    public function validarStore($student, $celula, $aula_id)
+    public function validarStore($student, $celula, $aulaRequest)
     {
         $this->agendaHelper = new AgendaHelper();
         $this->agendaHelper->student_id = $student->id;
-        $this->agendaHelper->module_id = $student->module_id;
-        $this->agendaHelper->aula_id = $aula_id;
+        $this->agendaHelper->module_id = $aulaRequest->module_id;
+        $this->agendaHelper->aula_id = $aulaRequest->id;
         $this->agendaHelper->setStart($celula->dia);
         $this->agendaHelper->setEnd($celula->dia);
         $this->agendaHelper->start();
@@ -23,7 +23,7 @@ class StoreStudentHelper
         $this->limiteCelula($celula);
         $this->mesmoDiaHorario($celula);
         $this->validModule($student);
-        $this->celulaEstado2($celula, $aula_id);
+        $this->celulaEstado2($celula, $aulaRequest->id);
         $this->filtroAulaDisciplina($celula);
         $this->validOrdemBase($celula);
         $this->ordemSystemCount($celula);
@@ -75,7 +75,7 @@ class StoreStudentHelper
     private function validModule($student)
     {
         $aulaRequest = $this->agendaHelper->getAulaRequest();
-        if ($aulaRequest->module_id != $student->module_id) {
+        if (!$student->isModuleAllowed($aulaRequest->module_id)) {
             throw new \Exception("Aula não Compátivel com seu módulo");
         }
 

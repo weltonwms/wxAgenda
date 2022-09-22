@@ -90,6 +90,9 @@ class AgendaHelper
         if (!$this->aula_id) {
             return false;
         }
+        if (!$this->module_id) {
+            return false;
+        }
 
         return true;
     }
