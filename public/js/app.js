@@ -152,4 +152,16 @@ function showGlobalMessage(conteudo,tipo='info',larger=true){
 
 }
 
+function showMessage(alvo,conteudo,tipo='info'){
+   
+    var string=' <div>'+
+        '<div class="alert alert-'+tipo+ ' alert-dismissable " style="width:100%">'+
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
+        conteudo+
+        '</div>'+
+    '</div>';
+    $(alvo).html(string);
+
+}
+
 

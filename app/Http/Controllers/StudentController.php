@@ -114,4 +114,10 @@ class StudentController extends Controller
         endif;
         return redirect()->route('students.index');
     }
+
+    public function getStudentsAjax()
+    {
+        $students=Student::all();
+        return response()->json($students);
+    }
 }

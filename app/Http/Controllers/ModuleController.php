@@ -102,4 +102,10 @@ class ModuleController extends Controller
         endif;
         return redirect()->route('modules.index');
     }
+
+    public function getModulesAjax()
+    {
+        $modules=Module::all();
+        return response()->json($modules);
+    }
 }

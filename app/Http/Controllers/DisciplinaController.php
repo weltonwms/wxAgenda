@@ -104,4 +104,10 @@ class DisciplinaController extends Controller
         endif;
         return redirect()->route('disciplinas.index');
     }
+
+    public function getDisciplinasAjax()
+    {
+        $disciplinas = Disciplina::all();
+        return response()->json($disciplinas);
+    }
 }

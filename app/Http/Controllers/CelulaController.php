@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CelulaStoreRequest;
+use App\Http\Requests\CelulaStoreStudentRequest;
 use App\Http\Requests\CelulasBathRequest;
 
 use App\Models\Celula;
 use App\Models\Teacher;
 use App\Models\Horario;
+use App\Models\Student;
 
 class CelulaController extends Controller
 {
@@ -94,6 +96,22 @@ class CelulaController extends Controller
                 $celula->delete();
             });
             return response()->json(['message' => 'Célula destruída com sucesso!']);
+        }
+        catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function storeStudent(CelulaStoreStudentRequest $request)
+    {
+        //request tem que ter: celula_id, student_id e aula_id
+        try {
+            $celulaInfo=\DB::transaction(function () use ($request) {
+                $student = Student::find($request->student_id);
+                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $request->aula_id);
+                return $celulaInfo;
+            });
+            return response()->json($celulaInfo);
         }
         catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

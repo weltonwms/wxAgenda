@@ -12,7 +12,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="message_modal"></div>
                 <input type="hidden" id="modalCelula_celula_id" />
+                <input type="hidden" id="modalCelula_aula_id" />
                 <div class="container-fluid">
                     <div class="row  p-2 mb-3 bg-light">
                         <div class="col-6 col-sm-4">
@@ -32,6 +34,37 @@
                     <ul id="modalCelula_students">
 
                     </ul>
+                    <div class="row mb-3">
+                        <div class="col-sm-3 mb-2">
+                            <button id="btnAddStudent" class="btn btn-sm btn-outline-success"
+                                title="Adicionar Aluno na Célula de Aula">
+                                Add Aluno
+                            </button>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div id="blocoConfirm" class=""></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="selectAluno" class="form-group"></div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div id="selectModule" class="form-group"></div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div id="selectDisciplina" class="form-group"></div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div id="selectAula" class="form-group"></div>
+                        </div>
+                    </div>
+
 
                 </div>
 

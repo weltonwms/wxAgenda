@@ -114,4 +114,11 @@ class AulaController extends Controller
         endif;
         return redirect()->route('aulas.index');
     }
+
+    public function getAulasAjax(Request $request)
+    {
+        $aulas = Aula::where('disciplina_id',$request->disciplina_id)
+        ->where('module_id',$request->module_id)->get();
+        return response()->json($aulas);
+    }
 }
