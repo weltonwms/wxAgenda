@@ -70,8 +70,14 @@ class Student extends Model
 
     public function onDesmarcacaoAula(Celula $celula,$byAdm=0)
     {
-        $this->saldo_atual++;
-        $this->save();
+        $credit_provided=0;
+        //add saldo somente se desmarcação de adm ou estiver dentro dos limites
+        if($byAdm || $this->isOnLimitCancellationsByMonth()){
+            $this->saldo_atual++;
+            $this->save();
+            $credit_provided=1;
+        }
+        //fim add saldo (devolução de crédito)        
         $cancellation= new Cancellation();
         $cancellation->student_id=$this->id;
         $cancellation->data_acao=date('Y-m-d H:i:s');
@@ -80,7 +86,9 @@ class Student extends Model
         $cancellation->teacher_id=$celula->teacher_id;
         $cancellation->aula_id=$celula->aula_id;
         $cancellation->by_adm=$byAdm;
+        $cancellation->credit_provided=$credit_provided;
         $cancellation->save();
+       
     }
 
     public function save(array $options = array())

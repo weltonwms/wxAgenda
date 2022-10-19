@@ -52,10 +52,12 @@ class AgendadosController extends Controller
         if(!$celula->isOnLimitHoursToStart()){
              throw new \Exception("Desmarcação deverá ser feita com antecedência");
         }
-
+        //Não proibir mais o aluno de desmarcar
+        /*
         if(!$student->isOnLimitCancellationsByMonth()){
             throw new \Exception("Limite Estourado de Desmarcações por mês ");
         }
+        */
 
     }
 }
