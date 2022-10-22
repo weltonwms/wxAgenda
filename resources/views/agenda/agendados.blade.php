@@ -19,11 +19,41 @@ $modulesList->prepend('Todos','all');
 ?>
 
 <div class="tile tile-nomargin">
-    <label class="text-primary">Créditos Atuais:</label>
-    <button type="button" class="btn btn-outline-info btn-sm"> {{$student->saldo_atual}}</button>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <label class="text-primary">Módulo Corrente:</label>
-    <button type="button" class="btn btn-outline-info btn-sm"> @if($student->module){{$student->module->nome}}@endif</button>
+
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="text-primary mr-1">Créditos Atuais:</label>
+            <button type="button" class="btn btn-outline-info btn-sm mr-3"> {{$student->saldo_atual}}</button>
+        </div>
+
+        <div class="form-group">
+            <label class="text-primary mr-1">Módulo Corrente:</label>
+            <button type="button" class="btn btn-outline-info btn-sm mr-3">
+                @if($student->module){{$student->module->nome}}@endif</button>
+
+
+        </div>
+
+        <div class="form-group">
+            <label class="text-primary mr-1">Desmarcações no Mês:</label>
+            <button type="button" class="btn btn-outline-info btn-sm mr-3">
+                {{$student->countCancellationsByMonth()}}
+            </button>
+
+        </div>
+
+        <div class="form-group">
+            <label class="text-primary mr-1">Limite Desmarcações no Mês:</label>
+            <button type="button" class="btn btn-outline-info btn-sm mr-3">
+                {{$limitDesmarcacao}}
+            </button>
+
+        </div>
+        
+    </div>
+
+
+
 </div>
 
 
@@ -107,7 +137,7 @@ $modulesList->prepend('Todos','all');
                             data-aula_sigla="{{$celula->aula_sigla}}" data-horario="{{$celula->horario}}"
                             data-dia="{{$celula->getDiaFormatado()}}" data-teacher_nome="{{$celula->teacher_nome}}">
                             <i class="fa fa-trash"></i>
-                        @endif
+                            @endif
 
                         </a>
                     </td>

@@ -198,13 +198,14 @@ class Celula extends Model
     public static function desmarcarStudent($student,$celula,$byAdm=0)
     {       
         $celula->students()->detach($student->id);
-        $student->onDesmarcacaoAula($celula,$byAdm);
+        $retorno=$student->onDesmarcacaoAula($celula,$byAdm);
         if($celula->students->count() ==0){
             //Se célula ficar vazia retirar aula_id e level 
             $celula->aula_id=null;
             $celula->aula_level=null;
             $celula->save();
         }
+        return $retorno;
 
     }
 

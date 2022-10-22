@@ -88,7 +88,7 @@ class Student extends Model
         $cancellation->by_adm=$byAdm;
         $cancellation->credit_provided=$credit_provided;
         $cancellation->save();
-       
+        return ['success'=>true,'credit_provided'=>$credit_provided];
     }
 
     public function save(array $options = array())

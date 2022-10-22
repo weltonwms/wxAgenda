@@ -18,7 +18,9 @@ class AgendadosController extends Controller
         $modulesList = \App\Models\Module::getList();
         $teachersList = \App\Models\Teacher::getList();
         $disciplinasList = \App\Models\Disciplina::getList();
-        return view('agenda.agendados', compact('celulas', 'modulesList', 'teachersList', 'disciplinasList','student'));
+        $limitDesmarcacao=ConfiguracoesHelper::desmarcacao_limit_by_month();
+        return view('agenda.agendados', compact('celulas', 'modulesList', 
+        'teachersList', 'disciplinasList','student','limitDesmarcacao'));
     }
 
 
@@ -28,10 +30,14 @@ class AgendadosController extends Controller
         try {
             $student = auth()->user()->student;
             $this->verifyRegrasDesmarcacao($student,$celula);
-            \DB::transaction(function () use($celula, $student){               
-                Celula::desmarcarStudent($student,$celula);               
+            $msg= 'Aula Desmarcada com Sucesso!<br>';
+            \DB::transaction(function () use($celula, $student,&$msg){               
+                $retorno=Celula::desmarcarStudent($student,$celula); 
+               
+                $msg.= $retorno['credit_provided']?'<strong>Crédito Devolvido!</strong>':
+                '<strong class="text-danger">Crédito não Devolvido!(verifique o limite de desmarcações no mês)</strong>';
             });
-            \Session::flash('mensagem', ['type' => 'success', 'conteudo' => 'Aula Desmarcada com Sucesso!']);
+            \Session::flash('mensagem', ['type' => 'success', 'conteudo' => $msg]);
             return redirect()->route('agendados.index');
         }
         catch (\Exception $e) {
