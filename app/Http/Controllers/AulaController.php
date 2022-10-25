@@ -14,8 +14,10 @@ class AulaController extends Controller
      */
     public function index()
     {
-        $aulas = Aula::with('module')->with('disciplina')->get();
-        return view("aulas.index", compact('aulas'));
+        $aulas = Aula::getAulasByFiltro();
+        $modulesList = \App\Models\Module::getList();
+        $disciplinasList = \App\Models\Disciplina::getList();
+        return view("aulas.index", compact('aulas','modulesList','disciplinasList'));
     }
 
     /**
@@ -120,5 +122,11 @@ class AulaController extends Controller
         $aulas = Aula::where('disciplina_id',$request->disciplina_id)
         ->where('module_id',$request->module_id)->get();
         return response()->json($aulas);
+    }
+
+    public function showSystemCounter()
+    {
+        $registros=\App\Models\Systemcount::with('module')->with('disciplina')->get();
+        return view('aulas.counter',compact('registros'));
     }
 }

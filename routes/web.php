@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::post('celulas/storeStudent','\App\Http\Controllers\CelulaController@storeStudent');
     Route::get('configurations',[App\Http\Controllers\ConfigurationController::class , 'index'])->name('configurations.index');
     Route::post('confgurations',[App\Http\Controllers\ConfigurationController::class , 'save'])->name('configurations.save');
+    Route::get('showSystemCounter',[App\Http\Controllers\AulaController::class ,'showSystemCounter'])->name('showSystemCounter');
 });
 
 

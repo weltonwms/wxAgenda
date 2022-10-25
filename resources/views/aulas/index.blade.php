@@ -15,6 +15,57 @@
 @endsection
 
 @section('content')
+
+
+
+<div class="tile tile-nomargin">
+    <form action="{{route('aulas.index')}}">
+        <div class='row'>
+            <div class="col-xl-2 col-md-4">
+
+                {!!Form::bsSelect('module_id', $modulesList,
+                request('module_id'),
+                ['onchange'=>"this.form.submit()","class"=>"select2", 'style'=>'width:100%',
+                "placeholder"=>"-Selecione-", "label"=>"Filtro Módulo"]
+                )!!}
+            </div>
+
+           
+            <div class="col-xl-2 col-md-4">
+
+                {!!Form::bsSelect('disciplina_id', $disciplinasList,
+                request('disciplina_id'),
+                ['onchange'=>"this.form.submit()","class"=>"select2", 'style'=>'width:100%',
+                "placeholder"=>"-Selecione-","label"=>"Filtro Disciplina"]
+                )!!}
+            </div>
+
+            <div class="col-xl-8 col-md-4">
+                <div class="form-group float-md-right">
+                    <label class="control-label d-none d-md-block"><i class="fa fa-list-ol" aria-hidden="true"></i></label>
+                <a class="btn btn-secondary form-control"
+                href="{{route('showSystemCounter')}}">
+                    System Counter
+                </a>
+                </div>
+               
+            </div>
+
+
+
+        </div>
+
+
+
+    </form>
+</div>
+
+
+
+
+
+
+
 @datatables
 <thead>
     <tr>

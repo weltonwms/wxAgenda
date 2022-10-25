@@ -5,10 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Aula;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Systemcount extends Model
 {
     use HasFactory;
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    public function disciplina()
+    {
+        return $this->belongsTo(Disciplina::class);
+    }
 
     public static function run($aula_id)
     {
@@ -38,5 +49,10 @@ class Systemcount extends Model
            $systemCount->save(); 
         }
 
+    }
+
+    public function updatedAtFormated()
+    {
+        return $this->updated_at->format('d/m/Y (H:i)');
     }
 }

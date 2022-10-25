@@ -223,7 +223,7 @@ class Celula extends Model
 
     }
 
-    public function getCelulasAgendadas($student)
+    public static function getCelulasAgendadas($student)
     {        
         $student_id=$student->id;
         $module_id=request('module_id');
