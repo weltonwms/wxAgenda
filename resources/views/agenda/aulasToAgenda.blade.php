@@ -6,8 +6,11 @@
                 <span class="" href="#">{{$disciplina->nome}}</span>
                 <ul class="">
                     @foreach($disciplina->aulas as $aula)
-                    <li><a  @class(['aulas','aula_realizada'=>$aula->realizada]) href="#" 
-                    data-aula_id="{{$aula->id}}" >{{$aula->sigla}}</a></li>
+                    <li @if($aula->current) data-jstree='{"icon":"fa fa-caret-square-o-right"}' @endif>
+                        <a  @class(['aulas','aula_realizada'=>$aula->realizada]) 
+                            href="#" data-aula_id="{{$aula->id}}" >{{$aula->sigla}}
+                        </a>
+                    </li>
                     @endforeach
                 </ul>
 

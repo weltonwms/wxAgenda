@@ -156,3 +156,7 @@ input[type=checkbox].checkbox-lg {
 .formDisponibilidade label[for=periodo_fim] {
   margin-bottom: 1px;
 }
+
+#jstree_list_aulas  a.aulas.empty{
+  color: #aaa;
+}

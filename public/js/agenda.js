@@ -2,7 +2,7 @@
     let instanceCalendar = null;
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
-        var minMaxHorarioValido=getMinMaxHorarioValido();
+        var minMaxHorarioValido = getMinMaxHorarioValido();
         var calendar = new FullCalendar.Calendar(calendarEl, {
             //timeZone: 'UTC',
             height: 'auto',
@@ -53,6 +53,14 @@
                 }
 
             ],
+            datesSet: function (dateInfo) {
+                //console.log(dateInfo);
+                var isTreeLoaded = $('#jstree_list_aulas .aulas').length;
+                if (isTreeLoaded) {
+                    vouNoBack(dateInfo.start, dateInfo.end);
+                }
+
+            },
             eventClick: function (calendaInfo) {
                 var event = calendaInfo.event;
                 var props = event.extendedProps;
@@ -86,7 +94,7 @@
     $("#teacher_id").on('change', function () {
         instanceCalendar.refetchEvents();
     })
-    $('#jstree_list_aulas').on('click', '.aulas',function () {
+    $('#jstree_list_aulas').on('click', '.aulas', function () {
         var data = this.dataset;
         $("#aula_id").val(data.aula_id);
         instanceCalendar.refetchEvents();
@@ -97,7 +105,7 @@
             return '<option value="' + celula.id + '">' + celula.nome_professor + '</option>';
         });
         $('#celula_to_agenda').html(x.join(' '));
-        var diaMoment=moment(resp[0].dia);
+        var diaMoment = moment(resp[0].dia);
         $("#modalAgenda_horario").html(resp[0].horario);
         $("#modalAgenda_dia").html(diaMoment.format('DD.MM.YYYY'));
         $("#modalAgenda_aula").html(getNomeAulaAtiva());
@@ -133,82 +141,142 @@
         return obj;
 
     }
-    
-    function marcarAula(event){
-        var aula_id=$("#aula_id").val();
-        var celula_id=$("#celula_to_agenda").val();
+
+    function marcarAula(event) {
+        var aula_id = $("#aula_id").val();
+        var celula_id = $("#celula_to_agenda").val();
         var token = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
-            url: asset+"agenda",
+            url: asset + "agenda",
             method: 'POST',
             data: {
                 _token: token,
                 aula_id: aula_id,
                 celula_id: celula_id
-               
+
 
             },
-            success: function(resp) {
+            success: function (resp) {
                 console.log(resp)
                 //calendar.unselect()
                 instanceCalendar.refetchEvents();
                 $("#modalAgenda").modal('hide');
                 $('#jstree_list_aulas').jstree(true).refresh();
-                var message="Aula Agendada Com Sucesso:<br>";
-                message+='Dia: '+resp.dia+' '+resp.horario+', Professor: '+resp.teacher;
-                showGlobalMessage(message,'success');
-                $.notify(message,{type:'success'});
+                var message = "Aula Agendada Com Sucesso:<br>";
+                message += 'Dia: ' + resp.dia + ' ' + resp.horario + ', Professor: ' + resp.teacher;
+                showGlobalMessage(message, 'success');
+                $.notify(message, { type: 'success' });
                 setDadosAluno();
             },
-            error:function(resp){
-                var msg= resp.responseJSON.error;
+            error: function (resp) {
+                var msg = resp.responseJSON.error;
                 $("#modalAgenda").modal('hide');
-                $.notify(msg,{type:'danger'});
-                showGlobalMessage(msg,'danger');
+                $.notify(msg, { type: 'danger' });
+                showGlobalMessage(msg, 'danger');
                 instanceCalendar.refetchEvents();
                 $('#jstree_list_aulas').jstree(true).refresh();
                 setDadosAluno();
             }
-      
+
         });
         //alert('marcar aula')
     }
 
 
-    $("#btnAgendar").on('click',marcarAula);
+    $("#btnAgendar").on('click', marcarAula);
     setDadosAluno(); //Coloca na tela no começo do load os dados do aluno
     $("#module_id").on('change', function () {
-          //ao trocar modulo atualizar árvore e zerar seleção de aulas
-        $('#jstree_list_aulas').jstree(true).refresh(false,true);      
-        $('#aula_id').val(''); 
+        //ao trocar modulo atualizar árvore e zerar seleção de aulas
+        $('#jstree_list_aulas').jstree(true).refresh(false, true);
+        $('#aula_id').val('');
         //atualizar eventos
         instanceCalendar.refetchEvents();
-    })
+    });
+
+    $('#jstree_list_aulas').on('redraw.jstree', function () {
+        var start = instanceCalendar.view.currentStart;
+        var end = instanceCalendar.view.currentEnd;
+        vouNoBack(start, end);
+    });
+
+    $('#jstree_list_aulas').on(' after_open.jstree', function () {
+        var start = instanceCalendar.view.currentStart;
+        var end = instanceCalendar.view.currentEnd;
+        vouNoBack(start, end);
+    });
+
+
 
 })();
 
 function getNomeAulaAtiva() {
-    var aula_id=$("#aula_id").val();
-    if(aula_id){
-        var query='[data-aula_id='+aula_id+']';
+    var aula_id = $("#aula_id").val();
+    if (aula_id) {
+        var query = '[data-aula_id=' + aula_id + ']';
         return $(query).text();
     }
     return '';
 }
 
-function setDadosAluno(){
+function setDadosAluno() {
     $.ajax({
-        url: asset+"getAuthStudent",
-        success: function(resp) {
-            
+        url: asset + "getAuthStudent",
+        success: function (resp) {
+
             $("#student_saldo_atual").text(resp.saldo_atual);
-            if(resp.module)  {
-                $("#student_module_nome").text(resp.module.nome); 
+            if (resp.module) {
+                $("#student_module_nome").text(resp.module.nome);
             }
-                      
+
         },
-        error:function(resp){
-           console.log(resp)                
-        }      
+        error: function (resp) {
+            console.log(resp)
+        }
     });
+}
+
+function vouNoBack(start, end) {
+    // console.log('start', start.toLocaleString('en-GB'));
+    var aulas_id = [];
+    $('#jstree_list_aulas  a.aulas').each(function (i, el) {
+        aulas_id.push(el.dataset.aula_id);
+    });
+
+    var module_id = $("#module_id").val();
+    //console.log('fui no back com esses parametros', start, end, aulas_id);
+    var token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: asset + "statusAulas",
+        method: 'POST',
+        data: {
+            _token: token,
+            aulas_id: JSON.stringify(aulas_id),
+            start: moment(start).format(),
+            end: moment(end).format(),
+            module_id: module_id
+        },
+        success: function (resp) {
+            //console.log(resp)
+            viewStatusAulas(resp)
+
+
+        },
+        error: function (resp) {
+            console.log(resp)
+        }
+    });
+
+}
+
+function viewStatusAulas(status) {
+    $('#jstree_list_aulas  a.aulas').each(function (i, el) {
+        $(el).removeClass('empty');
+        var aula_id = el.dataset.aula_id;
+        var status_aula = status[aula_id] ? parseInt(status[aula_id]) : 0;
+        if (aula_id && status_aula == 0) {
+            $(el).addClass('empty');
+        }
+
+    });
+
 }

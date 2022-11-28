@@ -1,5 +1,6 @@
 <?php
 namespace App\Helpers;
+
 use Carbon\Carbon;
 use App\Models\Celula;
 use App\Models\Systemcount;
@@ -17,8 +18,8 @@ use App\Helpers\ConfiguracoesHelper;
 class AgendaHelper
 {
     public $student_id;
-    public $aula_id;
     public $module_id;
+    private $aula_id;
     private $start;
     private $end;
     private $celulasBase;
@@ -31,11 +32,11 @@ class AgendaHelper
 
     public function start()
     {
-        $celula_limit= ConfiguracoesHelper::celula_limit();
+        $celula_limit = ConfiguracoesHelper::celula_limit();
         $queryBase = Celula::has('students', '<', $celula_limit)
             ->join('horarios', 'horarios.horario', 'celulas.horario')
             ->leftJoin('aulas', 'aulas.id', 'celulas.aula_id')
-            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id','aulas.module_id');
+            ->select('celulas.*', 'horarios.turno_id', 'aulas.disciplina_id', 'aulas.module_id');
         if ($this->start) {
             $queryBase->where('celulas.dia', '>=', $this->start);
         }
@@ -62,8 +63,17 @@ class AgendaHelper
 
         $this->systemCounts = Systemcount::where('module_id', $this->module_id)->get();
 
-        $this->aulaRequest = Aula::find($this->aula_id);
+        //$this->aulaRequest = Aula::find($this->aula_id);
 
+
+    }
+
+    public function setAulaRequest($aula)
+    {
+        if ($aula) {
+            $this->aulaRequest = $aula;
+            $this->aula_id = $aula->id;
+        }
 
     }
 
@@ -112,8 +122,7 @@ class AgendaHelper
             }
             if ($base) {
                 return $this->isCelulaDisponivelForAulaBase($celula);
-            }
-            else {
+            } else {
                 return $this->isCelulaDisponivelForAulaNaoBase($celula);
             }
 
@@ -131,8 +140,7 @@ class AgendaHelper
         if ($celula->aula_id) {
             //estado 2
             return $celula->aula_id == $this->aula_id;
-        }
-        else {
+        } else {
             //estado 1
             $startCarbon = Carbon::createFromDate($celula->dia)->subDay();
             $endCarbon = Carbon::createFromDate($celula->dia)->addDay();
@@ -154,8 +162,7 @@ class AgendaHelper
             $filtroCompatibilidade = true; // Implementar filtro
             return $celula->aula_id == $this->aula_id && $filtroCompatibilidade;
 
-        }
-        else {
+        } else {
             //estado 1
             $disciplina_id = $this->aulaRequest->disciplina_id;
             $systemCount = $this->getSystemCount($disciplina_id);
@@ -164,9 +171,9 @@ class AgendaHelper
                 $endCarbon = Carbon::createFromDate($celula->dia)->addDay();
                 $start = $startCarbon->format('Y-m-d');
                 $end = $endCarbon->format('Y-m-d');
-                $module_id=$this->aulaRequest->module_id;
+                $module_id = $this->aulaRequest->module_id;
 
-                $resp = $this->filtroDisciplina($disciplina_id, $start, $end, $celula->turno_id,$module_id);
+                $resp = $this->filtroDisciplina($disciplina_id, $start, $end, $celula->turno_id, $module_id);
                 return $resp->isEmpty();
             endif;
             return false;
@@ -174,20 +181,20 @@ class AgendaHelper
 
     }
 
-    public function filtroDisciplina($disciplina_id, $start, $end, $turno_id,$module_id=null)
+    public function filtroDisciplina($disciplina_id, $start, $end, $turno_id, $module_id = null)
     {
-        
+
         $filtered = $this->celulasBase
-            ->filter(function ($celula) use ($disciplina_id, $start, $end, $turno_id,$module_id) {
-            $result=$celula->disciplina_id == $disciplina_id &&
-            $celula->turno_id == $turno_id &&
-            $celula->dia >= $start &&
-            $celula->dia <= $end;
-            if($module_id):
-                return $result && $celula->module_id==$module_id;
-            endif;
-            return $result;
-        });
+            ->filter(function ($celula) use ($disciplina_id, $start, $end, $turno_id, $module_id) {
+                $result = $celula->disciplina_id == $disciplina_id &&
+                    $celula->turno_id == $turno_id &&
+                    $celula->dia >= $start &&
+                    $celula->dia <= $end;
+                if ($module_id):
+                    return $result && $celula->module_id == $module_id;
+                endif;
+                return $result;
+            });
         return $filtered;
     }
 
@@ -197,11 +204,11 @@ class AgendaHelper
         $filtered = $this->celulasBase
             ->filter(function ($celula) use ($aula_id, $start, $end, $turno_id) {
 
-            return $celula->aula_id == $aula_id &&
-            $celula->turno_id == $turno_id &&
-            $celula->dia >= $start &&
-            $celula->dia <= $end;
-        });
+                return $celula->aula_id == $aula_id &&
+                    $celula->turno_id == $turno_id &&
+                    $celula->dia >= $start &&
+                    $celula->dia <= $end;
+            });
         return $filtered;
     }
 
@@ -210,9 +217,9 @@ class AgendaHelper
         $filtered = $this->celulasMarcadas
             ->filter(function ($celula) use ($dia, $horario) {
 
-            return $celula->dia == $dia &&
-            $celula->horario == $horario;
-        });
+                return $celula->dia == $dia &&
+                    $celula->horario == $horario;
+            });
         return $filtered;
 
     }
@@ -249,8 +256,7 @@ class AgendaHelper
                 $list[$key]->teachers[] = $celula->teacher_id;
                 $list[$key]->celulas[] = $celula->id;
 
-            }
-            else {
+            } else {
                 $obj->teachers = [$celula->teacher_id];
                 $obj->celulas = [$celula->id];
                 $list[$key] = $obj;
@@ -281,7 +287,16 @@ class AgendaHelper
     {
         $level = $this->levelStudent->getLevel($celula->dia, $celula->horario);
         return $level;
-    }   
+    }
+
+    public static function filterCelulasByPeriod($celulas, $startString, $endString)
+    {
+        $filtered = $celulas->filter(function ($celula) use ($startString, $endString) {
+            $dateToCompare = $celula->dia . ' ' . $celula->horario;
+            return $dateToCompare >= $startString && $dateToCompare <= $endString;
+        });
+        return $filtered;
+    }
 
 
 

@@ -81,7 +81,7 @@ class AulaHelper
             $objAula->sigla = $aula->sigla;
             $objAula->ordem = $aula->ordem;
             $objAula->realizada = 1;
-
+            $objAula->current=false;
             return $objAula;
         });
         if ($nextAula):
@@ -90,6 +90,7 @@ class AulaHelper
             $objAula->sigla = $nextAula->sigla;
             $objAula->ordem = $nextAula->ordem;
             $objAula->realizada = 0;
+            $objAula->current=false;
             $aulasShow->push($objAula);
         endif;
 
@@ -114,24 +115,26 @@ class AulaHelper
         $aulaCurrent = $base->aulas->first(function ($value) use ($countDisciplina) {
             return $value->ordem == $countDisciplina;
         });
-
+       
         $aulasAbertas = $base->aulas->whereIn('id', $this->celulasAbertas->pluck('aula_id'));
-
-        $aulasShow = $aulasAbertas->map(function($aula){
+       
+        $aulasShow = $aulasAbertas->map(function($aula) use ($countDisciplina) {
             $objAula = new \stdClass();
             $objAula->id = $aula->id;
             $objAula->sigla = $aula->sigla;
             $objAula->ordem = $aula->ordem;
             $objAula->realizada = $this->isAulaFeita($aula->id);
-
+            $objAula->current = $aula->ordem == $countDisciplina; //Aula no Corrente SystemCount?
             return $objAula;
         });
+       
         if ($aulaCurrent) {
             $objAula = new \stdClass();
             $objAula->id = $aulaCurrent->id;
             $objAula->sigla = $aulaCurrent->sigla;
             $objAula->ordem = $aulaCurrent->ordem;
             $objAula->realizada =  $this->isAulaFeita($aulaCurrent->id);
+            $objAula->current=true;
             $aulasShow->push($objAula);
         }
 

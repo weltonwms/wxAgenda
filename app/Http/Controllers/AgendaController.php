@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Celula;
 use App\Models\Horario;
@@ -39,7 +40,7 @@ class AgendaController extends Controller
         $agendaHelper = new AgendaHelper();
         $agendaHelper->setStart(request('start'));
         $agendaHelper->setEnd(request('end'));
-        $agendaHelper->aula_id = request('aula_id');
+        $agendaHelper->setAulaRequest(\App\Models\Aula::find(request('aula_id')));
         $agendaHelper->student_id = $student->id;
         $agendaHelper->module_id = request('module_id');
 
@@ -85,6 +86,37 @@ class AgendaController extends Controller
         $dadosCelulas = Celula::getDadosToAgenda($request->celulas);
         return response()->json($dadosCelulas);
 
+    }
+
+    public function statusAulas()
+    {
+        $aulas_id=json_decode(request('aulas_id'));
+        $start=request('start');
+        $end=request('end');         
+        $student = auth()->user()->student;
+        
+        $agendaHelper = new AgendaHelper();
+        $agendaHelper->setStart($start);
+        $agendaHelper->setEnd($end);
+        $agendaHelper->student_id = $student->id;
+        $agendaHelper->module_id = request('module_id'); //analisar request do module_id
+
+        $output=[];
+        
+        $aulas=\App\Models\Aula::whereIn('id', $aulas_id)->with('disciplina')->get();
+        $startString= Carbon::createFromDate($start)->format("Y-m-d H:i");
+        $endString= Carbon::createFromDate($end)->format("Y-m-d H:i");
+
+        $agendaHelper->start();
+        foreach ($aulas as $aula):
+            $agendaHelper->setAulaRequest($aula);
+            $celulas = $agendaHelper->filtrar();            
+            //filtrar novamente com start e end;
+            $celulas2=$agendaHelper->filterCelulasByPeriod($celulas,$startString,$endString);
+            $output[$aula->id]= $celulas2->count();
+        endforeach;
+
+        return response()->json($output);
     }
 
 

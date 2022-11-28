@@ -13,7 +13,7 @@ class StoreStudentHelper
         $this->agendaHelper = new AgendaHelper();
         $this->agendaHelper->student_id = $student->id;
         $this->agendaHelper->module_id = $aulaRequest->module_id;
-        $this->agendaHelper->aula_id = $aulaRequest->id;
+        $this->agendaHelper->setAulaRequest($aulaRequest);
         $this->agendaHelper->setStart($celula->dia);
         $this->agendaHelper->setEnd($celula->dia);
         $this->agendaHelper->start();

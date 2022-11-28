@@ -78,4 +78,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('gradeEscola','\App\Http\Controllers\GradeController@index')->name('gradeEscola.index');
     Route::get('getEventsGrade', '\App\Http\Controllers\GradeController@getEventsCelula');
     Route::get('getCelula/{celula}', '\App\Http\Controllers\GradeController@getCelula');
+    Route::post('statusAulas','\App\Http\Controllers\AgendaController@statusAulas');
 });
