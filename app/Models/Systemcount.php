@@ -55,4 +55,15 @@ class Systemcount extends Model
     {
         return $this->updated_at->format('d/m/Y (H:i)');
     }
+
+    public static function getContador($module_id,$disciplina_id)
+    {
+        $result= Systemcount::where('module_id',$module_id)
+        ->where('disciplina_id',$disciplina_id)
+        ->first();
+        if ($result) {
+            return $result->contador;
+        }
+        return 1;
+    }
 }

@@ -224,7 +224,7 @@ class AgendaHelper
 
     }
 
-    private function isDateFuture($dia, $horario)
+    public function isDateFuture($dia, $horario)
     {
         $dateHourNow = date('Y-m-d H:i');
         $dateToCompare = $dia . ' ' . $horario;

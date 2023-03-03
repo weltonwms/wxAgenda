@@ -26,7 +26,12 @@ class StoreStudentHelper
         $this->celulaEstado2($celula, $aulaRequest->id);
         $this->filtroAulaDisciplina($celula);
         $this->validOrdemBase($celula);
+        
         $this->ordemSystemCount($celula);
+        //Adm pode marcar datas no passado; por enqunto
+        if(!auth()->user()->isAdm){
+            $this->isDateFuture($celula->dia,$celula->horario);
+        }
 
     }
 
@@ -161,6 +166,15 @@ class StoreStudentHelper
             $msg = "{$aulaRequest->sigla} possui ordem: {$aulaRequest->ordem} que é ";
             $msg .= "diferente da contagem do sistema: $systemCount";
             throw new \Exception($msg);
+        }
+
+    }
+
+    private function isDateFuture($dia, $horario)
+    {
+        $isFuture=$this->agendaHelper->isDateFuture($dia, $horario);
+        if (!$isFuture) {
+            throw new \Exception("Só é possível agendar Datas Futuras!");
         }
 
     }

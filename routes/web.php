@@ -79,4 +79,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('getEventsGrade', '\App\Http\Controllers\GradeController@getEventsCelula');
     Route::get('getCelula/{celula}', '\App\Http\Controllers\GradeController@getCelula');
     Route::post('statusAulas','\App\Http\Controllers\AgendaController@statusAulas');
+
+    Route::get('disciplinasAjax','\App\Http\Controllers\GradeController@getDisciplinasAjax');
+    Route::get('modulesAjax','\App\Http\Controllers\GradeController@getModulesAjax');
+    Route::get('aulasAjax','\App\Http\Controllers\GradeController@getAulasAjax');
+
+    Route::post('gradeEscola/agenda','\App\Http\Controllers\GradeController@storeAgenda');
+
 });
