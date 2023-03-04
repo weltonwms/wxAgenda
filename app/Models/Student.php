@@ -143,4 +143,17 @@ class Student extends Model
     {
         return $this->getModules()->contains('id',$module_id);
     }
+
+    public function isModuleAnterior($module_id)
+    {
+        $moduleCorrent= $this->module;
+        $moduleToCompare= $this->getModules()->firstWhere('id',$module_id);
+        ///dd($moduleToCompare);
+
+        if($moduleCorrent && $moduleToCompare):
+            return $moduleToCompare->ordem < $moduleCorrent->ordem;
+        endif;
+
+        return false;
+    }
 }

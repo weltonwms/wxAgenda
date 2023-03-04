@@ -25,7 +25,7 @@ class StoreStudentHelper
         $this->validModule($student);
         $this->celulaEstado2($celula, $aulaRequest->id);
         $this->filtroAulaDisciplina($celula);
-        $this->validOrdemBase($celula);
+        $this->validOrdemBase($celula,$student);
         
         $this->ordemSystemCount($celula);
         //Adm pode marcar datas no passado; por enqunto
@@ -133,13 +133,17 @@ class StoreStudentHelper
 
 
 
-    private function validOrdemBase($celula)
+    private function validOrdemBase($celula,$student)
     {
         //level aluno compativel para ordem da request da aula_id
         $aulaRequest = $this->agendaHelper->getAulaRequest();
         $base = $aulaRequest->disciplina->base;
         if (!$base):
             //validação apenas para disciplina base;
+            return true;
+        endif;
+        if($student->isModuleAnterior($aulaRequest->module_id)):
+            //ignonar validação para módulos anteriores ao corrente.
             return true;
         endif;
         if (!$this->agendaHelper->isValidOrdemBase($celula)) {
