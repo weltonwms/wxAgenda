@@ -15,7 +15,7 @@ use App\Models\Systemcount;
 class GradeController extends Controller
 {
     public function index()
-    {        
+    {
         $teachersList = Teacher::getList();
         $horariosList = Horario::getList()->values();
         return view('grade.index', compact('teachersList', 'horariosList'));

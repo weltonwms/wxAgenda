@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
        
         eventClick: function(arg) {
-            console.log(arg.event.id);
+            //console.log(arg.event.id);
             limpaSelects();
             $(".message_modal").html('');
             setDadosCelula(arg.event.id);
@@ -216,19 +216,74 @@ function mountSelectAulas(module_id,disciplina_id){
                 $("#selectAula").html('Loading...');
             },
             success: function(resp) {
-                var string="<select class='form-control form-control-sm'><option value=''>--Aula--</option>";
-                var mapAulas = resp.map(function(aula) {
-                    return '<option value="'+aula.id+'">' + aula.sigla+ '</option>';
-                });
-                string+=mapAulas.join('');
-                string+="</select>";                   
-                $("#selectAula").html(string);  
-                $('#selectAula select').select2({
-                    dropdownParent: $('#selectAula'),                    
-                     width: '100%'                    
-                });   
+                preFilterSelectAulas(module_id,disciplina_id,resp);
             }
         });
+}
+
+function preFilterSelectAulas(module_id,disciplina_id, aulas){
+    $.ajax({
+        url: asset+"getAulasAgendadasStudent/?module_id="+module_id+"&disciplina_id="+disciplina_id,
+        success: function(resp) {
+           filterSelectAulas(aulas,resp,module_id)
+        }
+    });
+    
+}
+
+function filterSelectAulas(aulas,aulasAgendadas,module_id){
+    var moduleCurrent=$("#student_module_id").val();
+    if(moduleCurrent==module_id){
+        var maxOrdem= 0;
+        aulasAgendadas.forEach(function (item) {
+            if(item.ordem > maxOrdem){
+                maxOrdem=item.ordem;
+            }
+        });
+        aulas=aulas.filter(function(aula){
+            return aula.ordem <= (maxOrdem +1)
+        })
+
+    }    
+
+    aulas.forEach(function(aula){
+        var match= aulasAgendadas.find(function(aulaAgendada){
+            return aulaAgendada.id==aula.id
+        })
+        if(match){
+            aula.agendada=true;
+        }
+        else{
+            aula.agendada=false;
+        }
+    })
+    outSelectAulas(aulas);
+}
+
+function outSelectAulas(aulas){
+    var string="<select class='form-control form-control-sm'><option value=''>--Aula--</option>";
+    var mapAulas = aulas.map(function(aula) {
+        var agendada=aula.agendada?'data-agendada="true" ':'data-agendada="false" ';
+        return '<option value="'+aula.id+'" '+agendada+'>' + aula.sigla+ '</option>';
+    });
+    string+=mapAulas.join('');
+    string+="</select>";                   
+    $("#selectAula").html(string);  
+    $('#selectAula select').select2({
+        dropdownParent: $('#selectAula'),                    
+        width: '100%',
+        templateResult:function(state){
+            var aulaAgendada=$(state.element).attr('data-agendada');
+            if(aulaAgendada=='true'){
+                var $state = $(
+                    '<span class="aulaAgendada">' + state.text + '</span>'
+                  );
+                  return $state;
+            }           
+            return state.text;
+        }                    
+    });   
+
 }
 
 function limpaSelects(){
@@ -304,6 +359,7 @@ function setDadosAluno() {
             $("#student_id").val(resp.id);
             if (resp.module) {
                 $("#student_module_nome").text(resp.module.nome);
+                $("#student_module_id").val(resp.module.id);
             }
         },
         error: function (resp) {
@@ -324,8 +380,7 @@ function isPossivelAgendar(dia, horario, student_id, students){
         return student.id==student_id;
     })
     //console.log('studentsOnlist ',studentOnList);
-    console.log('student_id in valicao', student_id)
-    return isFuture && !studentOnList;
+     return isFuture && !studentOnList;
 
 }
 //fim funcoes agendamento

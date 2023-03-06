@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('perfil/changePassword','\App\Http\Controllers\PerfilController@showChangePassword')->name('changePassword.show');
     Route::post('perfil/changePassword','\App\Http\Controllers\PerfilController@updatePassword')->name('changePassword.update');
     Route::get('getAuthStudent','\App\Http\Controllers\PerfilController@getAuthStudent');
+    Route::get('getAulasAgendadasStudent','\App\Http\Controllers\PerfilController@getAulasAgendadas');
     Route::get('gradeEscola','\App\Http\Controllers\GradeController@index')->name('gradeEscola.index');
     Route::get('getEventsGrade', '\App\Http\Controllers\GradeController@getEventsCelula');
     Route::get('getCelula/{celula}', '\App\Http\Controllers\GradeController@getCelula');

@@ -31,4 +31,14 @@ class PerfilController extends Controller
         }
         return response()->json($student);
     }
+
+    public function getAulasAgendadas(Request $request)
+    {
+        $student=auth()->user()->student;
+        if($student){
+            $resp=$student->getAulasAgendadas($request->module_id,$request->disciplina_id);
+            return response()->json($resp); 
+        }
+        return response()->json([]);
+    }
 }

@@ -15,6 +15,7 @@
     <label class="text-primary">Módulo Corrente:</label>
     <button type="button" class="btn btn-outline-info btn-sm"> <span id="student_module_nome"></span></button>
     <input type="hidden" value="" id="student_id"> <!--Usado para validação de agenda-->
+    <input type="hidden" value="" id="student_module_id"> <!--Usado para filtro aulas base-->
 </div>
 
 <input type="hidden" id="horarios_validos" value="{{$horariosList}}" class="form-control">

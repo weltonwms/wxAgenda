@@ -156,4 +156,22 @@ class Student extends Model
 
         return false;
     }
+
+    public function getAulasAgendadas($module_id=null,$disciplina_id=null)
+    {
+        $query=Aula::join('celulas', 'celulas.aula_id', '=', 'aulas.id')
+            ->join('celula_student', 'celula_student.celula_id', '=', 'celulas.id')
+            ->select('aulas.*', 'celulas.horario', 'celulas.dia', 'celulas.id as celula_id')
+            ->where('celula_student.student_id', $this->id);
+
+        if($module_id):
+            $query->where('aulas.module_id', $module_id);
+        endif;
+        if($disciplina_id):
+            $query->where('aulas.disciplina_id', $disciplina_id);
+        endif;
+        $result=$query->get();
+        return $result;
+
+    }
 }
