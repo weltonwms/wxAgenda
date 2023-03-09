@@ -117,6 +117,12 @@ function setDadosCelula(celula_id){
             });
             $("#modalCelula_students").html(mapStudents.join(''));
 
+            $("#info_aula_individual").html("");
+            if(resp.aula_individual){
+                var msgIndividual='<p class="mb-3"> <b style="color: red">Sala de Aula Individual</b></p>';
+                $("#info_aula_individual").html(msgIndividual);
+            }
+
             var student_id= parseInt($("#student_id").val());
             var isActiveAgenda= isPossivelAgendar(resp.dia,resp.horario,student_id,resp.students);
             if(isActiveAgenda){
@@ -141,8 +147,9 @@ function mountSelects(){
     if(!aula_id){
      mountSelectModules();
      mountSelectDisciplinas();
+     mountSelectTipoAula();
     }
-    mountBlocoConfirm();    
+     mountBlocoConfirm();    
  }
  
  $("#btnAgendarAula").click(mountSelects);
@@ -291,6 +298,7 @@ function limpaSelects(){
     $("#selectDisciplina").html(''); 
     $("#selectAula").html('');
     $("#blocoConfirm").html("");
+    $("#selectTipoAula").html("");
 }
 
 function mountBlocoConfirm(){
@@ -300,6 +308,19 @@ function mountBlocoConfirm(){
     $("#blocoConfirm").html(string); 
     $('#btnCancell').on('click',limpaSelects);
     $('#btnBlocoConfirm').on('click',sendAgendarAula);
+}
+
+function mountSelectTipoAula(){
+    var string="<select class='form-control form-control-sm'><option value='0'>--Tipo de Aula--</option>";
+    string+='<option value="0">Turma</option>';
+    string+='<option value="1">Individual</option>';
+    string+='</select>';
+    $("#selectTipoAula").html(string);
+    $('#selectTipoAula select').select2({
+        dropdownParent: $('#selectModule'),                    
+         width: '100%'                    
+    });   
+
 }
 
 
@@ -313,6 +334,7 @@ function sendAgendarAula(){
 
    var module_id=$("#selectModule select").val() || null;
    var disciplina_id=$("#selectDisciplina select").val() || null;
+   var aula_individual=$("#selectTipoAula select").val() || 0;
    
         $.ajax({
             url: asset+"gradeEscola/agenda",
@@ -322,7 +344,8 @@ function sendAgendarAula(){
                 celula_id:celula_id,
                 aula_id:aula_id,
                 module_id:module_id,
-                disciplina_id:disciplina_id
+                disciplina_id:disciplina_id,
+                aula_individual:aula_individual
 
             },
             beforeSend:function(data){ 

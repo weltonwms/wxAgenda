@@ -135,6 +135,12 @@ class Celula extends Model
                 $obj->backgroundColor = '#dc3545';
                 $obj->textColor='#fff';
             }
+            if($celula->aula_individual):
+                //Para aulas individuais não importa o limite configurado, sempre o limite será de um aluno
+                //repetir cores de limite estourado ou colocar outra cor
+                $obj->backgroundColor = '#dc3545';
+                $obj->textColor='#fff';               
+            endif;
             return $obj;
         });
         return $mapCelulas;
@@ -171,7 +177,7 @@ class Celula extends Model
 
     }
 
-    public static function storeStudent($student, $celula_id, $aula_id)
+    public static function storeStudent($student, $celula_id, $aula_id,$aula_individual=0)
     {
         //validar se pode
         //ações em créditos
@@ -186,12 +192,18 @@ class Celula extends Model
             //abrindo célula para aula 
             $celula->aula_id = $aula_id;
             $celula->aula_level=$helper->getLevelStudent($celula);
+            $celula->aula_individual=$aula_individual;
             $celula->save();
             Systemcount::run($celula->aula_id);
         }
+        else{
+            //Se não for abertura de célula não pode ter aula_individual=1
+            //force aula_individual=0 (padrão)
+            $aula_individual=0;
+        }
         
         $celula->students()->attach($student->id);
-        $student->onMarcacaoAula($celula);
+        $student->onMarcacaoAula($celula,$aula_individual);
         return $celula->info();
     }
 
@@ -203,6 +215,7 @@ class Celula extends Model
             //Se célula ficar vazia retirar aula_id e level 
             $celula->aula_id=null;
             $celula->aula_level=null;
+            $celula->aula_individual=0; //padrão
             $celula->save();
         }
         return $retorno;

@@ -62,9 +62,13 @@ class Student extends Model
         }
     }
 
-    public function onMarcacaoAula(Celula $celula)
+    public function onMarcacaoAula(Celula $celula,$aula_individual=0)
     {
         $this->saldo_atual--;
+        if($aula_individual==1):
+            //para aulas individuais descontar do saldo 2 vezes.
+            $this->saldo_atual--;
+        endif;
         $this->save();
     }
 

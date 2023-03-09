@@ -60,8 +60,9 @@ class GradeController extends Controller
             $celulaInfo = \DB::transaction(function () use ($request) {
                 $student = auth()->user()->student;
                 $aula_id = $this->getAulaIdForAgenda($request);
-                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $aula_id);
+                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $aula_id,$request->aula_individual);
                 return $celulaInfo;
+                //return response()->json($request->all());
 
             });
             return response()->json($celulaInfo);

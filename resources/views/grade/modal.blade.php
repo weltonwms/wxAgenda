@@ -17,6 +17,7 @@
                     <input type="hidden" id="modalCelula_celula_id" />
                     <input type="hidden" id="modalCelula_aula_id" />
                     <div class="container-fluid">
+                    <div id="info_aula_individual"></div>
                         <div class="row  p-2 mb-3 bg-light">
                             <div class="col-6 col-sm-4">
                                 <b>Dia:</b> <span id="modalCelula_dia"></span>
@@ -60,6 +61,9 @@
 
                             <div class="col-sm-4">
                                 <div id="selectAula" class="form-group"></div>
+                            </div>
+                            <div class="col-sm-8">
+                                <div id="selectTipoAula" class="form-group"></div>
                             </div>
                         </div>
 

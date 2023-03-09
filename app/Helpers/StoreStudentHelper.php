@@ -61,8 +61,14 @@ class StoreStudentHelper
     private function limiteCelula($celula)
     {
         $celula_limit= ConfiguracoesHelper::celula_limit();
+        $msg="";
+        if($celula->aula_individual):
+            //Para aulas individuais não importa o limite configurado, sempre o limite será de um aluno
+            $celula_limit=1;
+            $msg="<br>Sala de Aula Individual";
+        endif;
         if ($celula->students->count() >= $celula_limit):
-            throw new \Exception("Limite de $celula_limit alunos por sala de Aula Estourado!");
+            throw new \Exception("Limite de $celula_limit alunos por sala de Aula Estourado!".$msg);
         endif;
     }
 
