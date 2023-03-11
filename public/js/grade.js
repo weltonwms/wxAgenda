@@ -311,10 +311,11 @@ function mountBlocoConfirm(){
 }
 
 function mountSelectTipoAula(){
-    var string="<select class='form-control form-control-sm'><option value='0'>--Tipo de Aula--</option>";
+    var string="<select class='form-control form-control-sm'><option value='0'>--Sala de Aula--</option>";
     string+='<option value="0">Turma</option>';
     string+='<option value="1">Individual</option>';
     string+='</select>';
+    string+='<small class="form-text text-muted">Sala de Aula Individual descontará 2 créditos!</small>'
     $("#selectTipoAula").html(string);
     $('#selectTipoAula select').select2({
         dropdownParent: $('#selectModule'),                    
@@ -335,7 +336,7 @@ function sendAgendarAula(){
    var module_id=$("#selectModule select").val() || null;
    var disciplina_id=$("#selectDisciplina select").val() || null;
    var aula_individual=$("#selectTipoAula select").val() || 0;
-   
+   var sendAjax= function(){
         $.ajax({
             url: asset+"gradeEscola/agenda",
             method: 'POST',
@@ -371,7 +372,13 @@ function sendAgendarAula(){
                setDadosAluno();
             }
         });
-        
+    } 
+    if(aula_individual=='1'){
+        wxConfirm(sendAjax,"Deseja Realmente Continuar?",'Sala de Aula Individual descontará 2 Créditos!')
+    } 
+    else{
+        sendAjax();
+    }  
 }
 
 function setDadosAluno() {

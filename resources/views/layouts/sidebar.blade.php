@@ -72,22 +72,24 @@
 
     @if(!auth()->user()->isAdm)
     <li>
+      <a class="app-menu__item {{Request::segment(1)=='gradeEscola'?'active':null}}" href="{{route('gradeEscola.index')}}">
+        <i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Agendar Aula</span>
+      </a>
+    </li>
+    <!--
+    <li>
       <a class="app-menu__item {{Request::segment(1)=='agenda'?'active':null}}" href="{{route('agenda.index')}}">
         <i class="app-menu__icon fa fa-calendar"></i><span class="app-menu__label">Agendar Aula</span>
       </a>
     </li>
-
+    -->
     <li>
       <a class="app-menu__item {{Request::segment(1)=='agendados'?'active':null}}" href="{{route('agendados.index')}}">
         <i class="app-menu__icon fa fa-calendar-check-o"></i><span class="app-menu__label">Aulas Marcadas</span>
       </a>
     </li>
 
-    <li>
-      <a class="app-menu__item {{Request::segment(1)=='gradeEscola'?'active':null}}" href="{{route('gradeEscola.index')}}">
-        <i class="app-menu__icon fa fa-map"></i><span class="app-menu__label">Grade da Escola</span>
-      </a>
-    </li>
+   
     @endif
   </ul>
 

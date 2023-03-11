@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('breadcrumb')
-@breadcrumbs(['title'=>' Grade da Escola', 'icon'=>'fa-map', 'route'=>route('gradeEscola.index'),'subtitle'=>'Grade Horária 
- Completa da Escola'])
+@breadcrumbs(['title'=>' Agendar Aula', 'icon'=>'fa-calendar', 'route'=>route('gradeEscola.index'),'subtitle'=>'Grade Horária 
+ Completa da Escola/Agendamento'])
 
 @endbreadcrumbs
 @endsection

@@ -78,8 +78,14 @@ class Student extends Model
         //add saldo somente se desmarcação de adm ou estiver dentro dos limites
         if($byAdm || $this->isOnLimitCancellationsByMonth()){
             $this->saldo_atual++;
+            $credit_provided++;
+            if($celula->aula_individual):
+                //dobrar add saldo para devolução de Aula Individual
+                $this->saldo_atual++;
+                $credit_provided++;
+            endif;
             $this->save();
-            $credit_provided=1;
+            
         }
         //fim add saldo (devolução de crédito)        
         $cancellation= new Cancellation();

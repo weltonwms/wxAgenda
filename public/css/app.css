@@ -13,6 +13,10 @@
     padding: 10px 20px;
   }
 
+  .app-nav__item.profile{
+    font-size: 10px;
+  }
+
 }
 
 
