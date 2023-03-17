@@ -108,7 +108,7 @@ class CelulaController extends Controller
         try {
             $celulaInfo=\DB::transaction(function () use ($request) {
                 $student = Student::find($request->student_id);
-                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $request->aula_id);
+                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $request->aula_id,$request->aula_individual);
                 return $celulaInfo;
             });
             return response()->json($celulaInfo);

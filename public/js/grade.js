@@ -156,7 +156,7 @@ function mountSelects(){
 
  function mountSelectModules(){
     $.ajax({
-            url: asset+"modulesAjax/",
+            url: asset+"modulesAjax",
             beforeSend:function(data){ 
                 $("#selectModule").html('Loading...');
             },
@@ -181,7 +181,7 @@ function mountSelects(){
 
 function mountSelectDisciplinas(){
     $.ajax({
-            url: asset+"disciplinasAjax/",
+            url: asset+"disciplinasAjax",
             beforeSend:function(data){ 
                 $("#selectDisciplina").html('Loading...');
             },
@@ -218,7 +218,7 @@ function mountSelectDisciplinas(){
 
 function mountSelectAulas(module_id,disciplina_id){
     $.ajax({
-            url: asset+"aulasAjax/?module_id="+module_id+"&disciplina_id="+disciplina_id,
+            url: asset+"aulasAjax?module_id="+module_id+"&disciplina_id="+disciplina_id,
             beforeSend:function(data){ 
                 $("#selectAula").html('Loading...');
             },
@@ -230,7 +230,7 @@ function mountSelectAulas(module_id,disciplina_id){
 
 function preFilterSelectAulas(module_id,disciplina_id, aulas){
     $.ajax({
-        url: asset+"getAulasAgendadasStudent/?module_id="+module_id+"&disciplina_id="+disciplina_id,
+        url: asset+"getAulasAgendadasStudent?module_id="+module_id+"&disciplina_id="+disciplina_id,
         success: function(resp) {
            filterSelectAulas(aulas,resp,module_id)
         }

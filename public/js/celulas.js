@@ -115,6 +115,11 @@ function setDadosCelula(celula_id){
                 return "<li>" + student.nome + "</li>";
             });
             $("#modalCelula_students").html(mapStudents.join(''));
+            $("#info_aula_individual").html("");
+            if(resp.aula_individual){
+                var msgIndividual='<p class="mb-3"> <b style="color: red">Sala de Aula Individual</b></p>';
+                $("#info_aula_individual").html(msgIndividual);
+            }
 
         }
     });
@@ -128,20 +133,29 @@ $("#teacher_id").on('change', function() {
 $("#btnDeleteCelula").on('click', function() {
     var celula_id = $("#modalCelula_celula_id").val();
     var token = $('meta[name="csrf-token"]').attr('content');
-    $.ajax({
-        url: asset+"celulas/" + celula_id,
-        method: "DELETE",
-        data: {
-            _token: token
-        },
-        success: function(resp) {
-            console.log(resp)
-            instanceCalendar.refetchEvents();
-            $("#modalDeleteCelula").modal('hide');
-            showGlobalMessage(resp.message,'success');
-        }
-    });
-});
+    var countStudents= $("#modalCelula_students li").length;
+    function sendAjax(){
+        $.ajax({
+            url: asset+"celulas/" + celula_id,
+            method: "DELETE",
+            data: {
+                _token: token
+            },
+            success: function(resp) {
+                console.log(resp)
+                instanceCalendar.refetchEvents();
+                $("#modalDeleteCelula").modal('hide');
+                showGlobalMessage(resp.message,'success');
+            }
+        });
+    }
+    if(countStudents>0){
+        wxConfirm(sendAjax,"Deseja Realmente Excluir Célula?","Existem Alunos Agendados")
+    }
+    else{
+        sendAjax();
+    }    
+}); //fim Click btnDeleteCelula
 
 function getHorariosValidos() {
     var horarios_validos_json = $('#horarios_validos').val();
@@ -183,6 +197,7 @@ function getMinMaxHorarioValido() {
     if(!aula_id){
         aula_id=$("#selectAula select").val();
     }
+    var aula_individual=$("#selectTipoAula select").val() || 0;
         $.ajax({
             url: asset+"celulas/storeStudent",
             method: 'POST',
@@ -190,7 +205,8 @@ function getMinMaxHorarioValido() {
                 _token: token,
                 student_id:student_id,
                 celula_id:celula_id,
-                aula_id:aula_id
+                aula_id:aula_id,
+                aula_individual:aula_individual
 
             },
             success: function(resp) {
@@ -212,7 +228,7 @@ function getMinMaxHorarioValido() {
 
 function mountSelectAlunos(){
     $.ajax({
-            url: asset+"getStudentsAjax/",
+            url: asset+"getStudentsAjax",
             success: function(resp) {
                 var string="<select class='form-control form-control-sm'><option value=''>--Aluno--</option>";
                 var mapStudents = resp.map(function(student) {
@@ -231,7 +247,7 @@ function mountSelectAlunos(){
 
 function mountSelectModules(){
     $.ajax({
-            url: asset+"getModulesAjax/",
+            url: asset+"getModulesAjax",
             success: function(resp) {
                 var string="<select class='form-control form-control-sm'><option value=''>--Módulo--</option>";
                 var mapModules = resp.map(function(modulo) {
@@ -252,7 +268,7 @@ function mountSelectModules(){
 
 function mountSelectDisciplinas(){
     $.ajax({
-            url: asset+"getDisciplinasAjax/",
+            url: asset+"getDisciplinasAjax",
             success: function(resp) {
                 var string="<select class='form-control form-control-sm'><option value=''>--Disciplina--</option>";
                 var mapDisciplinas = resp.map(function(disciplina) {
@@ -283,7 +299,7 @@ function gatilhoMountSelectAulas(){
 
 function mountSelectAulas(module_id,disciplina_id){
     $.ajax({
-            url: asset+"getAulasAjax/?module_id="+module_id+"&disciplina_id="+disciplina_id,
+            url: asset+"getAulasAjax?module_id="+module_id+"&disciplina_id="+disciplina_id,
             success: function(resp) {
                 var string="<select class='form-control form-control-sm'><option value=''>--Aula--</option>";
                 var mapAulas = resp.map(function(aula) {
@@ -306,6 +322,7 @@ function limpaSelects(){
     $("#selectDisciplina").html(''); 
     $("#selectAula").html('');
     $("#blocoConfirm").html("");
+    $("#selectTipoAula").html("");
 }
 
 function mountBlocoConfirm(){
@@ -317,6 +334,20 @@ function mountBlocoConfirm(){
     $('#btnBlocoConfirm').on('click',sendAddStudent);
 }
 
+function mountSelectTipoAula(){
+    var string="<select class='form-control form-control-sm'><option value='0'>--Sala de Aula--</option>";
+    string+='<option value="0">Turma</option>';
+    string+='<option value="1">Individual</option>';
+    string+='</select>';
+    string+='<small class="form-text text-muted">Sala de Aula Individual descontará 2 créditos!</small>'
+    $("#selectTipoAula").html(string);
+    $('#selectTipoAula select').select2({
+        dropdownParent: $('#selectModule'),                    
+         width: '100%'                    
+    });   
+
+}
+
 
 function mountSelects(){
    var aula_id= $("#modalCelula_aula_id").val();
@@ -324,6 +355,7 @@ function mountSelects(){
    if(!aula_id){
     mountSelectModules();
     mountSelectDisciplinas();
+    mountSelectTipoAula();
    }
    mountBlocoConfirm();
 }
