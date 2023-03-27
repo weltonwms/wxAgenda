@@ -29,4 +29,16 @@ class ConfiguracoesHelper
         return (int) config('agenda.desmarcacao_limit_by_month',4);
     }
 
+    public static function day_interval_before()
+    {
+        //Implementar futuramente em arquivo de configuração.
+        return 0;
+    }
+
+    public static function day_interval_after()
+    {
+        //Implementar futuramente em arquivo de configuração.
+        return 0;
+    }
+
 }

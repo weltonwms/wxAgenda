@@ -112,10 +112,11 @@ class StoreStudentHelper
         $aulaRequest = $this->agendaHelper->getAulaRequest();
         $base = $aulaRequest->disciplina->base;
         $turno_id = $celula->horarioObj->turno_id;
-        $startCarbon = Carbon::createFromDate($celula->dia)->subDay();
-        $endCarbon = Carbon::createFromDate($celula->dia)->addDay();
-        $start = $startCarbon->format('Y-m-d');
-        $end = $endCarbon->format('Y-m-d');
+        
+        $start = $this->getDayIntervalBefore($celula->dia) ;
+        $end = $this->getDayIntervalAfter($celula->dia);
+
+
         if ($base) {
             $xpt = "Aula";
             $filter = $this->agendaHelper->filtroAula($aulaRequest->id, $start, $end, $turno_id);
@@ -129,8 +130,8 @@ class StoreStudentHelper
         if (!$filter->isEmpty()):
             //Não pode ter já marcado Aula/Disciplina no mesmo turno 1 dia trás e 1 para frente.
 
-            $msg = "$xpt já disponível no período de {$startCarbon->format('d.m.Y')} a ";
-            $msg .= $endCarbon->format('d.m.Y') . ", nesse turno!";
+            $msg = "$xpt já disponível no período de $start a ";
+            $msg .= $end. ", nesse turno!";
             throw new \Exception($msg);
         endif;
 
@@ -187,5 +188,21 @@ class StoreStudentHelper
             throw new \Exception("Só é possível agendar Datas Futuras!");
         }
 
+    }
+
+    //Auxiliar de Filtro Aula/Disciplina
+    private function getDayIntervalBefore($dia)
+    {
+        $interval=ConfiguracoesHelper::day_interval_before();
+        $startCarbon = Carbon::createFromDate($dia)->subDays($interval);        
+        return $startCarbon->format('Y-m-d');
+    }
+
+     //Auxiliar de Filtro Aula/Disciplina
+    private function getDayIntervalAfter($dia)
+    {
+        $interval=ConfiguracoesHelper::day_interval_after();
+        $endCarbon = Carbon::createFromDate($dia)->addDays($interval);       
+        return $endCarbon->format('Y-m-d');       
     }
 }
