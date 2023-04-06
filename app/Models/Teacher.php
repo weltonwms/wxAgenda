@@ -10,6 +10,18 @@ class Teacher extends Model
     use HasFactory;
     protected $fillable = ['nome', 'email','telefone','disponibilidade'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getUsernameAttribute($value)
+    {
+        if($this->user){
+            return $this->user->username;
+        }
+       
+    }
 
     public static function verifyAndDestroy(array $ids)
     {

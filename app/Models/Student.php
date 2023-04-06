@@ -13,7 +13,7 @@ class Student extends Model
 {
     use HasFactory;
     protected $fillable = ['nome', 'email','telefone','module_id','cidade',
-    'endereco','cidade','uf','horas_contratadas'];
+    'endereco','cidade','uf','horas_contratadas','active'];
 
     private $modules;
 
@@ -183,5 +183,20 @@ class Student extends Model
         $result=$query->get();
         return $result;
 
+    }
+
+    public function getNomeActive()
+    {
+       return $this->active?'<span class="badge badge-success f90">Sim</span>':
+       '<span class="badge badge-danger f90">Não</span>';
+    }
+
+    public static function getAllByFilter()
+    {
+        if(request()->filter_ativo!=null){
+            session(['student_filter_ativo' => request()->filter_ativo]);
+        }        
+        return Student::where('active',session('student_filter_ativo',1))->with('module')->get();
+        
     }
 }

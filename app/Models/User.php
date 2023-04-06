@@ -54,9 +54,18 @@ class User extends Authenticatable
         return $this->hasOne(Administrator::class);
     }
 
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
     public function entidade()
     {
-        return $this->isAdm?$this->administrator():$this->student();
+        switch(strtolower($this->tipo)):
+            case 'administrator': return $this->administrator(); 
+            case 'teacher': return $this->teacher();
+            default: return $this->student();            
+        endswitch;       
     }
 
     public static function saveUser($request,$entidade)
@@ -126,5 +135,13 @@ class User extends Authenticatable
             return $this->entidade->nome;
         }
         return $this->username;
+    }
+
+    public function isActive()
+    {
+        if($this->entidade){
+            return $this->entidade->active?true:false;
+        }
+        return true; //se nao tiver entidade considera um ativo especial como admin
     }
 }

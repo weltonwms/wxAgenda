@@ -15,9 +15,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //\DB::enableQueryLog();
-        //use \DB::getQueryLog() no ponto da view que deseja;
-        $students = Student::with('module')->get();
+        $students = Student::getAllByFilter();
         return view("students.index", compact('students'));
     }
 

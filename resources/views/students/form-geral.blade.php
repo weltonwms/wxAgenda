@@ -36,6 +36,11 @@ $estadosBrasileiros = array(
 
 
 <div class="row">
+<div class="col-md-12">
+    <label for="" class="control-label yesno">Aluno Ativo *</label>
+        {{ Form::bsYesno('active','1') }} 
+    </div>
+
     <div class="col-md-6">
         {{ Form::bsText('nome',null,['label'=>"Nome *",'class'=>""]) }}
 
@@ -47,13 +52,19 @@ $estadosBrasileiros = array(
 
     </div>
 
+   
+   
+
+
     <div class="col-md-6">
         {{ Form::bsText('telefone',null,['label'=>"Telefone *",'class'=>""]) }}
 
     </div>
 
     <div class="col md-4">
+        <div style="width:97%">
         {{ Form::bsSelect('module_id',$modulesList,null,['label'=>"Módulo Corrente", 'placeholder' => '--Selecione--','class'=>'select2']) }}
+        </div>
     </div>
     <div class="col-md-2">
     {{ Form::bsNumber('horas_contratadas')}}

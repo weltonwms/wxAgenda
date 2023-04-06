@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use App\Http\Requests\TeacherRequest;
+use App\Models\User;
 
 class TeacherController extends Controller
 {
@@ -37,6 +38,7 @@ class TeacherController extends Controller
     public function store(TeacherRequest $request)
     {
         $teacher = Teacher::create($request->all());
+        User::saveUser($request->all(),$teacher); //gatilho para User;
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionCreate')]);
         if ($request->input('fechar') == 1):
             return redirect('teachers');
@@ -75,6 +77,7 @@ class TeacherController extends Controller
     public function update(TeacherRequest $request, Teacher $teacher)
     {
         $teacher->update($request->all());
+        User::saveUser($request->all(),$teacher); //gatilho para User;
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionUpdate')]);
         if ($request->input('fechar') == 1):
             return redirect()->route('teachers.index');
@@ -92,6 +95,7 @@ class TeacherController extends Controller
     {
         $retorno = $teacher->delete();
         if ($retorno):
+            User::destroyUser($teacher->user_id); //gatilho para User
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('messages.actionDelete')]);
         endif;
         return redirect()->route('teachers.index');
@@ -99,8 +103,10 @@ class TeacherController extends Controller
 
     public function destroyBath()
     {
+        $users_ids=Teacher::whereIn('id',request('ids'))->pluck('user_id');//gatilho para User
         $retorno = Teacher::verifyAndDestroy(request('ids'));
         if ($retorno):
+            User::destroyUserBath($users_ids); //gatilho para User
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans_choice('messages.actionDelete', $retorno)]);
         endif;
         return redirect()->route('teachers.index');

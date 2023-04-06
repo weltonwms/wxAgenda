@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -41,5 +44,19 @@ class LoginController extends Controller
     public function username()
     {
         return "username";
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $user= User::where('username', $request->username)->first();       
+        $active=$user && $user->isActive();
+
+        if( !$active){
+            throw ValidationException::withMessages([$this->username() => 'Usuário Desativado.']);
+        }
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
     }
 }

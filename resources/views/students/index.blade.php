@@ -15,6 +15,25 @@
 @endsection
 
 @section('content')
+<div class="tile tile-nomargin">
+    <form action="{{route('students.index')}}">
+        <div class='row'>
+            <div class="col-xl-2 col-md-4" style="margin-bottom:-16px">
+
+                {!!Form::bsSelect('filter_ativo', [1=>'Ativo',0=>'Inativo'],
+                    session('student_filter_ativo',1),
+                ['onchange'=>"this.form.submit()","class"=>"select2", 'style'=>'width:100%',
+                 "label"=>"Filtro Ativo"]
+                )!!}
+            </div>
+
+        </div>
+
+
+
+    </form>
+</div>
+
 @datatables
 <thead>
     <tr>
@@ -25,6 +44,7 @@
         <th>Módulo</th>
         <th>Cidade</th>
         <th>UF</th>
+        <th>Ativo</th>
         <th>ID</th>
     </tr>
 </thead>
@@ -39,6 +59,7 @@
         <td>{{$student->getModuleNome()}}</td>
         <td>{{$student->cidade}}</td>
         <td>{{$student->uf}}</td>
+        <td>{!!$student->getNomeActive()!!}</td>
         <td>{{$student->id}}</td>
     </tr>
     @endforeach
@@ -56,7 +77,7 @@
      * **********************************
      */
 $(document).ready(function() {
-    Tabela.getInstance({colId:7}); //instanciando dataTable e informando a coluna do id
+    Tabela.getInstance({colId:8}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
 </script>
