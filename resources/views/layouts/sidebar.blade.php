@@ -67,6 +67,38 @@
         <span class="app-menu__label">Administradores</span>
       </a>
     </li>
+
+    <li class="treeview">
+      <a class="app-menu__item {{Request::segment(1)=='relatorio'?'active':null}}" href="#" data-toggle="treeview">
+        <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Relatórios</span>
+        <i class="treeview-indicator fa fa-angle-right"></i>
+      </a>
+      <ul class="treeview-menu">
+       
+        <li>
+          <a class="treeview-item {{Request::segment(2)=='teachers'?'active':null}}" href="{{route('relatorio.teachers')}}">
+            <i class="icon fa fa-circle-o"></i> Professores
+          </a>
+        </li>
+
+        <li>
+          <a class="treeview-item {{Request::segment(2)=='students'?'active':null}}" href="{{route('relatorio.students')}}">
+            <i class="icon fa fa-circle-o"></i> Alunos
+          </a>
+        </li>
+
+        <li>
+          <a class="treeview-item {{Request::segment(2)=='produtoVenda'?'active':null}}"
+            href="#">
+            <i class="icon fa fa-circle-o"></i> Aulas Alunos
+          </a>
+        </li>
+
+       
+
+      </ul>
+    </li>
+
     @endif
 
 
