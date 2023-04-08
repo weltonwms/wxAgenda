@@ -88,9 +88,9 @@
         </li>
 
         <li>
-          <a class="treeview-item {{Request::segment(2)=='produtoVenda'?'active':null}}"
-            href="#">
-            <i class="icon fa fa-circle-o"></i> Aulas Alunos
+          <a class="treeview-item {{Request::segment(2)=='students2'?'active':null}}"
+            href="{{route('relatorio.students2')}}">
+            <i class="icon fa fa-circle-o"></i> Alunos - Aulas
           </a>
         </li>
 
