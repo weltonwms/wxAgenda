@@ -15,6 +15,8 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
+                    <a class="pop-over-link" href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="maiasd asdf asdf asdf adf weltonmoreira dos santos">maiasd asd</a>
                 </div>
             </div>
         </div>

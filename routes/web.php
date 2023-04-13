@@ -64,6 +64,10 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::match(['get', 'post'],"relatorio/students",'\App\Http\Controllers\RelatorioController@students')->name('relatorio.students');
     Route::match(['get', 'post'],"relatorio/students2",'\App\Http\Controllers\RelatorioController@students2')->name('relatorio.students2');
 
+    Route::put('celulas/{celula}/saveInfoStudent', '\App\Http\Controllers\CelulaController@saveInfoStudentOnCelula');   
+    Route::delete('celulas/{celula}/{student}', '\App\Http\Controllers\CelulaController@desmarcarStudent');   
+
+
 });
 
 

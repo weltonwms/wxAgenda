@@ -118,5 +118,43 @@ class CelulaController extends Controller
         }
     }
 
+    public function saveInfoStudentOnCelula(Request $request, Celula $celula)
+    {        
+        try {
+            $celulaInfo=\DB::transaction(function () use ($request,$celula) {
+                $celula->students()->updateExistingPivot($request->student_id, [
+                    'presenca' => $request->presenca?1:0,
+                    'n1' => $request->n1,
+                    'n2' => $request->n2,
+                    'n3' => $request->n3,
+                    'feedback' => $request->feedback,
+        
+                ]);
+                return $celula->load('students');
+            });
+            return response()->json($celulaInfo);
+        }
+        catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }       
+    }
+
+    public function desmarcarStudent(Celula $celula, Student $student)
+    {
+       // dd($celula,$student);
+        try {
+            \DB::transaction(function () use($celula, $student){
+                $byAdm=1; //Informar na desmarcação que a ação é feito por um adm.                
+                Celula::desmarcarStudent($student,$celula,$byAdm);  
+            });
+            return response()->json(['message' => 'Desmarcação Realizada com sucesso!',
+        "celula"=>$celula]);
+        }
+        catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
     
 }

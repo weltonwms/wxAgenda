@@ -58,6 +58,7 @@ $(document).ready(function () {
     $('.cpf').mask('000.000.000-00', { reverse: true });
     $('.phone').mask(SPMaskBehavior, spOptions);
     $('.money').mask('000.000.000.000.000,00', {reverse: true});
+    
 
     //função busca CEP em Webservice
     $("#cep").keyup(function () {
@@ -88,7 +89,7 @@ $(document).ready(function () {
     //FIM BUSCA CEP
 
     $('.select2').select2();
-   
+    
 
 });
 
@@ -164,4 +165,28 @@ function showMessage(alvo,conteudo,tipo='info'){
 
 }
 
+function createPopOverLink(text,size=30) {
+    if(text.length <=size){
+        return text;
+    }
+    let shortText = text.slice(0, size); // pegar os primeiros 10 caracteres
+    shortText=shortText+"..." //Indicativo que Tem mais texto
+    const fullText = text; // armazenar o texto completo
+    
+    const link = $("<a>")
+      .addClass("pop-over-link")
+      .prop("href", "#")
+      .attr("data-toggle", "popover")
+      .attr("data-trigger", "focus")
+      .attr("data-placement", "auto")     
+      .attr("data-content", fullText)        
+      .text(shortText);
+    
+    // Obter a string HTML do link
+    const linkString = $("<div>").append(link).html();
+    
+    return linkString;
+  } 
+ 
+  
 
