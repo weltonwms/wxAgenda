@@ -28,14 +28,32 @@
                             <div class="col-sm-4">
                                 <b>Aula: </b> <span id="modalCelula_aula"></span>
                             </div>
+                            <div class="col-sm-12 mt-1" id="modalCelula_aula_link">
+                               
+                            </div>
                         </div>
 
 
-
-
-                        <ul id="modalCelula_students">
-
-                        </ul>
+                        <!--Table com Students na Célula -->
+            <div class="table-responsive" id="modalCelula_students">
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>                        
+                        <th >Aluno</th>
+                        <th >Presença</th>
+                        <th >N1</th>
+                        <th >N2</th>
+                        <th >N3</th>
+                        <th >FeedBack</th>
+      
+                    </tr>
+                </thead>
+                <tbody>
+    
+                </tbody>
+            </table>
+            </div>
+                <!--Fim Table com Students na Célula -->
 
                         <div class="row mb-3">
                             <div class="col-sm-4 mb-2">

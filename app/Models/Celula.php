@@ -51,6 +51,7 @@ class Celula extends Model
             return Carbon::parse($this->dia)->format('d/m/Y');
         //return Carbon::parse($value)->format('Y-m-d');
         endif;
+        return '';
     }
 
     public function info()
@@ -216,6 +217,7 @@ class Celula extends Model
         if($celula->students->count() ==0){
             //Se célula ficar vazia retirar aula_id e level 
             $celula->aula_id=null;
+            $celula->aula_link=null;
             $celula->aula_level=null;
             $celula->aula_individual=0; //padrão
             $celula->save();

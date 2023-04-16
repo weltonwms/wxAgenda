@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth','adm']], function () {
 
     Route::put('celulas/{celula}/saveInfoStudent', '\App\Http\Controllers\CelulaController@saveInfoStudentOnCelula');   
     Route::delete('celulas/{celula}/{student}', '\App\Http\Controllers\CelulaController@desmarcarStudent');   
+    Route::patch('celulas/{celula}/aulaLink', '\App\Http\Controllers\CelulaController@saveAulaLinkOnCelula');   
 
 
 });

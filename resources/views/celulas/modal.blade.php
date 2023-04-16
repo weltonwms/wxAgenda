@@ -16,7 +16,7 @@
                 <input type="hidden" id="modalCelula_celula_id" />
                 <input type="hidden" id="modalCelula_aula_id" />
                 <div class="container-fluid">
-                <div id="info_aula_individual"></div>
+                    <div id="info_aula_individual"></div>
                     <div class="row  p-2 mb-3 bg-light">
                         <div class="col-6 col-sm-4">
                             <b>Dia:</b> <span id="modalCelula_dia"></span>
@@ -27,93 +27,138 @@
                         <div class="col-sm-4">
                             <b>Aula: </b> <span id="modalCelula_aula"></span>
                         </div>
+                        <div class="col-sm-12">
+
+
+                            <p>
+                                
+                                <a class="btn btn-outline-secondary btn-sm" data-toggle="collapse" href="#collapseAulaLink" role="button"
+                                    aria-expanded="false" aria-controls="collapseAulaLink">
+                                    <b>Link da Aula</b> <i class="fa fa-caret-down"></i>
+                                </a>
+                                
+                            </p>
+                            <div class="collapse" id="collapseAulaLink">
+                                
+
+                            <hr>
+                                <input type="text" class="form-control" 
+                                    value="" 
+                                     id="modalCelula_aula_link">
+                                    <button  
+                                        onclick="copyToClipBoard('modalCelula_aula_link',this)"
+                                        class="btn-sm btn btn-outline-secondary mt-2">
+                                        Copiar Link
+                                    </button>
+                                    <button  class="btn-sm btn btn-success mt-2 btnSaveAulaLink">Salvar Link</button>
+
+
+
+
+                                <hr>
+                            </div>
+
+
+
+
+
+
+                        </div>
                     </div>
 
-<!--Formulário de Edição do Aluno na Célula-->
-<div id="content_edit_aluno" style="display:none">
-<form class="row" style="background-color:#ddd" id="formEditAluno">
-<input type="hidden" id="student_id" name="student_id" value="">
-<div class="col-sm-12">
-    <br>
-<button type="button" class="btn btn-sm btn-outline-secondary my-1 btnCancellEditAluno" >Cancelar</button>
-<button type="button" class="btn btn-sm btn-success my-1 btnSaveEditAluno">Salvar</button>
 
-</div>
-<div class="col-sm-6">
-<div class="form-group">
-    <label for="">Aluno</label>
-    <input type="text" class="form-control form-control-sm" id="nomeAluno" value="" readonly>
-</div>
-</div>
+                    <!--Formulário de Edição do Aluno na Célula-->
+                    <div id="content_edit_aluno" style="display:none">
+                        <form class="row" style="background-color:#ddd" id="formEditAluno">
+                            <input type="hidden" id="student_id" name="student_id" value="">
+                            <div class="col-sm-12">
+                                <br>
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-secondary my-1 btnCancellEditAluno">Cancelar</button>
+                                <button type="button"
+                                    class="btn btn-sm btn-success my-1 btnSaveEditAluno">Salvar</button>
 
-<div class="col-sm-6">
-<div class="form-group">
-    <label for="">Presença</label>
-    <div class="form-check">
-        <input class="form-check-input position-static" type="checkbox" name="presenca" id="presenca" value="1" >
-    </div>
-</div>
-</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Aluno</label>
+                                    <input type="text" class="form-control form-control-sm" id="nomeAluno" value=""
+                                        readonly>
+                                </div>
+                            </div>
 
-<div class="col-sm-4">
-<div class="form-group">
-    <label for="">N1</label>
-    <input type="number" class="form-control form-control-sm" value="" name='n1' id="n1">
-</div>
-</div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="">Presença</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input position-static" type="checkbox" name="presenca"
+                                            id="presenca" value="1">
+                                    </div>
+                                </div>
+                            </div>
 
-<div class="col-sm-4">
-<div class="form-group">
-    <label for="">N2</label>
-    <input type="number" class="form-control form-control-sm" value="" name='n2' id="n2">
-</div>
-</div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">N1</label>
+                                    <input type="number" class="form-control form-control-sm" value="" name='n1'
+                                        id="n1">
+                                </div>
+                            </div>
 
-<div class="col-sm-4">
-<div class="form-group">
-    <label for="">N3</label>
-    <input type="number" class="form-control form-control-sm" value="" name='n3' id="n3">
-</div>
-</div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">N2</label>
+                                    <input type="number" class="form-control form-control-sm" value="" name='n2'
+                                        id="n2">
+                                </div>
+                            </div>
 
-<div class="col-sm-12">
-<div class="form-group">
-    <label for="feedback">FeedBack</label>
-    <textarea class="form-control" id="feedback" name="feedback" rows="3"></textarea>
-  </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">N3</label>
+                                    <input type="number" class="form-control form-control-sm" value="" name='n3'
+                                        id="n3">
+                                </div>
+                            </div>
 
-</div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <label for="feedback">FeedBack</label>
+                                    <textarea class="form-control" id="feedback" name="feedback" rows="3"></textarea>
+                                </div>
 
-  
-</form>
-<br>
-</div>
-<!--Fim Formulário de Edição do Aluno na Célula-->
+                            </div>
 
-<!--Table com Students na Célula -->
-<div class="table-responsive" id="modalCelula_students">
-<table class="table table-bordered table-sm">
-  <thead>
-    <tr>
-    <th >Edit</th>
-    <th >Excluir</th>
-      <th >Aluno</th>
-      <th >Presença</th>
-      <th >N1</th>
-      <th >N2</th>
-      <th >N3</th>
-      <th >FeedBack</th>
-      
-    </tr>
-  </thead>
-  <tbody>
-    
-  </tbody>
-</table>
-</div>
-<!--Fim Table com Students na Célula -->
 
-                   <!--Bloco Adicionar Aluno na Célula -->
+                        </form>
+                        <br>
+                    </div>
+                    <!--Fim Formulário de Edição do Aluno na Célula-->
+
+                    <!--Table com Students na Célula -->
+                    <div class="table-responsive" id="modalCelula_students">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Edit</th>
+                                    <th>Excluir</th>
+                                    <th>Aluno</th>
+                                    <th>Presença</th>
+                                    <th>N1</th>
+                                    <th>N2</th>
+                                    <th>N3</th>
+                                    <th>FeedBack</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--Fim Table com Students na Célula -->
+
+                    <!--Bloco Adicionar Aluno na Célula -->
                     <div class="row mb-3">
                         <div class="col-sm-3 mb-2">
                             <button id="btnAddStudent" class="btn btn-sm btn-outline-success"
@@ -144,10 +189,10 @@
                             <div id="selectAula" class="form-group"></div>
                         </div>
                         <div class="col-sm-8">
-                                <div id="selectTipoAula" class="form-group"></div>
+                            <div id="selectTipoAula" class="form-group"></div>
                         </div>
                     </div>
-                     <!--Fim Bloco Adicionar Aluno na Célula -->
+                    <!--Fim Bloco Adicionar Aluno na Célula -->
 
                 </div>
 

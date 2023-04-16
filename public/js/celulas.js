@@ -106,6 +106,7 @@
                 var aula_id = resp.aula ? resp.aula.id : "";
                 $("#modalCelula_celula_id").val(resp.id);
                 $("#modalCelula_aula_id").val(aula_id);
+                $("#modalCelula_aula_link").val(resp.aula_link);
                 var dia = moment(resp.dia);
                 $("#modalCelula_dia").html(dia.format('DD.MM.YYYY'));
                 $("#modalCelula_horario").html(resp.horario);
@@ -187,6 +188,40 @@
 
     }
 
+    function saveAulaLink(){
+        var celula_id = $("#modalCelula_celula_id").val();
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var aula_link = $("#modalCelula_aula_link").val();
+        var aula_id = $("#modalCelula_aula_id").val();
+       
+            $.ajax({
+                url: asset + "celulas/" + celula_id+"/aulaLink",
+                method: "PATCH",
+                data: {
+                    _token: token,
+                    aula_link:aula_link,
+                    aula_id:aula_id
+                },
+                success: function (resp) {
+                    console.log(resp)
+                    showMessage('.message_modal', resp.message, 'success');
+                    //showGlobalMessage(resp.message, 'success');
+                    
+                },
+                error: function (resp) {
+                    console.log(resp)
+                    var resposta = resp.responseJSON.error || resp.responseJSON.message || "Algo deu Errado";
+
+                    showMessage('.message_modal', resposta, 'danger');
+                    //$("#modalCelula").scrollTop(90);
+                    //$.notify(resposta,{type:'danger'})
+                    //showGlobalMessage(resposta,'danger');
+                }
+            });
+        
+    }
+
+    $(".btnSaveAulaLink").on('click', saveAulaLink);
 
     /**
      * Inicio das funções para agendamento de aula pelo administrador * 
@@ -382,6 +417,18 @@
             return (value != null && value != undefined) ? value : '';
         }
 
+        /**
+         * 
+         * Método para limpar Aula em caso de desmarcação do último aluno
+         */
+        function clearAula(celula){
+            if(!celula.aula_id){
+                $("#modalCelula_aula_id").val('');
+                $("#modalCelula_aula_link").val('');
+                $("#modalCelula_aula").html('');                
+            }
+        }
+
         this.findAlunoById = function (id) {
             return $this.alunos.find(function (aluno) {
                 return aluno.id == id;
@@ -421,6 +468,7 @@
                 success: function (resp) {
                     console.log(resp)
                     mountStudentsOnCelula(resp.celula.students);
+                    clearAula(resp.celula);
                     showMessage('.message_modal', resp.message, 'success');
                     $("#modalCelula").scrollTop(90);
                     instanceCalendar.refetchEvents();
@@ -449,6 +497,7 @@
                 var strPresenca = student.pivot.presenca ?
                     '<i class="fa fa-check-square-o" aria-hidden="true"></i>' :
                     '<i class="fa fa-square-o" aria-hidden="true"></i>';
+                var studentModuleName= student.module?student.module.nome:'';
                 var string = "<tr>" +
                     "<td>" +
                     '<button data-id="' + student.id + '" class="btn btn-outline-primary btn-sm btnEditAluno" >' +
@@ -460,7 +509,7 @@
                     '<i class="fa fa-trash" aria-hidden="true"></i> ' +
                     '</button>' +
                     "</td>" +
-                    '<td>' + student.nome + ' (Intermediate)</td>' +
+                    '<td>' + student.nome + ' ('+studentModuleName+')</td>' +
                     '<td>' + strPresenca + '</td>' +
                     '<td>' + echoX(student.pivot.n1) + '</td>' +
                     '<td>' + echoX(student.pivot.n2) + '</td>' +
@@ -547,6 +596,8 @@
     $('#modalCelula').on('hidden.bs.modal', function (e) {
         cancellEditAluno();
         $("#modalCelula_celula_id").val('');
+        $("#modalCelula_aula_link").val('');
+        $('#collapseAulaLink').collapse('hide');
     })
 
     $(".btnSaveEditAluno").click(saveEditAluno);

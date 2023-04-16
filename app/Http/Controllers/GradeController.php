@@ -29,7 +29,9 @@ class GradeController extends Controller
 
     public function getCelula(Celula $celula)
     {
-        return response()->json($celula->load('students', 'aula'));
+        $celulaWithStudents=$celula->load('students.module', 'aula');
+        $this->hideInfoStudents($celulaWithStudents->students);
+        return response()->json($celulaWithStudents);
     }
 
     public function getDisciplinasAjax()
@@ -102,6 +104,22 @@ class GradeController extends Controller
         endif;
 
         return $aula->id;
+    }
+
+    /**
+     * Proteger Informações de notas e feedback de colegas. Informação somente para o aluno autenticado
+     */
+    private function hideInfoStudents($students)
+    {
+        $authStudent = auth()->user()->student;
+        foreach($students as $student){
+            if($student->pivot && $student->id!=$authStudent->id){
+                $student->pivot->n1='';
+                $student->pivot->n2='';
+                $student->pivot->n3='';
+                $student->pivot->feedback='';
+            }
+        }
     }
 
 

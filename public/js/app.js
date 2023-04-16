@@ -10,12 +10,12 @@ function confirmDelete(callback) {
     });
 }
 
-function wxConfirm(callback, title="Deseja Realmente  ?", content="") {
+function wxConfirm(callback, title = "Deseja Realmente  ?", content = "") {
     swal({
         title: title,
         type: "warning",
         showCancelButton: true,
-        text:content,
+        text: content,
     }, function (ok) {
         if (ok) {
             callback();
@@ -26,29 +26,29 @@ function wxConfirm(callback, title="Deseja Realmente  ?", content="") {
 
 var SPMaskBehavior = function (val) {
     return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
-  },
-  spOptions = {
-    onKeyPress: function(val, e, field, options) {
-        field.mask(SPMaskBehavior.apply({}, arguments), options);
-      }
-  };
+},
+    spOptions = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(SPMaskBehavior.apply({}, arguments), options);
+        }
+    };
 
 function adminFormSubmit(event) {
     event.preventDefault();
-    var btn= event.currentTarget;
-    var fechar= !!btn.dataset.close;
+    var btn = event.currentTarget;
+    var fechar = !!btn.dataset.close;
     var form = document.getElementById("adminForm");
-    if(fechar){
-       var exist= $("input[name=fechar]").length;
-       if(!exist){
-        $(form).append('<input type="hidden" name="fechar" value="'+btn.dataset.close+'" >');
-       }
+    if (fechar) {
+        var exist = $("input[name=fechar]").length;
+        if (!exist) {
+            $(form).append('<input type="hidden" name="fechar" value="' + btn.dataset.close + '" >');
+        }
     }
-    else{
-        $("input[name=fechar]").remove();   
+    else {
+        $("input[name=fechar]").remove();
     }
     form.submit();
-    $(btn).attr('disabled','disabled');
+    $(btn).attr('disabled', 'disabled');
     $(btn).removeAttr('onclick');
     $(btn).unbind();
 }
@@ -57,19 +57,19 @@ $(document).ready(function () {
     $('.cep').mask('00000-000');
     $('.cpf').mask('000.000.000-00', { reverse: true });
     $('.phone').mask(SPMaskBehavior, spOptions);
-    $('.money').mask('000.000.000.000.000,00', {reverse: true});
-    
+    $('.money').mask('000.000.000.000.000,00', { reverse: true });
+
 
     //função busca CEP em Webservice
     $("#cep").keyup(function () {
         if (this.value.length == 9) {
-            $('#cep').css({'background': "url('../img/preload.GIF') no-repeat right", 'background-size': '30px 30px'});
+            $('#cep').css({ 'background': "url('../img/preload.GIF') no-repeat right", 'background-size': '30px 30px' });
             $('body').append("<div class='fundo_preload  modal-backdrop fade show'></div>");
             $.getJSON("//viacep.com.br/ws/" + this.value + "/json/?callback=?", function (dados) {
 
                 if (!("erro" in dados)) {
-                    var string_endereco= dados.logradouro+' '+dados.complemento+' ';
-                    string_endereco+=dados.bairro+' '+dados.localidade+' - '+dados.uf+' '+dados.unidade;
+                    var string_endereco = dados.logradouro + ' ' + dados.complemento + ' ';
+                    string_endereco += dados.bairro + ' ' + dados.localidade + ' - ' + dados.uf + ' ' + dados.unidade;
                     $("#endereco").val(string_endereco);
                 } else {
 
@@ -79,28 +79,28 @@ $(document).ready(function () {
                 $('#cep').css('background', "url()");
                 $('.fundo_preload').remove();
             }).fail(function () {
-               $('#cep').css('background', "url()");
-               $('.fundo_preload').remove();
+                $('#cep').css('background', "url()");
+                $('.fundo_preload').remove();
                 console.log('falha de rede ou erro lançado pelo webservice');
-                
+
             });
         }
     }); //fim  KEYUP função busca CEP
     //FIM BUSCA CEP
 
     $('.select2').select2();
-    
+
 
 });
 
-function limparFormPesquisa(){
+function limparFormPesquisa() {
     $('#form_pesquisa select, #form_pesquisa input[type=date]').val('');
     $('#form_pesquisa select').trigger('change'); //avisar select2
 }
 
-function valorFormatado(valorNumber){
-    var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
-    if(isNaN(v)){
+function valorFormatado(valorNumber) {
+    var v = Number.parseFloat(valorNumber); //garantindo que param vai ser number
+    if (isNaN(v)) {
         //mesmo assim se não form um número para aqui.
         return "";
     }
@@ -108,9 +108,9 @@ function valorFormatado(valorNumber){
     return valor_formatado; //string formatada
 }
 
-function floatBr(valorNumber){
-    var v= Number.parseFloat(valorNumber); //garantindo que param vai ser number
-    if(isNaN(v)){
+function floatBr(valorNumber) {
+    var v = Number.parseFloat(valorNumber); //garantindo que param vai ser number
+    if (isNaN(v)) {
         //mesmo assim se não form um número para aqui.
         return 0;
     }
@@ -119,74 +119,97 @@ function floatBr(valorNumber){
     return valor_formatado; //string formatada
 }
 
-function moneyBrToFloat(valor){
-    if(valor){
-        return parseFloat( valor.toString().replace('.', '').replace(',', '.') );
-       
+function moneyBrToFloat(valor) {
+    if (valor) {
+        return parseFloat(valor.toString().replace('.', '').replace(',', '.'));
+
     }
 }
 
 function ler_valor(campo) {
     return moneyBrToFloat($(campo).val());
-  
+
 }
 
-function lerInputNumber(campo){
+function lerInputNumber(campo) {
     var val = $(campo).val();
-    if(!val && val!=='0'){
+    if (!val && val !== '0') {
         //alert("nr invalido!");
         $(campo).val('0');
-        return false;	
+        return false;
     }
     return parseFloat(val);
 }
 
-function showGlobalMessage(conteudo,tipo='info',larger=true){
-    var row=larger?'row':'';
-    var string=' <div class="'+row+' tile tile-mensagens">'+
-        '<div class="alert alert-'+tipo+ ' alert-dismissable " style="width:100%">'+
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
-        conteudo+
-        '</div>'+
-    '</div>';
+function showGlobalMessage(conteudo, tipo = 'info', larger = true) {
+    var row = larger ? 'row' : '';
+    var string = ' <div class="' + row + ' tile tile-mensagens">' +
+        '<div class="alert alert-' + tipo + ' alert-dismissable " style="width:100%">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+        conteudo +
+        '</div>' +
+        '</div>';
     $('.globalMessages').html(string);
 
 }
 
-function showMessage(alvo,conteudo,tipo='info'){
-   
-    var string=' <div>'+
-        '<div class="alert alert-'+tipo+ ' alert-dismissable " style="width:100%">'+
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'+
-        conteudo+
-        '</div>'+
-    '</div>';
+function showMessage(alvo, conteudo, tipo = 'info') {
+
+    var string = ' <div>' +
+        '<div class="alert alert-' + tipo + ' alert-dismissable " style="width:100%">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+        conteudo +
+        '</div>' +
+        '</div>';
     $(alvo).html(string);
 
 }
 
-function createPopOverLink(text,size=30) {
-    if(text.length <=size){
+function createPopOverLink(text, size = 30) {
+    if (text.length <= size) {
         return text;
     }
-    let shortText = text.slice(0, size); // pegar os primeiros 10 caracteres
-    shortText=shortText+"..." //Indicativo que Tem mais texto
-    const fullText = text; // armazenar o texto completo
-    
-    const link = $("<a>")
-      .addClass("pop-over-link")
-      .prop("href", "#")
-      .attr("data-toggle", "popover")
-      .attr("data-trigger", "focus")
-      .attr("data-placement", "auto")     
-      .attr("data-content", fullText)        
-      .text(shortText);
-    
+    var shortText = text.slice(0, size); // pegar os primeiros 10 caracteres
+    shortText = shortText + "..." //Indicativo que Tem mais texto
+    var fullText = text; // armazenar o texto completo
+
+    var link = $("<a>")
+        .addClass("pop-over-link")
+        .prop("href", "#")
+        .attr("data-toggle", "popover")
+        .attr("data-trigger", "focus")
+        .attr("data-placement", "auto")
+        .attr("data-content", fullText)
+        .text(shortText);
+
     // Obter a string HTML do link
-    const linkString = $("<div>").append(link).html();
-    
+    var linkString = $("<div>").append(link).html();
+
     return linkString;
-  } 
- 
-  
+}
+
+
+function copyToClipBoard(id, elementEvent) {
+    // Get the text field
+    var copyText = document.getElementById(id);
+    // Select the text field
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+    // Copy the text inside the text field
+    navigator.clipboard.writeText(copyText.value);
+
+    var mensagemOriginal = elementEvent.innerHTML;
+    var mensagemTemporaria = 'Copiado com Sucesso!.';
+    elementEvent.disabled = true;
+    elementEvent.innerHTML = mensagemTemporaria;
+    var tempoLimite = 3000;
+    var limparMensagem = function () {
+        elementEvent.innerHTML = mensagemOriginal;
+        elementEvent.disabled = false;
+    };
+
+    setTimeout(limparMensagem, tempoLimite);
+}
+
+
 

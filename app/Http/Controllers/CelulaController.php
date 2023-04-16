@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CelulaStoreRequest;
 use App\Http\Requests\CelulaStoreStudentRequest;
 use App\Http\Requests\CelulasBathRequest;
+use App\Http\Requests\CelulaAulaLinkRequest;
 
 use App\Models\Celula;
 use App\Models\Teacher;
@@ -29,12 +30,15 @@ class CelulaController extends Controller
 
     public function celulasBath(CelulasBathRequest $request)
     {
-        $retorno=Celula::createCelulasBath($request);
-        if($retorno):
-            \Session::flash('mensagem', ['type' => 'success', 
-            'conteudo' => 'Disponibilidade de Células  Criada com Sucesso!', 'larger' => true]);
+        $retorno = Celula::createCelulasBath($request);
+        if ($retorno):
+            \Session::flash('mensagem', [
+                'type' => 'success',
+                'conteudo' => 'Disponibilidade de Células  Criada com Sucesso!',
+                'larger' => true
+            ]);
         endif;
-       
+
         return redirect()->back()->withInput($request->input());
     }
 
@@ -42,7 +46,7 @@ class CelulaController extends Controller
 
     public function getEventsCelula()
     {
-        $mapCelulas=Celula::getEventsCelula(request('start'),request('end'),request('teacher_id'));
+        $mapCelulas = Celula::getEventsCelula(request('start'), request('end'), request('teacher_id'));
         return response()->json($mapCelulas);
     }
 
@@ -74,7 +78,7 @@ class CelulaController extends Controller
      */
     public function show(Celula $celula)
     {
-        return response()->json($celula->load('students', 'aula'));
+        return response()->json($celula->load('students.module', 'aula'));
     }
 
 
@@ -88,16 +92,13 @@ class CelulaController extends Controller
     public function destroy(Celula $celula)
     {
         try {
-            \DB::transaction(function () use($celula){
-                $byAdm=1; //Informar na desmarcação que a ação é feito por um adm.
-                foreach($celula->students as $student):
-                    Celula::desmarcarStudent($student,$celula,$byAdm);
-                endforeach;
-                $celula->delete();
+            \DB::transaction(function () use ($celula) {
+                $byAdm = 1; //Informar na desmarcação que a ação é feito por um adm.
+                foreach ($celula->students as $student): Celula::desmarcarStudent($student, $celula, $byAdm);
+                endforeach; $celula->delete();
             });
             return response()->json(['message' => 'Célula destruída com sucesso!']);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -106,55 +107,72 @@ class CelulaController extends Controller
     {
         //request tem que ter: celula_id, student_id e aula_id
         try {
-            $celulaInfo=\DB::transaction(function () use ($request) {
+            $celulaInfo = \DB::transaction(function () use ($request) {
                 $student = Student::find($request->student_id);
-                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $request->aula_id,$request->aula_individual);
+                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $request->aula_id, $request->aula_individual);
                 return $celulaInfo;
             });
             return response()->json($celulaInfo);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function saveInfoStudentOnCelula(Request $request, Celula $celula)
-    {        
+    {
         try {
-            $celulaInfo=\DB::transaction(function () use ($request,$celula) {
+            $celulaInfo = \DB::transaction(function () use ($request, $celula) {
                 $celula->students()->updateExistingPivot($request->student_id, [
-                    'presenca' => $request->presenca?1:0,
+                    'presenca' => $request->presenca ? 1 : 0,
                     'n1' => $request->n1,
                     'n2' => $request->n2,
                     'n3' => $request->n3,
                     'feedback' => $request->feedback,
-        
+
                 ]);
-                return $celula->load('students');
+                return $celula->load('students.module');
             });
             return response()->json($celulaInfo);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        }       
+        }
     }
 
     public function desmarcarStudent(Celula $celula, Student $student)
     {
-       // dd($celula,$student);
+        // dd($celula,$student);
         try {
-            \DB::transaction(function () use($celula, $student){
-                $byAdm=1; //Informar na desmarcação que a ação é feito por um adm.                
-                Celula::desmarcarStudent($student,$celula,$byAdm);  
+            \DB::transaction(function () use ($celula, $student) {
+                $byAdm = 1; //Informar na desmarcação que a ação é feito por um adm.                
+                Celula::desmarcarStudent($student, $celula, $byAdm);
             });
-            return response()->json(['message' => 'Desmarcação Realizada com sucesso!',
-        "celula"=>$celula]);
-        }
-        catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Desmarcação Realizada com sucesso!',
+                "celula" => $celula->load('students.module')
+            ]);
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
+    public function saveAulaLinkOnCelula(CelulaAulaLinkRequest $request, Celula $celula)
+    {
+        try {
+            $celula->aula_link = $request->aula_link;
+            $celula->save();
+            return response()->json([
+                'message' => 'Link Salvo com Sucesso!',
+                "celula" => $celula
+            ]);
+        } catch (\Exception $e) {
+            $message=$e->getMessage()?$e->getMessage():"Erro Inesperado!";
+            return response()->json(['error' => $message], 500);
+        }
 
-    
+    }
+
+
+
+
+
 }
