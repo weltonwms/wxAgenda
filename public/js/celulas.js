@@ -120,7 +120,7 @@
                     var msgIndividual = '<p class="mb-3"> <b style="color: red">Sala de Aula Individual</b></p>';
                     $("#info_aula_individual").html(msgIndividual);
                 }
-
+                hideBtnDeleteCelula();
             }
         });
     }
@@ -149,6 +149,12 @@
                     $("#modalCelula").modal('hide');
                     showGlobalMessage(resp.message, 'success');
                     $.notify(resp.message, { type: 'success' })
+                },
+                error: function (resp) {
+                    var resposta = resp.responseJSON.error;
+                    showMessage('.message_modal', resposta, 'danger');
+                    //$.notify(resposta, { type: 'danger' })
+                    //showGlobalMessage(resposta,'danger');
                 }
             });
         }
@@ -159,6 +165,18 @@
             sendAjax();
         }
     }); //fim Click btnDeleteCelula
+
+    function hideBtnDeleteCelula(){
+        var countStudents = $("#modalCelula_students tbody tr").length;
+        var is_adm= $('#is_adm').val()==1?true:false;
+        if(!is_adm && countStudents > 0){            
+            $("#btnDeleteCelula").hide();
+        }
+        else{
+            $("#btnDeleteCelula").show();            
+        }
+    }
+    
 
     function getHorariosValidos() {
         var horarios_validos_json = $('#horarios_validos').val();
@@ -429,6 +447,10 @@
             }
         }
 
+        function isAdmin(){
+            return $('#is_adm').val()==1?true:false;
+        }
+
         this.findAlunoById = function (id) {
             return $this.alunos.find(function (aluno) {
                 return aluno.id == id;
@@ -503,12 +525,16 @@
                     '<button data-id="' + student.id + '" class="btn btn-outline-primary btn-sm btnEditAluno" >' +
                     '<i class="fa fa-pencil" aria-hidden="true"></i> ' +
                     '</button>' +
-                    "</td>" +
-                    "<td>" +
+                    "</td>" ;
+
+                if(isAdmin()){
+                    string += "<td>" +
                     '<button data-id="' + student.id + '" class="btn btn-outline-danger btn-sm btnDeleteAluno" >' +
                     '<i class="fa fa-trash" aria-hidden="true"></i> ' +
                     '</button>' +
-                    "</td>" +
+                    "</td>" ;
+                }
+                string+=
                     '<td>' + student.nome + ' ('+studentModuleName+')</td>' +
                     '<td>' + strPresenca + '</td>' +
                     '<td>' + echoX(student.pivot.n1) + '</td>' +

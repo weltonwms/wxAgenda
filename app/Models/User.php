@@ -137,6 +137,25 @@ class User extends Authenticatable
         return $this->username;
     }
 
+    public function getIsTeacherAttribute()
+    {
+        return strtolower($this->tipo) == 'teacher'; //retorna true se for Teacher
+    }
+
+    public function getIsStudentAttribute()
+    {
+        return strtolower($this->tipo) == 'student'; //retorna true se for Student
+    }
+
+   
+    public function getIdTeacher()
+    {
+        if($this->entidade && $this->isTeacher){
+            return $this->entidade->id;
+        }
+        return null;    
+    }
+
     public function isActive()
     {
         if($this->entidade){

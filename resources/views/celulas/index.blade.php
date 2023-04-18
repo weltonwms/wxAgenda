@@ -10,6 +10,8 @@
 @section('content')
 
 <input type="hidden" id="horarios_validos" value="{{$horariosList}}" class="form-control">
+<input type="hidden" id="is_adm" value="{{auth()->user()->isAdm?1:0}}" class="form-control">
+
 <div class="tile row">
 
     <div class="col-sm-3">

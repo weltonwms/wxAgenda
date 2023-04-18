@@ -141,7 +141,9 @@
                             <thead>
                                 <tr>
                                     <th>Edit</th>
+                                    @if(auth()->user()->isAdm)
                                     <th>Excluir</th>
+                                    @endif
                                     <th>Aluno</th>
                                     <th>Presença</th>
                                     <th>N1</th>
@@ -159,6 +161,7 @@
                     <!--Fim Table com Students na Célula -->
 
                     <!--Bloco Adicionar Aluno na Célula -->
+                    @if(auth()->user()->isAdm)
                     <div class="row mb-3">
                         <div class="col-sm-3 mb-2">
                             <button id="btnAddStudent" class="btn btn-sm btn-outline-success"
@@ -171,7 +174,7 @@
                             <div id="blocoConfirm" class=""></div>
                         </div>
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-sm-12">
                             <div id="selectAluno" class="form-group"></div>
@@ -192,6 +195,7 @@
                             <div id="selectTipoAula" class="form-group"></div>
                         </div>
                     </div>
+                    @endif
                     <!--Fim Bloco Adicionar Aluno na Célula -->
 
                 </div>

@@ -25,23 +25,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class , 'index'])
 ->name('home');
 
 
-Route::group(['middleware' => ['auth','adm']], function () {
-    
+Route::group(['middleware' => ['auth','adm']], function () {    
     Route::resource('modules', '\App\Http\Controllers\ModuleController');
     Route::delete('/modules_bath', '\App\Http\Controllers\ModuleController@destroyBath')->name('modules_bath.destroy');
-    Route::get('getModulesAjax','\App\Http\Controllers\ModuleController@getModulesAjax');
     Route::resource('disciplinas', '\App\Http\Controllers\DisciplinaController');
     Route::delete('/disciplinas_bath', '\App\Http\Controllers\DisciplinaController@destroyBath')->name('disciplinas_bath.destroy');
-    Route::get('getDisciplinasAjax','\App\Http\Controllers\DisciplinaController@getDisciplinasAjax');
     Route::resource('restrictions', '\App\Http\Controllers\RestrictionController');
     Route::delete('/restrictions_bath', '\App\Http\Controllers\RestrictionController@destroyBath')->name('restrictions_bath.destroy');
     Route::resource('aulas', '\App\Http\Controllers\AulaController');
     Route::delete('/aulas_bath', '\App\Http\Controllers\AulaController@destroyBath')->name('aulas_bath.destroy');
-    Route::get('getAulasAjax','\App\Http\Controllers\AulaController@getAulasAjax');
     Route::resource('teachers', '\App\Http\Controllers\TeacherController');
     Route::delete('/teachers_bath', '\App\Http\Controllers\TeacherController@destroyBath')->name('teachers_bath.destroy');
-    Route::resource('students', '\App\Http\Controllers\StudentController');
-    Route::get('getStudentsAjax','\App\Http\Controllers\StudentController@getStudentsAjax');
+    Route::resource('students', '\App\Http\Controllers\StudentController');    
     Route::delete('/students_bath', '\App\Http\Controllers\StudentController@destroyBath')->name('students_bath.destroy');
     Route::resource('administrators', '\App\Http\Controllers\AdministratorController');
     Route::delete('/administrators_bath', '\App\Http\Controllers\AdministratorController@destroyBath')->name('administrators_bath.destroy');
@@ -49,13 +44,6 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::delete('/horarios_bath', '\App\Http\Controllers\HorarioController@destroyBath')->name('horarios_bath.destroy');
     Route::get('credits/{student_id}', '\App\Http\Controllers\CreditController@getCredits');
     Route::post('credits', '\App\Http\Controllers\CreditController@store')->name('credits.store');
-    Route::get('celulas', '\App\Http\Controllers\CelulaController@index')->name('celulas.index');   
-    Route::get('getEventsCelula', '\App\Http\Controllers\CelulaController@getEventsCelula');    
-    Route::get('celulas/{celula}', '\App\Http\Controllers\CelulaController@show')->name('celulas.show');
-    Route::post('celulasBath', '\App\Http\Controllers\CelulaController@celulasBath')->name('celulasBath.store');    
-    Route::post('celulas', '\App\Http\Controllers\CelulaController@store')->name('celulas.store');    
-    Route::delete('celulas/{celula}', '\App\Http\Controllers\CelulaController@destroy')->name('celulas.destroy');
-    Route::post('celulas/storeStudent','\App\Http\Controllers\CelulaController@storeStudent');
     Route::get('configurations',[App\Http\Controllers\ConfigurationController::class , 'index'])->name('configurations.index');
     Route::post('confgurations',[App\Http\Controllers\ConfigurationController::class , 'save'])->name('configurations.save');
     Route::get('showSystemCounter',[App\Http\Controllers\AulaController::class ,'showSystemCounter'])->name('showSystemCounter');
@@ -64,10 +52,25 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::match(['get', 'post'],"relatorio/students",'\App\Http\Controllers\RelatorioController@students')->name('relatorio.students');
     Route::match(['get', 'post'],"relatorio/students2",'\App\Http\Controllers\RelatorioController@students2')->name('relatorio.students2');
 
-    Route::put('celulas/{celula}/saveInfoStudent', '\App\Http\Controllers\CelulaController@saveInfoStudentOnCelula');   
-    Route::delete('celulas/{celula}/{student}', '\App\Http\Controllers\CelulaController@desmarcarStudent');   
-    Route::patch('celulas/{celula}/aulaLink', '\App\Http\Controllers\CelulaController@saveAulaLinkOnCelula');   
+});
 
+Route::group(['middleware' => ['auth','teacher']], function () {
+    Route::get('getModulesAjax','\App\Http\Controllers\ModuleController@getModulesAjax');
+    Route::get('getDisciplinasAjax','\App\Http\Controllers\DisciplinaController@getDisciplinasAjax');
+    Route::get('getAulasAjax','\App\Http\Controllers\AulaController@getAulasAjax');
+    Route::get('getStudentsAjax','\App\Http\Controllers\StudentController@getStudentsAjax');
+
+    Route::get('celulas', '\App\Http\Controllers\CelulaController@index')->name('celulas.index');   
+    Route::get('getEventsCelula', '\App\Http\Controllers\CelulaController@getEventsCelula');    
+    Route::get('celulas/{celula}', '\App\Http\Controllers\CelulaController@show')->name('celulas.show');
+    Route::post('celulasBath', '\App\Http\Controllers\CelulaController@celulasBath')->name('celulasBath.store');    
+    Route::post('celulas', '\App\Http\Controllers\CelulaController@store')->name('celulas.store');    
+    Route::delete('celulas/{celula}', '\App\Http\Controllers\CelulaController@destroy')->name('celulas.destroy');
+    Route::post('celulas/storeStudent','\App\Http\Controllers\CelulaController@storeStudent')->middleware('adm');
+
+    Route::put('celulas/{celula}/saveInfoStudent', '\App\Http\Controllers\CelulaController@saveInfoStudentOnCelula');   
+    Route::delete('celulas/{celula}/{student}', '\App\Http\Controllers\CelulaController@desmarcarStudent')->middleware('adm');   
+    Route::patch('celulas/{celula}/aulaLink', '\App\Http\Controllers\CelulaController@saveAulaLinkOnCelula');   
 
 });
 

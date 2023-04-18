@@ -12,12 +12,13 @@ class Adm
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * 
      */
     public function handle(Request $request, Closure $next)
     {
         if (!auth()->user()->isAdm) {
-            return redirect('login');
+            return response()->json(['error'=>"Ação Não Autorizada! "],403);
+            //return redirect('login');
         }
         return $next($request);
     }

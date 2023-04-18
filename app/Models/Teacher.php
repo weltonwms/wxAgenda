@@ -37,4 +37,20 @@ class Teacher extends Model
         });
     }
 
+    /**
+     * Retorna Lista de professores Completa se for adm;
+     * Se não for retorna apenas o Professor corresponte ao usuário logado
+     */
+    public static function getListForCelulas()
+    {
+        $list=Teacher::getList();
+        if(auth()->user()->isAdm){
+            return $list;
+        }
+        return $list->reject(function ($value, $key) {
+            return $key != auth()->user()->getIdTeacher();
+        });
+
+    }
+
 }

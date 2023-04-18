@@ -23,7 +23,7 @@ class CelulaController extends Controller
      */
     public function index()
     {
-        $teachersList = Teacher::getList();
+        $teachersList = Teacher::getListForCelulas();
         $horariosList = Horario::getList()->values();
         return view('celulas.index', compact('teachersList', 'horariosList'));
     }
