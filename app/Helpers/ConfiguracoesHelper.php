@@ -41,4 +41,10 @@ class ConfiguracoesHelper
         return 0;
     }
 
+    public static function agendamento_hours_before()
+    {
+        //Implementar futuramente em arquivo de configuração.
+        return 3;
+    }
+
 }

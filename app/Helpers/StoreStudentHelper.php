@@ -28,9 +28,11 @@ class StoreStudentHelper
         $this->validOrdemBase($celula,$student);
         
         $this->ordemSystemCount($celula);
-        //Adm pode marcar datas no passado; por enqunto
+        //Adm pode marcar datas no passado; por enquanto
+        //Adm pode agendar aluno sem limilite de antecedência
         if(!auth()->user()->isAdm){
             $this->isDateFuture($celula->dia,$celula->horario);
+            $this->antecedenciaAgendamento($celula);
         }
 
     }
@@ -204,5 +206,14 @@ class StoreStudentHelper
         $interval=ConfiguracoesHelper::day_interval_after();
         $endCarbon = Carbon::createFromDate($dia)->addDays($interval);       
         return $endCarbon->format('Y-m-d');       
+    }
+
+    private function antecedenciaAgendamento($celula)
+    {
+        $hoursAntecedencia=ConfiguracoesHelper::agendamento_hours_before();
+        if($celula->HoursToStart() < $hoursAntecedencia){
+            throw new \Exception("Agendamento viola antecedência mínima de {$hoursAntecedencia}h!");
+        }
+
     }
 }
