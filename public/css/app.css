@@ -168,4 +168,34 @@ input[type=checkbox].checkbox-lg {
 .aulaAgendada{
   text-decoration: line-through;
 }
+.eventAuthStudent .fc-event-time{
+  background-color: #2196f3;
+  color: white;
+}
+
+.legenda1{
+  background-color: #2196f3;
+  color: white;
+}
+
+.legenda2{
+  background-color: rgb(40, 167, 69);
+  color: white;
+}
+
+.legenda3{
+  background-color: rgb(255, 193, 7);
+  color:#000;
+}
+
+.legenda4{
+  background-color: rgb(220, 53, 69);
+  color: white;
+}
+
+
+.w60 {
+  display: inline-block;
+  width: 60px;
+}
 

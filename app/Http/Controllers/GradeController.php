@@ -1,5 +1,5 @@
 <?php
-
+//Controle Destinado a Student
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ use App\Models\Systemcount;
 class GradeController extends Controller
 {
     public function index()
-    {
+    {        
         $teachersList = Teacher::getList();
         $horariosList = Horario::getList()->values();
         return view('grade.index', compact('teachersList', 'horariosList'));
@@ -23,8 +23,11 @@ class GradeController extends Controller
 
     public function getEventsCelula()
     {
-        $mapCelulas = Celula::getEventsCelula(request('start'), request('end'), request('teacher_id'));
-        return response()->json($mapCelulas);
+        $student = auth()->user()->student;
+        $eventsCelula = Celula::getEventsCelula(request('start'), request('end'), request('teacher_id'));       
+        $eventsAgendados = Celula::getEventsAgendados($student->id, request('start'), request('end'));
+        Celula::markEventsAgendadosToEventsCelula($eventsCelula,$eventsAgendados); 
+        return response()->json($eventsCelula);
     }
 
     public function getCelula(Celula $celula)

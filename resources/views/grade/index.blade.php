@@ -33,6 +33,17 @@
 
 @include('grade.modal')
 
+<div class="legenda_celula card col-md-5 pt-2">
+    <h5>Legenda Cores</h5>
+<ul class="card-body">
+    <li><span class="badge legenda1 w60">Azul</span>: Marcação do Aluno</li>
+    <li><span class="badge legenda2 w60">Verde</span>: Sala Vazia</li>
+    <li><span class="badge legenda3 w60">Amarelo</span>: Sala Populada</li>
+    <li><span class="badge legenda4 w60">Vermelho</span>: Sala Lotada (Indiponível)</li>
+
+</ul>
+</div>
+
 
 @endsection
 

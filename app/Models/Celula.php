@@ -180,6 +180,17 @@ class Celula extends Model
 
     }
 
+    public static function markEventsAgendadosToEventsCelula($eventsCelula,$eventsAgendados)
+    {
+        foreach($eventsCelula as $eventCelula){
+            if($eventsAgendados->contains('id',$eventCelula->id)){
+                $eventCelula->borderColor='#4aefe4';
+                $eventCelula->classNames=['eventAuthStudent'];
+            }            
+        }
+        return $eventsCelula;
+    }
+
     public static function storeStudent($student, $celula_id, $aula_id,$aula_individual=0)
     {
         //validar se pode
