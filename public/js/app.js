@@ -188,6 +188,11 @@ function createPopOverLink(text, size = 30) {
     return linkString;
 }
 
+function isMobile(){
+    //consideração imprecisa considerando apenas largura da janela navegador;
+    return window.innerWidth < 768;
+}
+
 
 function copyToClipBoard(id, elementEvent) {
     // Get the text field
@@ -209,6 +214,58 @@ function copyToClipBoard(id, elementEvent) {
     };
 
     setTimeout(limparMensagem, tempoLimite);
+}
+
+$('[data-toggle="sidebar"]').click(function(event) {
+    console.log('[data-toggle="sidebar"]',$('.app').hasClass('sidenav-toggled') )
+    // event.preventDefault();
+    // $('.app').toggleClass('sidenav-toggled');
+    var sidenav_toggled=$('.app').hasClass('sidenav-toggled');
+    var token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: asset+"sidebar",
+        method: 'PATCH',
+        data: {
+            _token:token,
+            sidenav_toggled:sidenav_toggled,
+            isMobile:isMobile()
+            
+        },
+        success: function(resp) {
+            console.log(resp)
+           
+
+        },
+        error:function(resp){
+            console.log(resp)
+        }
+    });
+});
+
+
+function ckeckAllOnTable(){
+    $("#check-all").click(function() {
+        // Verifique se está marcado ou desmarcado
+        if ($(this).is(":checked")) {
+          // Atualize todas as checkboxes de linha para marcado
+          $(".check-item").prop("checked", true);
+        } else {
+          // Atualize todas as checkboxes de linha para desmarcado
+          $(".check-item").prop("checked", false);
+        }
+      });
+    
+      // Quando uma checkbox de linha for clicada
+      $(".check-item").click(function() {
+        // Verifique se todas as checkboxes de linha estão marcadas ou não
+        if ($(".check-item:checked").length == $(".check-item").length) {
+          // Atualize o checkbox do cabeçalho para marcado
+          $("#check-all").prop("checked", true);
+        } else {
+          // Atualize o checkbox do cabeçalho para desmarcado
+          $("#check-all").prop("checked", false);
+        }
+      });
 }
 
 

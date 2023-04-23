@@ -25,4 +25,17 @@ class HomeController extends Controller
     {
         return view('dashboard.home');
     }
+
+    public function setSideBarToggle(Request $request)
+    {
+        $valueToggle= $request->sidenav_toggled=='true';
+        $isMobile= $request->isMobile=='true';
+        session(['sideBarToggle' => $valueToggle && !$isMobile?"sidenav-toggled":""]);
+        //var_dump($valueToggle);
+
+        return response()->json([
+        'sideBarToggle'=>session('sideBarToggle'),
+        
+        ]);
+    }
 }

@@ -100,4 +100,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('gradeEscola/agenda','\App\Http\Controllers\GradeController@storeAgenda');
 
+    Route::resource('messages', '\App\Http\Controllers\MessageController');
+    Route::post('/messages_bath', '\App\Http\Controllers\MessageController@destroyBath')->name('messages_bath.destroy');
+    Route::post('messagesReply','\App\Http\Controllers\MessageReplyController@store')->name('replies.store');
+    
+    Route::patch('sidebar', '\App\Http\Controllers\HomeController@setSideBarToggle');
+
 });

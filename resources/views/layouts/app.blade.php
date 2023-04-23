@@ -25,7 +25,7 @@
   <script> var asset = "{{asset('/')}}"</script>
 </head>
 
-<body class="app sidebar-mini">
+<body class="app sidebar-mini {{session('sideBarToggle')}}">
   <!-- Navbar-->
   <header class="app-header">
     @include('layouts.header') 

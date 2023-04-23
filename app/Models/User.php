@@ -59,6 +59,21 @@ class User extends Authenticatable
         return $this->hasOne(Teacher::class);
     }
 
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'recipient_id');
+    }
+
+    public function messageReplies()
+    {
+        return $this->hasMany(MessageReply::class);
+    }
+
     public function entidade()
     {
         switch(strtolower($this->tipo)):
@@ -162,5 +177,54 @@ class User extends Authenticatable
             return $this->entidade->active?true:false;
         }
         return true; //se nao tiver entidade considera um ativo especial como admin
+    }
+
+    public static function getList()
+    {
+        //Cuidado!! Gasta muitos recursos;
+        return self::all()->mapWithKeys(function($item){
+                  
+            return [$item->id => $item->nome];
+        });
+    }
+
+    public static function getListToMessages()
+    {
+        //considerando que 3 entidades: Teachers, Students, e Adminstrators
+        //Posteriormente retirar ou colocar maias entidades na lista.
+       $list= \DB::table('teachers')
+                ->select('nome', 'user_id')
+                ->selectRaw("'Professor' AS tipo")
+                ->where('user_id', '>', 0)
+            ->union(\DB::table('students')
+                ->select('nome', 'user_id')
+                ->selectRaw("'Aluno' AS tipo")
+                ->where('user_id', '>', 0))
+            ->union(\DB::table('administrators')
+                ->select('nome', 'user_id')
+                ->selectRaw("'Administrador' AS tipo")
+                ->where('user_id', '>', 0))
+            ->get();
+        return $list->mapWithKeys(function($user){
+            return [$user->user_id=>$user->nome."(".$user->tipo.")"];
+        });        
+    }
+
+    public function onMessageRead()
+    {
+        //set session das messages_not_read        
+        session(['messages_not_read'=>$this->countMessagesNotRead()]);
+
+    }
+
+    public function getMessagesNotRead()
+    {
+        return $this->receivedMessages->where('is_read',0)->where('recipient_delete',0);
+
+    }
+
+    public function countMessagesNotRead()
+    {
+        return $this->getMessagesNotRead()->count();
     }
 }

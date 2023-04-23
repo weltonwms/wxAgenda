@@ -59,4 +59,14 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
     }
+
+    /*
+    * Fluxos Após o Usuário ser autenticado
+    */
+    protected function authenticated(Request $request, $user)
+    {
+      //set session das messages_not_read        
+      session(['messages_not_read'=>$user->countMessagesNotRead()]);
+      
+    }
 }

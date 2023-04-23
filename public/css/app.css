@@ -199,3 +199,23 @@ input[type=checkbox].checkbox-lg {
   width: 60px;
 }
 
+.mail_sidebar {
+  padding-bottom: 40px;
+}
+.mail_sidebar .active a{
+  background-color: #ddd;
+}
+
+.title.is_not_read{
+  font-weight: bold;
+}
+.mailbox-messages .body{
+  color: #6c757d;
+  opacity: 0.8;
+}
+
+.mailbox-messages .is_not_read .mail_user a{ 
+  font-weight: bold;
+  border-bottom: 2px solid;
+}
+
