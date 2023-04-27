@@ -41,9 +41,9 @@
                     <tr>                        
                         <th >Aluno</th>
                         <th >Presença</th>
-                        <th >N1</th>
-                        <th >N2</th>
-                        <th >N3</th>
+                        <th title="Nota Interaction" data-toggle="tooltip" >N1</th>
+                        <th title="Nota Speaking" data-toggle="tooltip" >N2</th>
+                        <th title="Nota Listening" data-toggle="tooltip">N3</th>
                         <th >FeedBack</th>
       
                     </tr>

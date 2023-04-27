@@ -99,25 +99,29 @@
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">N1</label>
+                                    <label for="n1" title="Nota Interaction" data-toggle="tooltip">N1</label>
+                                    
                                     <input type="number" class="form-control form-control-sm" value="" name='n1'
                                         id="n1">
+                                        <small class="form-text text-muted">Interaction</small>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">N2</label>
+                                    <label for="n2" title="Nota Speaking" data-toggle="tooltip">N2</label>
                                     <input type="number" class="form-control form-control-sm" value="" name='n2'
                                         id="n2">
+                                        <small class="form-text text-muted">Speaking</small>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label for="">N3</label>
+                                    <label for="n3" title="Nota Listening" data-toggle="tooltip">N3</label>
                                     <input type="number" class="form-control form-control-sm" value="" name='n3'
                                         id="n3">
+                                        <small class="form-text text-muted">Listening</small>
                                 </div>
                             </div>
 
@@ -146,9 +150,9 @@
                                     @endif
                                     <th>Aluno</th>
                                     <th>Presença</th>
-                                    <th>N1</th>
-                                    <th>N2</th>
-                                    <th>N3</th>
+                                    <th title="Nota Interaction" data-toggle="tooltip">N1</th>
+                                    <th title="Nota Speaking" data-toggle="tooltip">N2</th>
+                                    <th title="Nota Listening" data-toggle="tooltip">N3</th>
                                     <th>FeedBack</th>
 
                                 </tr>

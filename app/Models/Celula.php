@@ -184,7 +184,7 @@ class Celula extends Model
     {
         foreach($eventsCelula as $eventCelula){
             if($eventsAgendados->contains('id',$eventCelula->id)){
-                $eventCelula->borderColor='#4aefe4';
+               // $eventCelula->borderColor='#4aefe4';
                 $eventCelula->classNames=['eventAuthStudent'];
             }            
         }
