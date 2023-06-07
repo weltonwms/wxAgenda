@@ -13,7 +13,7 @@ return [
     'celula_limit' => '4',
     'desmarcacao_permitida'=>'1',
     'desmarcacao_limit_by_month'=> '8',
-    'desmarcacao_hours_before'=> '6',
+    'desmarcacao_hours_before'=> '4',
    
 
 ];
