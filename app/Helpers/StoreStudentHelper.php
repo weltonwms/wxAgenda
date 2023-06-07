@@ -210,6 +210,10 @@ class StoreStudentHelper
 
     private function antecedenciaAgendamento($celula)
     {
+        if ($celula->aula_id):
+            //validação apenas para celula estado 1 (em branco)
+            return true;
+        endif;
         $hoursAntecedencia=ConfiguracoesHelper::agendamento_hours_before();
         if($celula->HoursToStart() < $hoursAntecedencia){
             throw new \Exception("Agendamento viola antecedência mínima de {$hoursAntecedencia}h!");

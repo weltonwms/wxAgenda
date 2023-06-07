@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Teacher extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome', 'email','telefone','disponibilidade'];
+    protected $fillable = ['nome', 'email','telefone','disponibilidade','active'];
 
     public function user()
     {
@@ -51,6 +51,21 @@ class Teacher extends Model
             return $key != auth()->user()->getIdTeacher();
         });
 
+    }
+
+    public function getNomeActive()
+    {
+       return $this->active?'<span class="badge badge-success f90">Sim</span>':
+       '<span class="badge badge-danger f90">Não</span>';
+    }    
+
+    public static function getAllByFilter()
+    {
+        if(request()->filter_ativo!=null){
+            session(['teacher_filter_ativo' => request()->filter_ativo]);
+        }        
+        return Teacher::where('active',session('teacher_filter_ativo',1))->get();
+        
     }
 
 }

@@ -15,7 +15,13 @@
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <br>
         <div class="row">
+            <div class="col-sm-12">
+                <label for="" class="control-label yesno">Professor Ativo *</label>
+                {{ Form::bsYesno('active','1') }} 
+            </div>
+
             <div class="col-lg-12">
                 {{ Form::bsText('nome',null,['label'=>"Nome *",'class'=>""]) }}
                 {{ Form::bsText('email',null,['label'=>"Email ",'class'=>""]) }}
