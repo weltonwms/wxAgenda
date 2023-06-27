@@ -24,9 +24,9 @@
 <table id="tableCreditsStudent" class="table table-hover table-bordered nowrap" style="width:100%">
         <thead>
             <tr>
-                <th>Data Acao</th>
+                <th>Data Ação</th>
                 <th>Qtd</th>
-                <th>Operacao</th>
+                <th>Operacão</th>
                 <th>Saldo Ant.</th>
                 <th>Saldo Post</th>
                 <th>Obs:</th>
