@@ -191,19 +191,22 @@ class User extends Authenticatable
     public static function getListToMessages()
     {
         //considerando que 3 entidades: Teachers, Students, e Adminstrators
-        //Posteriormente retirar ou colocar maias entidades na lista.
+        //Posteriormente retirar ou colocar mais entidades na lista.
        $list= \DB::table('teachers')
                 ->select('nome', 'user_id')
                 ->selectRaw("'Professor' AS tipo")
                 ->where('user_id', '>', 0)
+                ->where('active',1)
             ->union(\DB::table('students')
                 ->select('nome', 'user_id')
                 ->selectRaw("'Aluno' AS tipo")
-                ->where('user_id', '>', 0))
+                ->where('user_id', '>', 0)
+                ->where('active',1))
             ->union(\DB::table('administrators')
                 ->select('nome', 'user_id')
                 ->selectRaw("'Administrador' AS tipo")
-                ->where('user_id', '>', 0))
+                ->where('user_id', '>', 0)
+                ->where('active',1))
             ->get();
         return $list->mapWithKeys(function($user){
             return [$user->user_id=>$user->nome."(".$user->tipo.")"];
