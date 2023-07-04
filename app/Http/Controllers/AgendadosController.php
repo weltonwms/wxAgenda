@@ -27,6 +27,7 @@ class AgendadosController extends Controller
 
     public function desmarcar(Celula $celula)
     {
+        
         try {
             $student = auth()->user()->student;
             $this->verifyRegrasDesmarcacao($student,$celula);
@@ -37,10 +38,16 @@ class AgendadosController extends Controller
                 $msg.= $retorno['credit_provided']?'<strong>Crédito Devolvido!</strong>':
                 '<strong class="text-danger">Crédito não Devolvido!(verifique o limite de desmarcações no mês)</strong>';
             });
+            if(request()->ajax()){
+                return response()->json(["message"=>$msg]);
+            }
             \Session::flash('mensagem', ['type' => 'success', 'conteudo' => $msg]);
             return redirect()->route('agendados.index');
         }
         catch (\Exception $e) {
+            if(request()->ajax()){
+                return response()->json(["error"=>$e->getMessage()],400);
+            }
             \Session::flash('mensagem', ['type' => 'danger', 'conteudo' => $e->getMessage()]);
             return redirect()->route('agendados.index');
         }
@@ -56,7 +63,8 @@ class AgendadosController extends Controller
        }
 
         if(!$celula->isOnLimitHoursToStart()){
-             throw new \Exception("Desmarcação deverá ser feita com antecedência");
+            $limitHoursToStart=ConfiguracoesHelper::desmarcacao_hours_before();
+             throw new \Exception("Desmarcação deverá ser feita com antecedência de ".$limitHoursToStart."h");
         }
         //Não proibir mais o aluno de desmarcar
         /*

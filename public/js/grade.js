@@ -47,7 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
        
         eventClick: function(arg) {
-            //console.log(arg.event.id);
+            var hasAuthStudent= arg.event.classNames.includes('eventAuthStudent');
+            //console.log("hasAuthStudent",hasAuthStudent)
             limpaSelects();
             $(".message_modal").html('');
             setDadosCelula(arg.event.id);
@@ -403,7 +404,6 @@ function setDadosAluno() {
 }
 setDadosAluno();//load das informações do aluno no cabeçalho
 
-
 function isPossivelAgendar(dia, horario, student_id, students){
     var dateNow= new Date();
     var dateCelula= new Date(dia+' '+horario);
@@ -421,16 +421,76 @@ function isPossivelAgendar(dia, horario, student_id, students){
 
 
  /**
-     * Inicio das funções de Edit Aluno
-     */
+    * Inicio das funções de Edit Aluno
+*/
+
+function sendDesmarcarAula(){
+    var token = $('meta[name="csrf-token"]').attr('content');
+    var celula_id =$("#modalCelula_celula_id").val();
+    var sendAjax= function(){
+        $.ajax({
+            url: asset+"agendados/"+celula_id+"/desmarcar",
+            method: 'DELETE',
+            data: {
+                _token: token,
+                celula_id:celula_id
+              
+
+            },
+            beforeSend:function(data){ 
+                $(".message_modal").html('Loading...');
+            },
+            success: function(resp) {
+                console.log('resp: ',resp)
+                
+                
+                var textoSuccess= resp.message;
+                setDadosCelula(celula_id);
+                //limpaSelects();
+                instanceCalendar.refetchEvents();
+                $.notify(textoSuccess, { type: 'success' });
+               showMessage('.message_modal',textoSuccess,'success');
+               setDadosAluno();
+               
+                
+            },
+            error:function(resp){
+                var resposta= resp.responseJSON.error;
+                console.log('resposta erro: ', resposta);
+                showMessage('.message_modal',resposta,'danger');               
+               setDadosAluno();
+               
+            }
+        });
+    } 
+    var aula=$("#modalCelula_aula").text();
+    var dia= $("#modalCelula_dia").text();
+    var horario = $("#modalCelula_horario").text();
+    var professor=$("#teacher_id option:selected").text();
+    wxConfirm(sendAjax,"Deseja Realmente Desmarcar?",'Aula: '+aula+'; Dia: '+dia+' ; Horário: '+horario+'  Professor: '+professor);
+    
+}
 
 
   function ListStudents() {
     this.alunos = [];
     var $this = this;
+    var isCelulaFutura=null;
 
     function echoX(value) {
         return (value != null && value != undefined) ? value : '';
+    }
+
+    function getStringAcaoDesmarcar(aluno){
+        
+        var authStudentId= $('#student_id').val();
+        if(aluno.id==authStudentId && isCelulaFutura){
+            return '<button data-id="' + aluno.id + '" class="btn btn-outline-danger btn-sm btnDesmarcarAula" title="Desmarcar Aula">' +
+            '<i class="fa fa-trash" aria-hidden="true"></i> ' +
+            '</button>' ;
+            
+        }
+        return "";
     }
 
     this.findAlunoById = function (id) {
@@ -439,12 +499,23 @@ function isPossivelAgendar(dia, horario, student_id, students){
         })
     }
 
+    this.setIsCelulaFutura= function(){
+        var horario= $("#modalCelula_horario").text();
+        var diaArray= $("#modalCelula_dia").text().split('.');
+        var dia= diaArray[2]+"-"+diaArray[1]+"-"+diaArray[0];
+       
+        var dateNow = new Date();
+        var dateCelula = new Date(dia+' '+horario);
+        isCelulaFutura = dateCelula > dateNow;
+    }
+
     this.updateTable = function () {
         if (!$this.alunos.length) {
             $("#modalCelula_students tbody").html('');
             $("#modalCelula_students").hide();
             return false;
         }
+        
         $("#modalCelula_students").show();
         var mapStudents = $this.alunos.map(function (student) {
             var strPresenca = student.pivot.presenca ?
@@ -452,6 +523,7 @@ function isPossivelAgendar(dia, horario, student_id, students){
                 '<i class="fa fa-square-o" aria-hidden="true"></i>';
             var studentModuleName= student.module?student.module.nome:'';
             var string = "<tr>" +
+                '<td>' + getStringAcaoDesmarcar(student) +'</td>' +            
                 '<td>' + student.nome + ' ('+studentModuleName+')</td>' +
                 '<td>' + strPresenca + '</td>' +
                 '<td>' + echoX(student.pivot.n1) + '</td>' +
@@ -463,7 +535,7 @@ function isPossivelAgendar(dia, horario, student_id, students){
             return string;
         });
         $("#modalCelula_students tbody").html(mapStudents.join(''));
-        
+        $(".btnDesmarcarAula").click(sendDesmarcarAula);
         $("[data-toggle='popover']").popover();
     }
 } //Fim Class ListStudent
@@ -474,6 +546,7 @@ var listStudents = 'listagem de students';
 function mountStudentsOnCelula(students) {
     listStudents = new ListStudents();
     listStudents.alunos = students;
+    listStudents.setIsCelulaFutura();
     listStudents.updateTable();
     console.log('mountStudentsOnCelula')
 

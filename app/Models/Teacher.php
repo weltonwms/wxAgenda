@@ -37,6 +37,14 @@ class Teacher extends Model
         });
     }
 
+    public static function getListActive()
+    {
+        return self::where('active',1)->get()->mapWithKeys(function($item){
+                  
+            return [$item->id => $item->nome];
+        });
+    }
+
     /**
      * Retorna Lista de professores Completa se for adm;
      * Se não for retorna apenas o Professor corresponte ao usuário logado

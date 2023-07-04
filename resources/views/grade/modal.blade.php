@@ -38,7 +38,8 @@
             <div class="table-responsive" id="modalCelula_students">
             <table class="table table-bordered table-sm">
                 <thead>
-                    <tr>                        
+                    <tr> 
+                        <th></th>                       
                         <th >Aluno</th>
                         <th >Presença</th>
                         <th title="Nota Interaction" data-toggle="tooltip" >N1</th>

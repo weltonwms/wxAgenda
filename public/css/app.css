@@ -219,3 +219,7 @@ input[type=checkbox].checkbox-lg {
   border-bottom: 2px solid;
 }
 
+table .showCelula{
+  margin-right: 10px;
+}
+

@@ -16,7 +16,7 @@ class GradeController extends Controller
 {
     public function index()
     {        
-        $teachersList = Teacher::getList();
+        $teachersList = Teacher::getListActive();
         $horariosList = Horario::getList()->values();
         return view('grade.index', compact('teachersList', 'horariosList'));
     }
