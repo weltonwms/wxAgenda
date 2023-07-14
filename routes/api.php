@@ -19,3 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+
+Route::post('telegram/subscribe','\App\Http\Controllers\TelegramController@subscribe');
+Route::get('telegram/teste','\App\Http\Controllers\TelegramController@teste');
