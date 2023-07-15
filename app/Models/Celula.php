@@ -9,6 +9,7 @@ use Carbon\CarbonPeriod;
 use App\Models\Systemcount;
 use App\Helpers\StoreStudentHelper;
 use App\Helpers\ConfiguracoesHelper;
+use App\Helpers\TelegramHelper;
 
 class Celula extends Model
 {
@@ -314,5 +315,11 @@ class Celula extends Model
     {
         $limitHoursToStart=ConfiguracoesHelper::desmarcacao_hours_before(); //trazer do config
         return $this->HoursToStart() >=$limitHoursToStart;
+    }
+
+    public function onSaveAulaLink()
+    {
+        TelegramHelper::notificarAlunosDaCelula($this);
+        //Implementar outras notificações se Necessário: Email ou Telegram
     }
 }

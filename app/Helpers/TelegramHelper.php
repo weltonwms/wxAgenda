@@ -1,5 +1,6 @@
 <?php
 namespace App\Helpers;
+use Illuminate\Support\Facades\Storage;
 
 
 class TelegramHelper
@@ -34,4 +35,30 @@ class TelegramHelper
         \Log::error( "Falha SendMessage TeleGram: Chat_id:$chat_id, message:$message ".$result);
         return false;
     }
+
+    public static function notificarAlunosDaCelula($celula)
+    {
+        $horario = $celula->horario;
+        $dia = $celula->getDiaFormatado();
+        $teacher = $celula->teacher->nome;
+        $aula= $celula->aula->sigla;
+        $message="Aula: $aula; Dia: $dia; Horário: $horario; Professor: $teacher; ";
+        $message.="Link Zoom: {$celula->aula_link}";
+
+        foreach($celula->students as $student){
+            if($student->chat_id && $celula->aula_link){
+                TelegramHelper::sendMessage($student->chat_id,$message);                
+            }
+            else{
+                $dados=[
+                    "data_acao"=>date('Y-m-d H:i'),
+                    "error"=>"Aluno ({$student->nome}) sem chat_id ou célula ({$celula->id})",
+                    "message"=>$message
+                ];
+                Storage::append('telegram_notificacao.log', json_encode($dados));
+            }
+        }
+    }
+
+    
 }

@@ -214,6 +214,9 @@
        
             $.ajax({
                 url: asset + "celulas/" + celula_id+"/aulaLink",
+                beforeSend:function(){             
+                    $("#modalCelula .btnSaveAulaLink").after( "<p id='modalBodyLoading'>Loading...</p>" );                    
+                },
                 method: "PATCH",
                 data: {
                     _token: token,
@@ -222,12 +225,14 @@
                 },
                 success: function (resp) {
                     console.log(resp)
+                    $("#modalBodyLoading").remove();
                     showMessage('.message_modal', resp.message, 'success');
                     //showGlobalMessage(resp.message, 'success');
                     
                 },
                 error: function (resp) {
                     console.log(resp)
+                    $("#modalBodyLoading").remove();
                     var resposta = resp.responseJSON.error || resp.responseJSON.message || "Algo deu Errado";
 
                     showMessage('.message_modal', resposta, 'danger');

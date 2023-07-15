@@ -160,6 +160,7 @@ class CelulaController extends Controller
         try {
             $celula->aula_link = $request->aula_link;
             $celula->save();
+            $celula->onSaveAulaLink();
             return response()->json([
                 'message' => 'Link Salvo com Sucesso!',
                 "celula" => $celula

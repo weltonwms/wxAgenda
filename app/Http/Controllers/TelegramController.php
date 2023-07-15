@@ -59,6 +59,8 @@ class TelegramController extends Controller
     {
         $chat_id ="teste";
         $message ='Teste a partir do laravel';
-        dd(TelegramHelper::sendMessage($chat_id, $message));
+        //dd(TelegramHelper::sendMessage($chat_id, $message));
+        //$celula= \App\Models\Celula::find(2024);
+        //return response()->json($celula->onSaveAulaLink());
     }
 }
