@@ -10,6 +10,8 @@ use App\Models\Systemcount;
 use App\Helpers\StoreStudentHelper;
 use App\Helpers\ConfiguracoesHelper;
 use App\Helpers\TelegramHelper;
+use App\Mail\NotificacaoAluno;
+use Illuminate\Support\Facades\Mail;
 
 class Celula extends Model
 {
@@ -319,7 +321,8 @@ class Celula extends Model
 
     public function onSaveAulaLink()
     {
-        TelegramHelper::notificarAlunosDaCelula($this);
-        //Implementar outras notificações se Necessário: Email ou Telegram
+        TelegramHelper::notificarAlunosDaCelula($this);        
+        Mail::send(new NotificacaoAluno($this));
+        //Implementar outras notificações se Necessário: WhatsApp
     }
 }
