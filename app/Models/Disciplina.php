@@ -65,7 +65,7 @@ class Disciplina extends Model
     }
 
     /**
-     * Método útil para deixa uma única disciplina como base
+     * Método útil para deixar uma única disciplina como base
      */
     public static function updateBases($disciplina)
     {
@@ -75,5 +75,19 @@ class Disciplina extends Model
         if($disciplina->base){
             self::where('id','<>',$disciplina->id)->update(['base'=>0]);
         }
+    }
+
+    /**
+     * Retorna apenas as disciplinas que possuem aulas em determinado módulo.
+     * Ou seja retona as disciplinas que um módulo possui.
+     */
+    public static function getDisciplinasInModule($module_id)
+    {
+        $disciplinas= Disciplina::select('disciplinas.*')
+        ->distinct()
+        ->join('aulas','disciplinas.id','=','aulas.disciplina_id')
+        ->where('aulas.module_id',$module_id)
+        ->get();
+        return $disciplinas;
     }
 }

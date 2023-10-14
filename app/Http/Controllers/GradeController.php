@@ -39,7 +39,16 @@ class GradeController extends Controller
 
     public function getDisciplinasAjax()
     {
-        $disciplinas = Disciplina::all();
+        $module_id=request('module_id');
+        if($module_id=='default'){
+            $student = auth()->user()->student;
+            $module_id = $student->module_id;
+        }
+        if($module_id){
+            $disciplinas = Disciplina::getDisciplinasInModule($module_id);
+        } else{
+            $disciplinas = Disciplina::all();
+        }       
         return response()->json($disciplinas);
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class NotificacaoAluno extends Mailable
 {
@@ -40,5 +41,15 @@ class NotificacaoAluno extends Mailable
         return $this->to($emails)
                     ->subject('Notificação de Aulas')
                     ->markdown('emails.linkAula');
+    }
+
+    public function send($mailer)
+    {
+        try {
+            parent::send($mailer);
+        } catch (\Exception $e) {
+            // Trate a exceção e registre no log
+            Log::channel('daily_email_logs')->error('Erro no envio do e-mail: ' . $e->getMessage());
+        }
     }
 }

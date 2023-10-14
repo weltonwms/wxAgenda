@@ -151,7 +151,7 @@ function mountSelects(){
     var aula_id= $("#modalCelula_aula_id").val();   
     if(!aula_id){
      mountSelectModules();
-     mountSelectDisciplinas();
+     mountSelectDisciplinas('default');
      mountSelectTipoAula();
     }
      mountBlocoConfirm();    
@@ -174,7 +174,8 @@ function mountSelects(){
                 string+="</select>";                   
                 $("#selectModule").html(string);
                 $("#selectModule select").val(resp.current_module);  
-                $("#selectModule select").on('change',gatilhoMountSelectAulas);
+                $("#selectModule select").on('change',gatilhoMountSelectDisciplinas);
+                $("#selectModule select").on('change',gatilhoMountSelectAulas);               
                 $('#selectModule select').select2({
                     dropdownParent: $('#selectModule'),                    
                      width: '100%'                    
@@ -184,9 +185,36 @@ function mountSelects(){
 
 }
 
-function mountSelectDisciplinas(){
+/**
+ * método para ver se precisa remontar as disciplinas.
+ */
+function gatilhoMountSelectDisciplinas(){
+    var module_id= $("#selectModule select").val();
+    var base= $("#selectDisciplina select").find(":selected").data('base');
+    if(module_id && !base){
+        //condição da base deduzindo que se for base não precisa remontar as disciplinas
+        //pois deduz que disciplina base está presente em todos os módulos.
+        //Retirar base da condicional se a dedução mudar.
+        $("#selectDisciplina select").val('');
+        $('#selectDisciplina select').trigger('change');   
+        mountSelectDisciplinas(module_id);
+    }
+}
+
+/**
+ * Discplinas são montadas baseadas num filtro por módulo, pois
+ * para alguma associação disciplina/modulo não haverá aulas cadastradas, então
+ * tal disciplina não deve constar na lista de disciplinas
+ */
+function mountSelectDisciplinas(module_id=''){
+    if(module_id){
+        var url=asset+"disciplinasAjax?module_id="+module_id;
+    } else {
+        var url=asset+"disciplinasAjax";
+    }
+    
     $.ajax({
-            url: asset+"disciplinasAjax",
+            url: url,
             beforeSend:function(data){ 
                 $("#selectDisciplina").html('Loading...');
             },
@@ -208,7 +236,6 @@ function mountSelectDisciplinas(){
  }
 
  function gatilhoMountSelectAulas(){
-   
     var module_id= $("#selectModule select").val();
     var disciplina_id= $("#selectDisciplina select").val();
     var base= $("#selectDisciplina select").find(":selected").data('base');
