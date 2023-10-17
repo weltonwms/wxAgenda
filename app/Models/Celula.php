@@ -260,7 +260,8 @@ class Celula extends Model
         $module_id=request('module_id');
         if(!$module_id):
             //pesquisa padrao == current module do student
-            $module_id=$student->module_id;
+            //pesquisa padrao modificada para == todos
+            //$module_id=$student->module_id;
         endif;
         $disciplina_id=request('disciplina_id');
         $teacher_id=request('teacher_id');
@@ -295,7 +296,7 @@ class Celula extends Model
        if($end){
         $query->where('celulas.dia','<=',$end);
        }
-       $result=$query->orderBy('celulas.dia')->orderBy('celulas.horario')->get();
+       $result=$query->orderBy('celulas.dia','desc')->orderBy('celulas.horario','desc')->get();
        return $result;
     }
 

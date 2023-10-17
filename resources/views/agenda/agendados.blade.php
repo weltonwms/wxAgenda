@@ -13,7 +13,8 @@
 $requestModuleId=request('module_id');
 if(!$requestModuleId):
     //pesquisa padrao == current module do student
-    $requestModuleId=$student->module_id;
+    //pesquisa padrao modificada para == todos
+    //$requestModuleId=$student->module_id;
 endif;
 $modulesList->prepend('Todos','all');
 ?>
