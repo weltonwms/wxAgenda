@@ -14,6 +14,8 @@ class Credit extends Model
 
     protected $dates = ['data_acao'];
 
+    protected $appends = ['data_acao_br'];
+
     public static function storeCredit($request)
     {
         $credit = new Credit();
@@ -48,6 +50,12 @@ class Credit extends Model
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d (H:i)');
+    }
+
+    public function getDataAcaoBrAttribute()
+    {
+        return $this->data_acao->format('d/m/Y H:i');
+        
     }
 
 

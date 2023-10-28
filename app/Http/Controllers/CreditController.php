@@ -32,4 +32,18 @@ class CreditController extends Controller
 
 
     }
+
+    public function getLastCreditByAuthStudent()
+    {
+        $student = auth()->user()->student;
+        if(!$student):
+            return response()->json(['error'=> 'Usuário autenticado não é Aluno'],400);
+        endif;
+        $credit= Credit::where('student_id', $student->id)
+        ->where('operacao','+')
+        ->orderBy('data_acao', 'desc')
+        ->first();
+        return response()->json($credit);
+
+    }
 }

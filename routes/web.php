@@ -105,5 +105,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('messagesReply','\App\Http\Controllers\MessageReplyController@store')->name('replies.store');
     
     Route::patch('sidebar', '\App\Http\Controllers\HomeController@setSideBarToggle');
+    Route::get('lastCreditByAuthStudent', '\App\Http\Controllers\CreditController@getLastCreditByAuthStudent');
+
 
 });

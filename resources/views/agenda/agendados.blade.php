@@ -23,8 +23,12 @@ $modulesList->prepend('Todos','all');
 
     <div class="form-inline">
         <div class="form-group">
-            <label class="text-primary mr-1">Créditos Atuais:</label>
-            <button type="button" class="btn btn-outline-info btn-sm mr-3"> {{$student->saldo_atual}}</button>
+            <label class="text-primary mr-1" title="Clique no nº para Detalhes">Créditos Atuais:</label>
+            <button type="button" 
+                class="creditos_atuais btn btn-outline-info btn-sm mr-3"> 
+                {{$student->saldo_atual}}
+                <i class="fa fa-caret-up ms-2 mb-2" aria-hidden="true"></i>
+            </button>
         </div>
 
         <div class="form-group">

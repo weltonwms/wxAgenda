@@ -270,3 +270,30 @@ function ckeckAllOnTable(){
 
 
 
+$('.creditos_atuais').popover({
+    placement: 'top',
+    html: true,
+    title: 'Última Recarga (+)',
+    content: function(){
+        var div_id =  "tmp-id-" + $.now();
+        return contentLastCreditByStudent(div_id);
+    }
+});   
+
+function contentLastCreditByStudent(div_id){
+    $.ajax({
+        url: asset + "lastCreditByAuthStudent",
+        success: function(response){
+            var msg= response.qtd+" Créditos em "+response.data_acao_br; 
+            $('#'+div_id).html(msg);
+        }
+    });
+    return '<div id="'+ div_id +'">Loading...</div>';
+}
+
+
+  
+
+
+
+

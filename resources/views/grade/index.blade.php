@@ -9,8 +9,12 @@
 
 @section('content')
 <div class="tile row tile-nomargin">
-    <label class="text-primary">Créditos Atuais:</label>
-    <button type="button" class="btn btn-outline-info btn-sm"> <span id="student_saldo_atual"></span></button>
+
+    <label class="text-primary" title="Clique no nº para Detalhes">Créditos Atuais:</label>
+    <button type="button" class="creditos_atuais btn btn-outline-info btn-sm"> 
+        <span id="student_saldo_atual"></span>
+        <i class="fa fa-caret-up ms-2 mb-2" aria-hidden="true"></i>
+    </button>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <label class="text-primary">Módulo Corrente:</label>
     <button type="button" class="btn btn-outline-info btn-sm"> <span id="student_module_nome"></span></button>
