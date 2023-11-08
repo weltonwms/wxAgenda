@@ -3,6 +3,7 @@
 */
 (function () {
     let instanceCalendar = null;
+    let lastPostSaveCelula = null;
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var minMaxHorarioValido = getMinMaxHorarioValido();
@@ -56,26 +57,31 @@
             },
             select: function (arg) {
                 var start = moment(arg.start);
-
                 var token = $('meta[name="csrf-token"]').attr('content');
                 var teacher_id = $("#teacher_id").val();
+                var dataPayload={
+                    _token: token,
+                    teacher_id: teacher_id,
+                    dia: start.format("YYYY-MM-DD"),
+                    horario: start.format('HH:mm')
+
+                }
+                if(lastPostSaveCelula===JSON.stringify(dataPayload)){
+                    return ; //impedir requisição duplicada ao servidor
+                }
+                lastPostSaveCelula = JSON.stringify(dataPayload)
+
                 $.ajax({
                     url: asset + "celulas",
                     method: 'POST',
-                    data: {
-                        _token: token,
-                        teacher_id: teacher_id,
-                        dia: start.format("YYYY-MM-DD"),
-                        horario: start.format('HH:mm')
-
-                    },
+                    data: dataPayload,
                     success: function (resp) {
                         console.log(resp)
                         //calendar.unselect()
                         instanceCalendar.refetchEvents();
                     },
                     error: function (resp) {
-                        var resposta = resp.responseJSON.error;
+                        var resposta = resp.responseJSON.error || "Ocorreu um Erro";
                         $.notify(resposta, { type: 'danger' })
                         //showGlobalMessage(resposta,'danger');
                     }
@@ -148,7 +154,8 @@
                     instanceCalendar.refetchEvents();
                     $("#modalCelula").modal('hide');
                     showGlobalMessage(resp.message, 'success');
-                    $.notify(resp.message, { type: 'success' })
+                    $.notify(resp.message, { type: 'success' });
+                    lastPostSaveCelula=null;
                 },
                 error: function (resp) {
                     var resposta = resp.responseJSON.error;
