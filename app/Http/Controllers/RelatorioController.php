@@ -18,7 +18,7 @@ class RelatorioController extends Controller
     $result = $request->isMethod('post') ? $relatorio->getRelatorio() : $relatorio;
 
     $dados = [
-        'teachers' => Teacher::pluck('nome', 'id'),
+        'teachers' => Teacher::getList(),
         'relatorio' => $result,
     ];
     return view("relatorios.teachers", $dados);
@@ -31,7 +31,7 @@ class RelatorioController extends Controller
     $result = $request->isMethod('post') ? $relatorio->getRelatorio() : $relatorio;
     
     $dados = [
-        'students' => Student::pluck('nome', 'id'),
+        'students' => Student::getList(),
         'relatorio' => $result,
     ];
     return view("relatorios.students", $dados);
@@ -49,9 +49,9 @@ class RelatorioController extends Controller
             $celulas = Celula::getCelulasAgendadas($student);
         endif;
         
-        $studentsList = \App\Models\Student::getList();
+        $studentsList = Student::getList();
         $modulesList = \App\Models\Module::getList();
-        $teachersList = \App\Models\Teacher::getList();
+        $teachersList = Teacher::getList();
         $disciplinasList = \App\Models\Disciplina::getList();
         
         return view('relatorios.students2', compact('celulas', 'modulesList', 

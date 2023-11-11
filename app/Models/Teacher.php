@@ -29,9 +29,10 @@ class Teacher extends Model
        return self::destroy($ids);    
     }
 
-    public static function getList()
+    public static function getList($includeInactive=false)
     {
-        return self::all()->mapWithKeys(function($item){
+        $query=$includeInactive?self::all():self::where('active',1)->get();
+        return $query->mapWithKeys(function($item){
                   
             return [$item->id => $item->nome];
         });

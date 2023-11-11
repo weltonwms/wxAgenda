@@ -25,7 +25,7 @@ class RelatorioStudent extends Model
                 $query->where('celulas.dia', '<=', $dt);
             endif;
         };
-        $queryBase = Student::$method('celulas', $functionFilter);
+        $queryBase = Student::where('active',1)->$method('celulas', $functionFilter);
         $queryBase->withCount(['celulas'=>$functionFilter]);
         $this->items = $queryBase->get();
         $this->tratarDados();

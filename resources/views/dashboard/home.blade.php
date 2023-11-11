@@ -20,4 +20,14 @@
         </div>
     </div>
 </div>
+
+<br>
+@if(auth()->user()->isAdm)
+    @include('dashboard.adm')
+@endif
+<br>
+@if(auth()->user()->isStudent)
+    @include('dashboard.student')
+@endif
+<br>
 @endsection
