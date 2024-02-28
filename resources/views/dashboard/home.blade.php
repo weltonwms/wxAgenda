@@ -29,5 +29,9 @@
 @if(auth()->user()->isStudent)
     @include('dashboard.student')
 @endif
+
+@if(auth()->user()->isTeacher)
+    @include('dashboard.teacher')
+@endif
 <br>
 @endsection

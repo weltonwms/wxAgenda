@@ -2,7 +2,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">Link Google Drive</div>
+                <div class="card-header">Link Student Google Drive</div>
 
                 <div class="card-body">
                    <a href="https://drive.google.com/drive/folders/1ztnT3_WeIf9FSGhzS1cdMslPeDQxgN9R?usp=drive_link" target="_blank">
