@@ -23,6 +23,25 @@ function wxConfirm(callback, title = "Deseja Realmente  ?", content = "") {
     });
 }
 
+function wxConfirm2(callback, paramsCallback, 
+    title = "Deseja Realmente  ?", content = "",fallBack=function(){}) {
+    swal({
+        html:true,
+        title: title,
+        type: "warning",
+        showCancelButton: true,
+        text: content,
+    }, function (ok) {
+        if (ok) {
+            callback(paramsCallback);
+        }
+        else{
+            fallBack()
+        }
+    });
+}
+
+
 
 var SPMaskBehavior = function (val) {
     return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
@@ -157,7 +176,7 @@ function showMessage(alvo, conteudo, tipo = 'info') {
 
     var string = ' <div>' +
         '<div class="alert alert-' + tipo + ' alert-dismissable " style="width:100%">' +
-        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+        '<button type="button" class="close ml-1" data-dismiss="alert" aria-hidden="true">&times;</button>' +
         conteudo +
         '</div>' +
         '</div>';
@@ -289,6 +308,10 @@ function contentLastCreditByStudent(div_id){
         }
     });
     return '<div id="'+ div_id +'">Loading...</div>';
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 

@@ -107,5 +107,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('sidebar', '\App\Http\Controllers\HomeController@setSideBarToggle');
     Route::get('lastCreditByAuthStudent', '\App\Http\Controllers\CreditController@getLastCreditByAuthStudent');
 
-
+    Route::get('getCelulasJaAbertasByTurno','\App\Http\Controllers\GradeController@getCelulasJaAbertasByTurno');
 });

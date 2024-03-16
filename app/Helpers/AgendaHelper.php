@@ -43,6 +43,9 @@ class AgendaHelper
         if ($this->end) {
             $queryBase->where('celulas.dia', '<=', $this->end);
         }
+        //considerando que celula individual é uma celula fechada
+        $queryBase->where('celulas.aula_individual','!=',1);
+        
         $this->celulasBase = $queryBase->with('students')
             ->orderBy('celulas.dia')
             ->orderBy('celulas.horario')

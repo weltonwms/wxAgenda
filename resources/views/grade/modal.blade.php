@@ -1,5 +1,5 @@
-<!-- Modal -->
 
+<!-- Modal -->
 
 <div class="modal fade" id="modalCelula" data-backdrop="static" data-keyboard="false" tabindex="-1"
     aria-labelledby="modalCelulaLabel" aria-hidden="true">
@@ -12,6 +12,7 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <div class="message_modal"></div>
                 <div class="corpo_modal">
                     <input type="hidden" id="modalCelula_celula_id" />
@@ -94,6 +95,9 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
 
             </div>
+
         </div>
     </div>
 </div>
+<!--Atributo ignorável usado durante oferecimento de Aula-->
+<input type="hidden" id="atributoOnOferecimentoAula"  value=""/>
