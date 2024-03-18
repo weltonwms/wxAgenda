@@ -129,7 +129,7 @@
                 }
 
                 var student_id = parseInt($("#student_id").val());
-                var isActiveAgenda = isPossivelAgendar(resp.dia, resp.horario, student_id, resp.students);
+                var isActiveAgenda = isPossivelAgendar(resp.dia, resp.horario, student_id, resp.students) && !resp.aula_individual;
                 if (isActiveAgenda) {
                     $("#btnAgendarAula").attr('disabled', false)
                 }
@@ -365,9 +365,7 @@
             verificaOferecimentoDeAula(celula_id);
 
         } else {
-            //busca ajax getAulasJaFeitas()
-            //alertarCasoAulaJaFeita()
-            sendAgendarAula()
+            VerificaSeAulaJaFeitaByAluno(aula_id);
         }
 
     }
@@ -418,7 +416,7 @@
         var student_id = parseInt($("#student_id").val());
         var agendamentoValido = isPossivelAgendar(info.dia, info.horario, student_id, info.students);        
         if(!agendamentoValido){
-            onRecusaOferecimentoAulaParaAluno(); //recusa automática não. Não tem como oferecer ao aluno
+            onRecusaOferecimentoAulaParaAluno(); //recusa automática. Não tem como oferecer ao aluno
             return false;
         }      
         //inicio do oferecimento
@@ -470,6 +468,42 @@
         var textoRecusa = "Você só pode abrir uma nova turma desta " +
             xpt + " após essa turma fechar. Você pode esperar ou tentar outra " + xpt + ".";
         showMessage('.message_modal', textoRecusa, 'warning');
+    }
+
+    /**
+     * Verifica uma aula se já feita pelo Aluno Autenticado.
+     * Se for feita emite alerta ao aluno se quer continuar.
+     * Se não feita segue o fluxo normal de tentar agendar: sendAgendarAula()
+     */
+    function VerificaSeAulaJaFeitaByAluno(aula_id){        
+        $.ajax({
+            url: asset + "isAulaJaFeitaByAuthStudent/"+aula_id,
+            method: 'GET',
+            beforeSend: function (data) {
+                $(".message_modal").html('Loading...');
+            },
+            success: function (resp) {
+                $(".message_modal").html('');
+                var isFeita= resp && resp.isFeita;
+                if(isFeita){
+                   alertarAlunoAulaJaFeita(resp.info);
+                   return; //fim do fluxo
+                }
+                  console.log('Aula Não feita by aluno')
+                  sendAgendarAula();
+                
+            },
+            error: function (resp) {
+                console.log(resp);
+                showMessage('.message_modal', 'Ocorreu um erro no Servidor', 'danger');
+            }
+        });
+    }
+
+    function alertarAlunoAulaJaFeita(info){
+        var textoConfirm="Você já fez essa aula no dia "+
+            info.dia+", "+info.horario+", professor "+info.teacher_nome;
+        wxConfirm(sendAgendarAula, "Deseja Realmente Continuar?", textoConfirm);
     }
 
 

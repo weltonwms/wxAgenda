@@ -108,4 +108,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('lastCreditByAuthStudent', '\App\Http\Controllers\CreditController@getLastCreditByAuthStudent');
 
     Route::get('getCelulasJaAbertasByTurno','\App\Http\Controllers\GradeController@getCelulasJaAbertasByTurno');
+    Route::get('isAulaJaFeitaByAuthStudent/{aula_id}','\App\Http\Controllers\AgendadosController@isAulaJaFeitaByAuthStudent');
+
 });

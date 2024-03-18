@@ -200,4 +200,27 @@ class Student extends Model
         return Student::where('active',session('student_filter_ativo',1))->with('module')->get();
         
     }
+
+    public function hasAulaIdWithPresenca($aula_id)
+    {
+        return $this->celulas()
+            ->where('aula_id', $aula_id)
+            ->wherePivot('presenca', 1)
+            ->exists();
+    }
+
+    /**
+     * Retorna first Celula de uma aula feita pelo Aluno, 
+     * desde que ele tenha presença nessa aula.
+     * @param int $aula_id Identificador de uma aula
+     */
+    public function getCelulaAulaIdWithPresenca($aula_id)
+    {
+        return $this->celulas()
+            ->where('aula_id', $aula_id)
+            ->wherePivot('presenca', 1)
+            ->orderBy('celulas.dia', 'desc')
+            ->first();
+
+    }
 }
