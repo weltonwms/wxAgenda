@@ -23,10 +23,7 @@ class Systemcount extends Model
 
     public static function run($aula_id)
     {
-        $aula=Aula::find($aula_id);
-
-       
-       
+        $aula=Aula::find($aula_id);       
         if($aula && !$aula->disciplina->base){
             $systemCount=Systemcount::where('module_id',$aula->module_id)
             ->where('disciplina_id',$aula->disciplina_id)
@@ -65,5 +62,19 @@ class Systemcount extends Model
             return $result->contador;
         }
         return 1;
+    }
+
+    /**
+     * Salva arbitrariamente um contador para um módulo/disciplina
+     * @param int $module_id identificador do módulo
+     * @param int $disciplina_id identificador da disciplina
+     * @param int $contador contagem arbitrária para salvar
+     */
+    public static function storeContador($module_id, $disciplina_id, $contador)
+    {
+        return Systemcount::where('module_id',$module_id)
+        ->where('disciplina_id',$disciplina_id)
+        ->update(['contador'=>$contador]);
+
     }
 }

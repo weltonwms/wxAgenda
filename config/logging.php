@@ -74,6 +74,13 @@ return [
             'days' => 14,
         ],
 
+        'daily_contador_escola_logs' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/contador_escola.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

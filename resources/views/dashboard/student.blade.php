@@ -5,8 +5,8 @@
                 <div class="card-header">Link Student Google Drive</div>
 
                 <div class="card-body">
-                   <a href="https://drive.google.com/drive/folders/1ztnT3_WeIf9FSGhzS1cdMslPeDQxgN9R?usp=drive_link" target="_blank">
-                   https://drive.google.com/drive/folders/1ztnT3_WeIf9FSGhzS1cdMslPeDQxgN9R?usp=drive_link
+                   <a href="{{env('STUDENT_LINK_DRIVE', '#')}}" target="_blank">
+                   {{env('STUDENT_LINK_DRIVE', '')}}
                    </a>
                    <br><br>
                 </div>

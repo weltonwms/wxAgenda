@@ -223,4 +223,34 @@ class Student extends Model
             ->first();
 
     }
+
+    /**
+     * Retorna uma lista de aulas conforme filtros passados como parametro.
+     * Lista útil para ter uma relação de todas as aulas com o contador de cada uma.
+     * O contator refere-se ao número de vezes que o aluno fez determinada aula.
+     * @param int $module_id filtro para módulo
+     * @param int $disciplina_id filtro para disciplina
+     * @return \Illuminate\Support\Collection Lista de objetos no formato {"aula_id": 173,"sigla": "GRM - 10","ordem": 1,"contador": 4}
+     */
+    public function getContagemAulasFeitasByModuleDisciplina($module_id=null,$disciplina_id=null)
+    {
+        $query = \DB::table('aulas')
+        ->select('aulas.id as aula_id', 'aulas.sigla', 'aulas.ordem', \DB::raw('COUNT(celula_student.celula_id) as contador'))
+        ->leftJoin('celulas', 'aulas.id', '=', 'celulas.aula_id')
+        ->leftJoin('celula_student', function ($join) {
+            $join->on('celula_student.celula_id', '=', 'celulas.id')
+                ->where('celula_student.student_id', '=', $this->id)
+                ->where('celula_student.presenca', '=', 1);
+        });
+        if($module_id){
+            $query->where('aulas.module_id', $module_id);
+        }
+        if($disciplina_id){
+            $query->where('aulas.disciplina_id', $disciplina_id);
+        }
+       
+        $aulas= $query->groupBy('aulas.id', 'aulas.sigla', 'aulas.ordem')->orderBy('aulas.ordem')
+        ->get();
+        return $aulas;
+    }
 }
