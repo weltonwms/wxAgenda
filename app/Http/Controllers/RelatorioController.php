@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\Celula;
 use App\Models\RelatorioTeacher;
 use App\Models\RelatorioStudent;
+use App\Helpers\RelatorioAndamentoHelper as RelatorioAndamento;
 
 
 class RelatorioController extends Controller
@@ -56,6 +57,21 @@ class RelatorioController extends Controller
         
         return view('relatorios.students2', compact('celulas', 'modulesList', 
         'teachersList', 'disciplinasList','studentsList'));
+
+   }
+
+   public function andamento(Request $request)
+   {               
+        $modulesList = \App\Models\Module::getList();        
+        $disciplinasList = \App\Models\Disciplina::getList();
+        $relatorio = new RelatorioAndamento();
+        if($request->isMethod('post')){
+            $request->validate(['module_id' => 'required']);
+            $relatorio->start($request->module_id, $request->disciplina_id);
+        }   
+        
+        return view('relatorios.andamento-students', compact('modulesList', 
+        'disciplinasList','relatorio'));
 
    }
 }

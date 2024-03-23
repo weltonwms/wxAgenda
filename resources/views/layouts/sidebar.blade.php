@@ -97,6 +97,13 @@
           </a>
         </li>
 
+        <li>
+          <a class="treeview-item {{Request::segment(2)=='andamento'?'active':null}}"
+            href="{{route('relatorio.andamento')}}">
+            <i class="icon fa fa-circle-o"></i> Andamento de Alunos
+          </a>
+        </li>
+
        
 
       </ul>
