@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Mail\NotificacaoMessage;
+use Illuminate\Support\Facades\Mail;
+use App\Helpers\TelegramHelper;
 
 class Message extends Model
 {
@@ -108,6 +111,24 @@ class Message extends Model
 
         $strFull= $openTag.$this->subject."</span> - <span class='body'>".$this->body.$closeTag;
         return $strFull;       
+    }
+
+    /**
+     * Gatilhos realizados ao salvar uma mensagem.
+     */
+    public function onSaveMessage()
+    {
+        $condicaoDisparoMail =  !($this->recipient->isStudent && $this->sender->isStudent);
+        $condicaoDisparoMail = $condicaoDisparoMail && $this->recipient->email;
+        if($condicaoDisparoMail):
+            Mail::send(new NotificacaoMessage($this));
+        endif;
+
+        $condicaoTelegram = $this->recipient->chat_id;
+        if($condicaoTelegram):
+            TelegramHelper::notificarMessage($this); 
+        endif;
+
     }
 
 }

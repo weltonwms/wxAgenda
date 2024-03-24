@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Message;
 
 
 class TelegramHelper
@@ -58,6 +59,16 @@ class TelegramHelper
                 Storage::append('telegram_notificacao.log', json_encode($dados));
             }
         }
+    }
+
+    public static function notificarMessage(Message $message)
+    {
+        $date = date('d/m/Y H:i');
+        $texto = "Nova mensagem no Sistema: De: {$message->sender->nome}, $date \n";
+        $texto .= "{$message->subject} \n";
+        $texto .= " {$message->body}";
+        TelegramHelper::sendMessage($message->recipient->chat_id, $texto); 
+
     }
 
     

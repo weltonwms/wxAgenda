@@ -151,6 +151,20 @@ class User extends Authenticatable
         }
         return $this->username;
     }
+    public function getEmailAttribute()
+    {
+        if($this->entidade){
+            return $this->entidade->email;
+        }
+        return "";
+    }
+    public function getChatIdAttribute()
+    {
+        if($this->entidade){
+            return $this->entidade->chat_id;
+        }
+        return "";
+    }
 
     public function getIsTeacherAttribute()
     {

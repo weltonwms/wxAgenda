@@ -69,6 +69,7 @@ class MessageController extends Controller
         $message->body = $request->body;
         $message->is_read = 0;
         $message->save();
+        $message->onSaveMessage();
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => 'Mensagem Enviada com Sucesso!']);
         //$url = url('messages')->with(request()->query());
         return redirect()->route('messages.index',request()->query());
@@ -112,4 +113,5 @@ class MessageController extends Controller
         $retorno = Message::markAsDeleted(request('ids'),request('sent') );
         return response()->json(['registros_afetados'=>$retorno]);
     }
+
 }
