@@ -10,6 +10,7 @@ class RelatorioAndamentoHelper
     private $aulasFeitas = [];
     private $aulasTarget = [];
 
+    private $aulasTargetModel= []; //mesmo que $aulasTarget, mas num formato diferente
     private $module_id;
     private $disciplina_id;
 
@@ -51,7 +52,7 @@ class RelatorioAndamentoHelper
             $query->where('disciplina_id', $this->disciplina_id);
         }
         $aulas = $query->get();
-
+        $this->aulasTargetModel = $aulas;
         $this->aulasTarget = $aulas->mapWithKeys(function ($aula) {
             return [$aula->id => 0];
         });
@@ -97,6 +98,17 @@ class RelatorioAndamentoHelper
     public function getAlunos()
     {
         return $this->alunos?$this->alunos->values():[];
+    }
+
+    public function mapeamento($aulasTargetObject)
+    {
+        $map= $this->aulasTargetModel->map(function($aula) use($aulasTargetObject){
+            $obj = new \stdClass();
+            $obj->sigla = $aula->sigla;
+            $obj->value = isset($aulasTargetObject[$aula->id])?$aulasTargetObject[$aula->id]:0;
+            return $obj;
+        });
+        return $map;
     }
 
 

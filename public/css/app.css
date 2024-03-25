@@ -223,3 +223,16 @@ table .showCelula{
   margin-right: 10px;
 }
 
+#detalhesAndamentoList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); /* Colunas de tamanho mínimo 200px */
+  grid-gap: 20px; /* Espaçamento entre as colunas */
+  
+  
+}
+#detalhesAndamentoList .aula-realizada{
+   color: rgb(40, 167, 69);
+   font-weight: bold;
+   text-decoration: underline;
+}
+

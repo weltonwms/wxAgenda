@@ -64,8 +64,8 @@ class TelegramHelper
     public static function notificarMessage(Message $message)
     {
         $date = date('d/m/Y H:i');
-        $texto = "Nova mensagem no Sistema: De: {$message->sender->nome}, $date \n";
-        $texto .= "{$message->subject} \n";
+        $texto = "Nova mensagem no Sistema: \n De: {$message->sender->nome}, $date \n";
+        $texto .= " {$message->subject} \n";
         $texto .= " {$message->body}";
         TelegramHelper::sendMessage($message->recipient->chat_id, $texto); 
 
