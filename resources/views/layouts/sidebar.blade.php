@@ -130,6 +130,11 @@
         <i class="app-menu__icon fa fa-calendar-check-o"></i><span class="app-menu__label">Aulas Marcadas</span>
       </a>
     </li>
+    <li>
+      <a class="app-menu__item {{Request::segment(1)=='andamentoAulas'?'active':null}}" href="{{route('andamento_aulas')}}">
+        <i class="app-menu__icon fa fa-battery-2"></i><span class="app-menu__label">Andamento Aulas</span>
+      </a>
+    </li>
 
    
     @endif

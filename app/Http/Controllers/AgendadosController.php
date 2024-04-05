@@ -105,4 +105,22 @@ class AgendadosController extends Controller
         */
 
     }
+
+    public function andamento()
+    {
+        $student = auth()->user()->student;
+        $modulesList = $student->getModules()->pluck('nome','id');
+        $requestModuleId= request('module_id')?request('module_id'):$student->module_id;       
+        $disciplinasList = \App\Models\Disciplina::getDisciplinasInModule($requestModuleId)->pluck('nome','id');        
+        $andamento = $student->getAndamento($requestModuleId,request('disciplina_id'));
+        
+        return view('andamento.aulas', compact(
+            'modulesList',            
+            'disciplinasList',
+            'student',
+            'requestModuleId',
+            'andamento'
+        ) );        
+    }
+
 }

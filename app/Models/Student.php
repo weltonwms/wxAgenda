@@ -253,4 +253,26 @@ class Student extends Model
         ->get();
         return $aulas;
     }
+
+    public function getAndamento($module_id=null,$disciplina_id=null)
+    {
+        $ct = $this->getContagemAulasFeitasByModuleDisciplina($module_id,$disciplina_id);
+        $obj = new \stdClass();
+        $obj->module_id = $module_id;
+        $obj->disciplina_id = $disciplina_id;
+        $obj->countAulas = $ct->count();
+        $obj->countFeitas = $ct->where('contador','>',0)->count();
+        $obj->percentualComplete = 0;
+        if($obj->countAulas){
+            $obj->percentualComplete = ($obj->countFeitas / $obj->countAulas)*100;
+        }       
+        $obj->mapeamento = $ct->map(function($item){
+            $obj = new \stdClass();
+            $obj->sigla = $item->sigla;
+            $obj->value = $item->contador > 0? 1: 0;
+            return $obj;
+        });
+        return $obj;
+
+    }
 }
