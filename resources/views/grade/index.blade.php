@@ -57,5 +57,5 @@
 
 @push('scripts')
 <script src="{{ asset('template/js/plugins/fullcalendar.min.js') }}"></script>
-<script src="{{ asset('js/grade.js') }}"></script>
+<script src="{{ asset('js/grade.js?v1') }}"></script>
 @endpush

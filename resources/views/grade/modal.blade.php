@@ -46,6 +46,7 @@
                         <th title="Nota Interaction" data-toggle="tooltip" >N1</th>
                         <th title="Nota Speaking" data-toggle="tooltip" >N2</th>
                         <th title="Nota Listening" data-toggle="tooltip">N3</th>
+                        <th title="Nota Comprehension" data-toggle="tooltip">N4</th>
                         <th >FeedBack</th>
       
                     </tr>

@@ -21,7 +21,7 @@ class Celula extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class)
-        ->withPivot('presenca', 'n1','n2','n3','feedback')
+        ->withPivot('presenca', 'n1','n2','n3','n4','feedback')
         ->withTimestamps();
 
     }

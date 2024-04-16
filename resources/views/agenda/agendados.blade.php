@@ -275,6 +275,7 @@ function ListStudents() {
                 '<td>' + echoX(student.pivot.n1) + '</td>' +
                 '<td>' + echoX(student.pivot.n2) + '</td>' +
                 '<td>' + echoX(student.pivot.n3) + '</td>' +
+                '<td>' + echoX(student.pivot.n4) + '</td>' +
                 '<td>' + createPopOverLink(echoX(student.pivot.feedback))+ '</td>' +
                 "</tr>";
                

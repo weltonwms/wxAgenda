@@ -480,6 +480,7 @@
             $("#n1").val(aluno.pivot.n1);
             $("#n2").val(aluno.pivot.n2);
             $("#n3").val(aluno.pivot.n3);
+            $("#n4").val(aluno.pivot.n4);
             $("#feedback").val(aluno.pivot.feedback);
             $("#content_edit_aluno").show();
             $("#modalCelula").scrollTop(90);
@@ -552,6 +553,7 @@
                     '<td>' + echoX(student.pivot.n1) + '</td>' +
                     '<td>' + echoX(student.pivot.n2) + '</td>' +
                     '<td>' + echoX(student.pivot.n3) + '</td>' +
+                    '<td>' + echoX(student.pivot.n4) + '</td>' +
                     '<td>' + createPopOverLink(echoX(student.pivot.feedback))+ '</td>' +
                     "</tr>";
                    
@@ -578,6 +580,7 @@
         var n1 = $("#n1").val();
         var n2 = $("#n2").val();
         var n3 = $("#n3").val();
+        var n4 = $("#n4").val();
         var feedback = $("#feedback").val();
 
         $.ajax({
@@ -591,6 +594,7 @@
                 n1: n1,
                 n2: n2,
                 n3: n3,
+                n4: n4,
                 feedback: feedback,
             },
             success: function (resp) {
@@ -619,6 +623,7 @@
         $("#n1").val('');
         $("#n2").val('');
         $("#n3").val('');
+        $("#n4").val('');
         $("#feedback").val("");
     }
 

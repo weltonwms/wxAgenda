@@ -8,6 +8,7 @@ use App\Http\Requests\CelulaStoreRequest;
 use App\Http\Requests\CelulaStoreStudentRequest;
 use App\Http\Requests\CelulasBathRequest;
 use App\Http\Requests\CelulaAulaLinkRequest;
+use App\Http\Requests\CelulaInfoStudentRequest;
 
 use App\Models\Celula;
 use App\Models\Teacher;
@@ -118,7 +119,7 @@ class CelulaController extends Controller
         }
     }
 
-    public function saveInfoStudentOnCelula(Request $request, Celula $celula)
+    public function saveInfoStudentOnCelula(CelulaInfoStudentRequest $request, Celula $celula)
     {
         try {
             $celulaInfo = \DB::transaction(function () use ($request, $celula) {
@@ -127,6 +128,7 @@ class CelulaController extends Controller
                     'n1' => $request->n1,
                     'n2' => $request->n2,
                     'n3' => $request->n3,
+                    'n4' => $request->n4,
                     'feedback' => $request->feedback,
 
                 ]);

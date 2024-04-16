@@ -138,6 +138,7 @@ class GradeController extends Controller
                 $student->pivot->n1 = '';
                 $student->pivot->n2 = '';
                 $student->pivot->n3 = '';
+                $student->pivot->n4 = '';
                 $student->pivot->feedback = '';
             }
         }

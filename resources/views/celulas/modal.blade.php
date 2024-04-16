@@ -96,32 +96,45 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="col-sm-12 text-secondary">
+                                    Notas de 0 a 5
+                            </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="n1" title="Nota Interaction" data-toggle="tooltip">N1</label>
                                     
                                     <input type="number" class="form-control form-control-sm" value="" name='n1'
-                                        id="n1">
+                                        id="n1" min="0" max="5">
                                         <small class="form-text text-muted">Interaction</small>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="n2" title="Nota Speaking" data-toggle="tooltip">N2</label>
                                     <input type="number" class="form-control form-control-sm" value="" name='n2'
-                                        id="n2">
+                                        id="n2" min="0" max="5">
                                         <small class="form-text text-muted">Speaking</small>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label for="n3" title="Nota Listening" data-toggle="tooltip">N3</label>
                                     <input type="number" class="form-control form-control-sm" value="" name='n3'
-                                        id="n3">
+                                        id="n3" min="0" max="5">
                                         <small class="form-text text-muted">Listening</small>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="n4" title="Nota Comprehension" data-toggle="tooltip">N4</label>
+                                    <input type="number" class="form-control form-control-sm" value="" name='n4'
+                                        id="n4" min="0" max="5">
+                                        <small class="form-text text-muted">Comprehension</small>
                                 </div>
                             </div>
 
@@ -153,6 +166,7 @@
                                     <th title="Nota Interaction" data-toggle="tooltip">N1</th>
                                     <th title="Nota Speaking" data-toggle="tooltip">N2</th>
                                     <th title="Nota Listening" data-toggle="tooltip">N3</th>
+                                    <th title="Nota Comprehension" data-toggle="tooltip">N4</th>
                                     <th>FeedBack</th>
 
                                 </tr>
