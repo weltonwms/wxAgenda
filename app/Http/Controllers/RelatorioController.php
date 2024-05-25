@@ -64,14 +64,27 @@ class RelatorioController extends Controller
    {               
         $modulesList = \App\Models\Module::getList();        
         $disciplinasList = \App\Models\Disciplina::getList();
+        $studentsList = Student::getList();
+        $requestModuleId= request('module_id');
+        $student= null;
         $relatorio = new RelatorioAndamento();
-        if($request->isMethod('post')){
-            $request->validate(['module_id' => 'required']);
-            $relatorio->start($request->module_id, $request->disciplina_id);
-        }   
         
+        if($request->student_id){
+            $student = Student::find($request->student_id);
+            if(!$requestModuleId && $student){
+                $requestModuleId= $student->module_id;
+            }          
+            
+            
+        }
+        
+        if(!$student && $request->isMethod('post')){
+                $request->validate(['module_id' => 'required']);
+                $relatorio->start($request->module_id, $request->disciplina_id);
+        } 
+
         return view('relatorios.andamento-students', compact('modulesList', 
-        'disciplinasList','relatorio'));
+        'disciplinasList','relatorio','studentsList','requestModuleId', 'student'));
 
    }
 }

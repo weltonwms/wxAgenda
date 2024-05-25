@@ -25,10 +25,23 @@
 {!! Form::open(['route'=>'relatorio.andamento','id'=>'form_pesquisa'])!!}
         <div class='row'>
 
+            <div class="col-sm-12">
+                {!!Form::bsSelect('student_id', $studentsList,
+                request('student_id'),
+                ["class"=>"select2", "placeholder"=>"-Selecione-",
+                "label"=>"Aluno"]
+                )!!}
+                <small style="margin-top:-1rem; margin-bottom:0.7rem;" 
+                    class="form-text text-muted">
+                    Não Selecione Aluno se quiser ver todos de seus módulos Correntes
+                </small>
+
+            </div>
+
             <div class="col-sm-2">
 
                 {!!Form::bsSelect('module_id', $modulesList,
-                    request('module_id'),
+                    $requestModuleId,
                     ["class"=>"select2",
                     "label"=>"Módulo"]
                 )!!}
@@ -53,7 +66,9 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>#</th>
+                    @if(!$student)
+                        <th>#</th>
+                    @endif
                     <th>Aluno</th>
                     <th>Total Aulas</th>
                     <th>Aulas Feitas</th>
@@ -62,26 +77,46 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($relatorio->getAlunos() as $key=>$aluno)
+                @if($student)
+                    <?php $andamento = $student->getAndamento($requestModuleId,request('disciplina_id'));?>
                     <tr>
-                        <td>{{++$key}}</td>
-                        <td>{{$aluno->nome}}</td>
-                        <td>{{$aluno->countAulas}}</td>
-                        <td>{{$aluno->countFeitas}}</td>
-                        <td class="@if($aluno->percentualComplete > 99) bg-success text-white @endif">
-                        {{number_format($aluno->percentualComplete,0)}}%
-                        </td>
-                        <td>
-                            <a href="#" class="detalhes_andamento"
-                            data-nome="{{$aluno->nome}}"
-                            data-detalhes="{{base64_encode($relatorio->mapeamento($aluno->aulasTarget)->toJson() )}}"
-                            >
-                            <i class="fa fa-eye"></i>
-                            </a>
-                           
-                        </td>
-                    </tr>
-                @endforeach     
+                       <td>{{$student->nome}}</td>
+                       <td>{{$andamento->countAulas}}</td>
+                       <td>{{$andamento->countFeitas}}</td>
+                       <td class="@if($andamento->percentualComplete > 99) bg-success text-white @endif"> 
+                           {{number_format($andamento->percentualComplete,0)}}% 
+                       </td>
+                       <td>
+                           <a href="#" class="detalhes_andamento"
+                           data-nome="{{$student->nome}}"
+                           data-detalhes="{{base64_encode($andamento->mapeamento->toJson() )}}"
+                           >
+                               <i class="fa fa-eye"></i>
+                           </a>                           
+                       </td>
+                   </tr>                
+                @else
+                    @foreach($relatorio->getAlunos() as $key=>$aluno)
+                        <tr>
+                            <td>{{++$key}}</td>
+                            <td>{{$aluno->nome}}</td>
+                            <td>{{$aluno->countAulas}}</td>
+                            <td>{{$aluno->countFeitas}}</td>
+                            <td class="@if($aluno->percentualComplete > 99) bg-success text-white @endif">
+                            {{number_format($aluno->percentualComplete,0)}}%
+                            </td>
+                            <td>
+                                <a href="#" class="detalhes_andamento"
+                                data-nome="{{$aluno->nome}}"
+                                data-detalhes="{{base64_encode($relatorio->mapeamento($aluno->aulasTarget)->toJson() )}}"
+                                >
+                                <i class="fa fa-eye"></i>
+                                </a>                           
+                            </td>
+                        </tr>                
+                    @endforeach                 
+                @endif
+
             </tbody>
         </table>
     </div>
