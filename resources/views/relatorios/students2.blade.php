@@ -84,7 +84,46 @@ $modulesList->prepend('Todos','all');
         </div>
 
     </form>
-</div>
+
+    @if($student && is_numeric(request('module_id')))
+    <?php $andamento = $student->getAndamento(request('module_id'),request('disciplina_id'));?>
+
+    <div class="shadow-sm" style="background-color: #e4f4f7 ">
+        <h4 class="text-center" style="text-decoration:underline">Andamento de {{$student->nome}}</h4>
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>                   
+                   
+                    <th>Total Aulas</th>
+                    <th>Aulas Feitas</th>
+                    <th>% Completado</th> 
+                    <th>Detalhes</th>    
+                </tr>
+            </thead>
+            <tbody>              
+                    <tr>
+                      
+                       <td>{{$andamento->countAulas}}</td>
+                       <td>{{$andamento->countFeitas}}</td>
+                       <td class="@if($andamento->percentualComplete > 99) bg-success text-white @endif"> 
+                           {{number_format($andamento->percentualComplete,0)}}% 
+                       </td>
+                       <td>
+                           <a href="#" class="detalhes_andamento"
+                           data-nome="{{$student->nome}}"
+                           data-detalhes="{{base64_encode($andamento->mapeamento->toJson() )}}"
+                           >
+                               <i class="fa fa-eye"></i>
+                           </a>                           
+                       </td>
+                   </tr>
+            </tbody>
+        </table>  
+    </div>
+    @include('andamento.modal')
+    @endif
+
+</div> <!--fechamento first tile -->
 
 <div class="tile">
     <div class="table-responsive">

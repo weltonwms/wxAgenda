@@ -45,6 +45,7 @@ class RelatorioController extends Controller
             $request->validate(['student_id' => 'required']);
         }        
         $celulas=[];
+        $student= null;
         if($request->student_id):
             $student=Student::find($request->student_id);
             $celulas = Celula::getCelulasAgendadas($student);
@@ -56,7 +57,7 @@ class RelatorioController extends Controller
         $disciplinasList = \App\Models\Disciplina::getList();
         
         return view('relatorios.students2', compact('celulas', 'modulesList', 
-        'teachersList', 'disciplinasList','studentsList'));
+        'teachersList', 'disciplinasList','studentsList','student'));
 
    }
 
