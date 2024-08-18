@@ -34,7 +34,9 @@ class GradeController extends Controller
     public function getCelula(Celula $celula)
     {
         $celulaWithStudents = $celula->load('students.module', 'aula');
-        $this->hideInfoStudents($celulaWithStudents->students);
+        if(auth()->user()->isStudent){
+            $this->hideInfoStudents($celulaWithStudents->students);
+        }        
         return response()->json($celulaWithStudents);
     }
 

@@ -144,7 +144,11 @@ $modulesList->prepend('Todos','all');
                 <tr>
                     <td>{{$celula->getDiaFormatado()}}</td>
                     <td>{{$celula->horario}}</td>
-                    <td>{{$celula->aula_sigla}}</td>
+                    <td>
+                        <a href="#" class="showCelula" data-celula_id="{{$celula->id}}" title="Visualizar Célula">
+                            {{$celula->aula_sigla}}
+                        </a>
+                    </td>
                     <td>{{$celula->module_nome}}</td>
                     <td>{{$celula->disciplina_nome}}</td>
                     <td>{{$celula->teacher_nome}}</td>
@@ -159,7 +163,10 @@ $modulesList->prepend('Todos','all');
 </div>
 
 
-
-
+@include('grade.modal')
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/showDetailCelula.js') }}"></script>
+@endpush
 
