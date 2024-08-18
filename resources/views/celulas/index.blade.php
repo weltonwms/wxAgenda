@@ -56,5 +56,5 @@
 
 @push('scripts')
 <script src="{{ asset('template/js/plugins/fullcalendar.min.js') }}"></script>
-<script src="{{ asset('js/celulas.js') }}"></script>
+<script src="{{ asset('js/celulas.js?v1') }}"></script>
 @endpush

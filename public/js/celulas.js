@@ -487,37 +487,41 @@
 
         }
 
-        this.deleteAluno = function (event) {
-            //alert('deleteAluno')
+        this.deleteAluno = function (event) {            
             var student_id = event.currentTarget.dataset.id;
             var celula_id = $("#modalCelula_celula_id").val();
             var token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: asset + "celulas/" + celula_id + "/" + student_id,
-                method: 'DELETE',
-                data: {
-                    _token: token,
-                    student_id: student_id,
-                    celula_id: celula_id
-                },
-                success: function (resp) {
-                    console.log(resp)
-                    mountStudentsOnCelula(resp.celula.students);
-                    clearAula(resp.celula);
-                    showMessage('.message_modal', resp.message, 'success');
-                    $("#modalCelula").scrollTop(90);
-                    instanceCalendar.refetchEvents();
-                },
-                error: function (resp) {
-                    console.log(resp)
+            var aluno = $this.findAlunoById(student_id);            
+            function sendAjax(){
+                $.ajax({
+                    url: asset + "celulas/" + celula_id + "/" + student_id,
+                    method: 'DELETE',
+                    data: {
+                        _token: token,
+                        student_id: student_id,
+                        celula_id: celula_id
+                    },
+                    success: function (resp) {
+                        console.log(resp)
+                        mountStudentsOnCelula(resp.celula.students);
+                        clearAula(resp.celula);
+                        showMessage('.message_modal', resp.message, 'success');
+                        $("#modalCelula").scrollTop(90);
+                        instanceCalendar.refetchEvents();
+                    },
+                    error: function (resp) {
+                        console.log(resp)
+    
+                        var resposta = resp.responseJSON.error || resp.responseJSON.message;
+                        showMessage('.message_modal', resposta, 'danger');
+                        $("#modalCelula").scrollTop(90);
+                        //$.notify(resposta,{type:'danger'})              
+    
+                    }
+                });
+            }
+            wxConfirm(sendAjax, "Excluir o(a) aluno(a) da Célula?", aluno.nome);
 
-                    var resposta = resp.responseJSON.error || resp.responseJSON.message;
-                    showMessage('.message_modal', resposta, 'danger');
-                    $("#modalCelula").scrollTop(90);
-                    //$.notify(resposta,{type:'danger'})              
-
-                }
-            });
 
         }
 
