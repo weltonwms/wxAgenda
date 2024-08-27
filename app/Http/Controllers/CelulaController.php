@@ -123,8 +123,10 @@ class CelulaController extends Controller
     {
         try {
             $celulaInfo = \DB::transaction(function () use ($request, $celula) {
+                //$presenca = is_numeric($request->presenca)?$request->presenca:null;
+                $presenca =  $request->presenca;           
                 $celula->students()->updateExistingPivot($request->student_id, [
-                    'presenca' => $request->presenca ? 1 : 0,
+                    'presenca' => $presenca,
                     'n1' => $request->n1,
                     'n2' => $request->n2,
                     'n3' => $request->n3,

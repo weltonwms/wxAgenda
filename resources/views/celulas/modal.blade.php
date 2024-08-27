@@ -87,14 +87,22 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-6">                               
+
                                 <div class="form-group">
-                                    <label for="">Presença</label>
-                                    <div class="form-check">
-                                        <input class="form-check-input position-static" type="checkbox" name="presenca"
-                                            id="presenca" value="1">
+                                    <label>Presença</label>
+                                    <div class="d-flex">
+                                        <div class="form-check mr-3">
+                                            <input type="radio" id="presenca1" name="presenca" value="1" class="form-check-input">
+                                            <label for="presenca1" class="form-check-label">Sim</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="radio" id="presenca2" name="presenca" value="0" class="form-check-input">
+                                            <label for="presenca2" class="form-check-label">Não</label>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                             
                             <div class="col-sm-12 text-secondary">

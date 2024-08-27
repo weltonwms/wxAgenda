@@ -414,20 +414,20 @@
         var info = dados.list[0];
         $("#atributoOnOferecimentoAula").val(dados.tipo);
         var student_id = parseInt($("#student_id").val());
-        var agendamentoValido = isPossivelAgendar(info.dia, info.horario, student_id, info.students);        
-        if(!agendamentoValido){
+        var agendamentoValido = isPossivelAgendar(info.dia, info.horario, student_id, info.students);
+        if (!agendamentoValido) {
             onRecusaOferecimentoAulaParaAluno(); //recusa automática. Não tem como oferecer ao aluno
             return false;
-        }      
+        }
         //inicio do oferecimento
-        var dia= moment(info.dia).format('DD.MM.YYYY');
+        var dia = moment(info.dia).format('DD.MM.YYYY');
         var tituloMsg = capitalizeFirstLetter(dados.tipo) + " já Aberta no turno.";
         var textoMsg = "<b>Deseja agendar a aula abaixo?</b> <br> " +
             "Aula: " + info.aula_sigla + ", professor: " + info.teacher_nome +
-            ", dia: " + dia + ", " + info.horario +". ";
+            ", dia: " + dia + ", " + info.horario + ". ";
         var callbackRecusa = onRecusaOferecimentoAulaParaAluno;
-        var callbackOk= sendOfecimentoAula;
-        
+        var callbackOk = sendOfecimentoAula;
+
         wxConfirm2(callbackOk, dados, tituloMsg, textoMsg, callbackRecusa);
     }
 
@@ -447,7 +447,7 @@
             },
             success: function (resp) {
                 var textoSuccess = "Agendamento realizado com Sucesso!<br>";
-                textoSuccess += "Dia: " + resp.dia + " às " + resp.horario + ", Professor: " + resp.teacher;                              
+                textoSuccess += "Dia: " + resp.dia + " às " + resp.horario + ", Professor: " + resp.teacher;
                 setDadosAluno();
                 $("#modalCelula").modal('hide');
                 $.notify(textoSuccess, { type: 'success' });
@@ -455,16 +455,16 @@
 
             },
             error: function (resp) {
-                var resposta = resp.responseJSON.error;               
+                var resposta = resp.responseJSON.error;
                 showMessage('.message_modal', resposta, 'danger');
-                $.notify(resposta,{type:'danger'})
-                 //setDadosAluno();
+                $.notify(resposta, { type: 'danger' })
+                //setDadosAluno();
             }
         });
     }
 
     function onRecusaOferecimentoAulaParaAluno() {
-        var xpt =  $("#atributoOnOferecimentoAula").val();
+        var xpt = $("#atributoOnOferecimentoAula").val();
         var textoRecusa = "Você só pode abrir uma nova turma desta " +
             xpt + " após essa turma fechar. Você pode esperar ou tentar outra " + xpt + ".";
         showMessage('.message_modal', textoRecusa, 'warning');
@@ -475,23 +475,23 @@
      * Se for feita emite alerta ao aluno se quer continuar.
      * Se não feita segue o fluxo normal de tentar agendar: sendAgendarAula()
      */
-    function VerificaSeAulaJaFeitaByAluno(aula_id){        
+    function VerificaSeAulaJaFeitaByAluno(aula_id) {
         $.ajax({
-            url: asset + "isAulaJaFeitaByAuthStudent/"+aula_id,
+            url: asset + "isAulaJaFeitaByAuthStudent/" + aula_id,
             method: 'GET',
             beforeSend: function (data) {
                 $(".message_modal").html('Loading...');
             },
             success: function (resp) {
                 $(".message_modal").html('');
-                var isFeita= resp && resp.isFeita;
-                if(isFeita){
-                   alertarAlunoAulaJaFeita(resp.info);
-                   return; //fim do fluxo
+                var isFeita = resp && resp.isFeita;
+                if (isFeita) {
+                    alertarAlunoAulaJaFeita(resp.info);
+                    return; //fim do fluxo
                 }
-                  console.log('Aula Não feita by aluno')
-                  sendAgendarAula();
-                
+                console.log('Aula Não feita by aluno')
+                sendAgendarAula();
+
             },
             error: function (resp) {
                 console.log(resp);
@@ -500,9 +500,9 @@
         });
     }
 
-    function alertarAlunoAulaJaFeita(info){
-        var textoConfirm="Você já fez essa aula no dia "+
-            info.dia+", "+info.horario+", professor "+info.teacher_nome;
+    function alertarAlunoAulaJaFeita(info) {
+        var textoConfirm = "Você já fez essa aula no dia " +
+            info.dia + ", " + info.horario + ", professor " + info.teacher_nome;
         wxConfirm(sendAgendarAula, "Deseja Realmente Continuar?", textoConfirm);
     }
 
@@ -695,9 +695,14 @@
 
             $("#modalCelula_students").show();
             var mapStudents = $this.alunos.map(function (student) {
-                var strPresenca = student.pivot.presenca ?
-                    '<i class="fa fa-check-square-o" aria-hidden="true"></i>' :
-                    '<i class="fa fa-square-o" aria-hidden="true"></i>';
+                var strPresenca = '';
+                if (student.pivot.presenca == '1') {
+                    //strPresenca = 'S';
+                    strPresenca = '<i class="fa fa-check-square-o" aria-hidden="true"></i>'
+                }
+                if (student.pivot.presenca == '0') {
+                    strPresenca = 'N';
+                }
                 var studentModuleName = student.module ? student.module.nome : '';
                 var string = "<tr>" +
                     '<td>' + getStringAcaoDesmarcar(student) + '</td>' +

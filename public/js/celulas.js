@@ -1,5 +1,6 @@
 /*
 /*Depende do FullCalendar.js
+/*Usado na admnistração de células (adm e teacher)
 */
 (function () {
     let instanceCalendar = null;
@@ -59,15 +60,15 @@
                 var start = moment(arg.start);
                 var token = $('meta[name="csrf-token"]').attr('content');
                 var teacher_id = $("#teacher_id").val();
-                var dataPayload={
+                var dataPayload = {
                     _token: token,
                     teacher_id: teacher_id,
                     dia: start.format("YYYY-MM-DD"),
                     horario: start.format('HH:mm')
 
                 }
-                if(lastPostSaveCelula===JSON.stringify(dataPayload)){
-                    return ; //impedir requisição duplicada ao servidor
+                if (lastPostSaveCelula === JSON.stringify(dataPayload)) {
+                    return; //impedir requisição duplicada ao servidor
                 }
                 lastPostSaveCelula = JSON.stringify(dataPayload)
 
@@ -155,7 +156,7 @@
                     $("#modalCelula").modal('hide');
                     showGlobalMessage(resp.message, 'success');
                     $.notify(resp.message, { type: 'success' });
-                    lastPostSaveCelula=null;
+                    lastPostSaveCelula = null;
                 },
                 error: function (resp) {
                     var resposta = resp.responseJSON.error;
@@ -173,17 +174,17 @@
         }
     }); //fim Click btnDeleteCelula
 
-    function hideBtnDeleteCelula(){
+    function hideBtnDeleteCelula() {
         var countStudents = $("#modalCelula_students tbody tr").length;
-        var is_adm= $('#is_adm').val()==1?true:false;
-        if(!is_adm && countStudents > 0){            
+        var is_adm = $('#is_adm').val() == 1 ? true : false;
+        if (!is_adm && countStudents > 0) {
             $("#btnDeleteCelula").hide();
         }
-        else{
-            $("#btnDeleteCelula").show();            
+        else {
+            $("#btnDeleteCelula").show();
         }
     }
-    
+
 
     function getHorariosValidos() {
         var horarios_validos_json = $('#horarios_validos').val();
@@ -213,42 +214,42 @@
 
     }
 
-    function saveAulaLink(){
+    function saveAulaLink() {
         var celula_id = $("#modalCelula_celula_id").val();
         var token = $('meta[name="csrf-token"]').attr('content');
         var aula_link = $("#modalCelula_aula_link").val();
         var aula_id = $("#modalCelula_aula_id").val();
-       
-            $.ajax({
-                url: asset + "celulas/" + celula_id+"/aulaLink",
-                beforeSend:function(){             
-                    $("#modalCelula .btnSaveAulaLink").after( "<p id='modalBodyLoading'>Loading...</p>" );                    
-                },
-                method: "PATCH",
-                data: {
-                    _token: token,
-                    aula_link:aula_link,
-                    aula_id:aula_id
-                },
-                success: function (resp) {
-                    console.log(resp)
-                    $("#modalBodyLoading").remove();
-                    showMessage('.message_modal', resp.message, 'success');
-                    //showGlobalMessage(resp.message, 'success');
-                    
-                },
-                error: function (resp) {
-                    console.log(resp)
-                    $("#modalBodyLoading").remove();
-                    var resposta = resp.responseJSON.error || resp.responseJSON.message || "Algo deu Errado";
 
-                    showMessage('.message_modal', resposta, 'danger');
-                    //$("#modalCelula").scrollTop(90);
-                    //$.notify(resposta,{type:'danger'})
-                    //showGlobalMessage(resposta,'danger');
-                }
-            });
-        
+        $.ajax({
+            url: asset + "celulas/" + celula_id + "/aulaLink",
+            beforeSend: function () {
+                $("#modalCelula .btnSaveAulaLink").after("<p id='modalBodyLoading'>Loading...</p>");
+            },
+            method: "PATCH",
+            data: {
+                _token: token,
+                aula_link: aula_link,
+                aula_id: aula_id
+            },
+            success: function (resp) {
+                console.log(resp)
+                $("#modalBodyLoading").remove();
+                showMessage('.message_modal', resp.message, 'success');
+                //showGlobalMessage(resp.message, 'success');
+
+            },
+            error: function (resp) {
+                console.log(resp)
+                $("#modalBodyLoading").remove();
+                var resposta = resp.responseJSON.error || resp.responseJSON.message || "Algo deu Errado";
+
+                showMessage('.message_modal', resposta, 'danger');
+                //$("#modalCelula").scrollTop(90);
+                //$.notify(resposta,{type:'danger'})
+                //showGlobalMessage(resposta,'danger');
+            }
+        });
+
     }
 
     $(".btnSaveAulaLink").on('click', saveAulaLink);
@@ -451,16 +452,16 @@
          * 
          * Método para limpar Aula em caso de desmarcação do último aluno
          */
-        function clearAula(celula){
-            if(!celula.aula_id){
+        function clearAula(celula) {
+            if (!celula.aula_id) {
                 $("#modalCelula_aula_id").val('');
                 $("#modalCelula_aula_link").val('');
-                $("#modalCelula_aula").html('');                
+                $("#modalCelula_aula").html('');
             }
         }
 
-        function isAdmin(){
-            return $('#is_adm').val()==1?true:false;
+        function isAdmin() {
+            return $('#is_adm').val() == 1 ? true : false;
         }
 
         this.findAlunoById = function (id) {
@@ -476,7 +477,8 @@
             var presenca = aluno.pivot.presenca;
             $("#nomeAluno").val(aluno.nome);
             $("#student_id").val(aluno.id);
-            $("#presenca").prop('checked', presenca ? true : false);
+            $("#presenca1").prop('checked', presenca == '1' ? true : false);
+            $("#presenca2").prop('checked', presenca == '0' ? true : false);
             $("#n1").val(aluno.pivot.n1);
             $("#n2").val(aluno.pivot.n2);
             $("#n3").val(aluno.pivot.n3);
@@ -487,12 +489,12 @@
 
         }
 
-        this.deleteAluno = function (event) {            
+        this.deleteAluno = function (event) {
             var student_id = event.currentTarget.dataset.id;
             var celula_id = $("#modalCelula_celula_id").val();
             var token = $('meta[name="csrf-token"]').attr('content');
-            var aluno = $this.findAlunoById(student_id);            
-            function sendAjax(){
+            var aluno = $this.findAlunoById(student_id);
+            function sendAjax() {
                 $.ajax({
                     url: asset + "celulas/" + celula_id + "/" + student_id,
                     method: 'DELETE',
@@ -511,12 +513,12 @@
                     },
                     error: function (resp) {
                         console.log(resp)
-    
+
                         var resposta = resp.responseJSON.error || resp.responseJSON.message;
                         showMessage('.message_modal', resposta, 'danger');
                         $("#modalCelula").scrollTop(90);
                         //$.notify(resposta,{type:'danger'})              
-    
+
                     }
                 });
             }
@@ -533,34 +535,39 @@
             }
             $("#modalCelula_students").show();
             var mapStudents = $this.alunos.map(function (student) {
-                var strPresenca = student.pivot.presenca ?
-                    '<i class="fa fa-check-square-o" aria-hidden="true"></i>' :
-                    '<i class="fa fa-square-o" aria-hidden="true"></i>';
-                var studentModuleName= student.module?student.module.nome:'';
+                var strPresenca = '';
+                if (student.pivot.presenca == '1') {
+                    //strPresenca = 'S';
+                    strPresenca = '<i class="fa fa-check-square-o" aria-hidden="true"></i>'
+                }
+                if (student.pivot.presenca == '0') {
+                    strPresenca = 'N';
+                }
+                var studentModuleName = student.module ? student.module.nome : '';
                 var string = "<tr>" +
                     "<td>" +
                     '<button data-id="' + student.id + '" class="btn btn-outline-primary btn-sm btnEditAluno" >' +
                     '<i class="fa fa-pencil" aria-hidden="true"></i> ' +
                     '</button>' +
-                    "</td>" ;
+                    "</td>";
 
-                if(isAdmin()){
+                if (isAdmin()) {
                     string += "<td>" +
-                    '<button data-id="' + student.id + '" class="btn btn-outline-danger btn-sm btnDeleteAluno" >' +
-                    '<i class="fa fa-trash" aria-hidden="true"></i> ' +
-                    '</button>' +
-                    "</td>" ;
+                        '<button data-id="' + student.id + '" class="btn btn-outline-danger btn-sm btnDeleteAluno" >' +
+                        '<i class="fa fa-trash" aria-hidden="true"></i> ' +
+                        '</button>' +
+                        "</td>";
                 }
-                string+=
-                    '<td>' + student.nome + ' ('+studentModuleName+')</td>' +
+                string +=
+                    '<td>' + student.nome + ' (' + studentModuleName + ')</td>' +
                     '<td>' + strPresenca + '</td>' +
                     '<td>' + echoX(student.pivot.n1) + '</td>' +
                     '<td>' + echoX(student.pivot.n2) + '</td>' +
                     '<td>' + echoX(student.pivot.n3) + '</td>' +
                     '<td>' + echoX(student.pivot.n4) + '</td>' +
-                    '<td>' + createPopOverLink(echoX(student.pivot.feedback))+ '</td>' +
+                    '<td>' + createPopOverLink(echoX(student.pivot.feedback)) + '</td>' +
                     "</tr>";
-                   
+
                 return string;
             });
             $("#modalCelula_students tbody").html(mapStudents.join(''));
@@ -580,12 +587,16 @@
         var token = $('meta[name="csrf-token"]').attr('content');
         var celula_id = $("#modalCelula_celula_id").val();
         var student_id = $("#student_id").val();
-        var presenca = $('#presenca').is(":checked") ? 1 : 0;
+        var presenca = $('[name="presenca"]:checked').val();
         var n1 = $("#n1").val();
         var n2 = $("#n2").val();
         var n3 = $("#n3").val();
         var n4 = $("#n4").val();
         var feedback = $("#feedback").val();
+
+        if (presenca === undefined || presenca === null) {
+            presenca = '';
+        }
 
         $.ajax({
             url: asset + "celulas/" + celula_id + "/saveInfoStudent",
@@ -623,7 +634,8 @@
     function resetFormEditAluno() {
         $("#nomeAluno").val('');
         $("#student_id").val('');
-        $("#presenca").prop('checked', false);
+        $("#presenca1").prop('checked', false);
+        $("#presenca2").prop('checked', false);
         $("#n1").val('');
         $("#n2").val('');
         $("#n3").val('');

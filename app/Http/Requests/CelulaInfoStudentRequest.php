@@ -25,12 +25,13 @@ class CelulaInfoStudentRequest extends FormRequest
      */
     public function rules()
     {
+        $requiredNotas = $this->presenca? 'required':'nullable';
        return [
-           
-            'n1'=>'nullable|numeric|between:0,5',
-            'n2'=>'nullable|numeric|between:0,5',
-            'n3'=>'nullable|numeric|between:0,5',
-            'n4'=>'nullable|numeric|between:0,5',
+            'presenca' => 'required',
+            'n1'=>"$requiredNotas|numeric|between:0,5",
+            'n2'=>"$requiredNotas|numeric|between:0,5",
+            'n3'=>"$requiredNotas|numeric|between:0,5",
+            'n4'=>"$requiredNotas|numeric|between:0,5",
             
         ];
     }
@@ -38,13 +39,17 @@ class CelulaInfoStudentRequest extends FormRequest
     public function messages()
     {
         return[
-            
+            "n1.required"=>"Notas Obrigatórias quando há presença",
+            "n2.required"=>"Notas Obrigatórias quando há presença",
+            "n3.required"=>"Notas Obrigatórias quando há presença",
+            "n4.required"=>"Notas Obrigatórias quando há presença",
         ];
     }
 
     public function attributes()
     {
         return [
+            'presenca' => "presença",
             "n1"=>'Nota Interaction',
             "n2"=>'Nota Speaking',
             "n3"=>'Nota Listening',
