@@ -1,12 +1,18 @@
 /*
 /*Depende do FullCalendar.js
 /*Usado na admnistração de células (adm e teacher)
+/* usado em views/pendenciasinfostudent/main
+/* usado em views/celulas
 */
 (function () {
     let instanceCalendar = null;
     let lastPostSaveCelula = null;
     document.addEventListener('DOMContentLoaded', function () {
+        
         var calendarEl = document.getElementById('calendar');
+        if(!calendarEl){
+            return false; //encerrar se não tiver o elemento no HTML
+        }
         var minMaxHorarioValido = getMinMaxHorarioValido();
         var calendar = new FullCalendar.Calendar(calendarEl, {
             //timeZone: 'UTC',
@@ -151,8 +157,9 @@
                     _token: token
                 },
                 success: function (resp) {
-                    console.log(resp)
-                    instanceCalendar.refetchEvents();
+                    if(instanceCalendar){
+                        instanceCalendar.refetchEvents();
+                    }                   
                     $("#modalCelula").modal('hide');
                     showGlobalMessage(resp.message, 'success');
                     $.notify(resp.message, { type: 'success' });
@@ -281,7 +288,9 @@
                 console.log(resp)
                 setDadosCelula(celula_id);
                 limpaSelects();
-                instanceCalendar.refetchEvents();
+                if(instanceCalendar){
+                    instanceCalendar.refetchEvents();
+                }                
                 showMessage('.message_modal', "Agendamento realizado com Sucesso!", 'success');
 
             },
@@ -509,7 +518,10 @@
                         clearAula(resp.celula);
                         showMessage('.message_modal', resp.message, 'success');
                         $("#modalCelula").scrollTop(90);
-                        instanceCalendar.refetchEvents();
+                        if(instanceCalendar){
+                            instanceCalendar.refetchEvents();
+                        }
+                        
                     },
                     error: function (resp) {
                         console.log(resp)
@@ -663,6 +675,22 @@
     $(".btnCancellEditAluno").click(cancellEditAluno);
     /**
      * Fim das funções de Edit Alunos
+     */
+
+    /**
+     * Inicio das funções para Na views/pendenciasinfostudent/main
+     */
+
+     $(".detalhesPendencia").click(function(){
+            var data_id = this.dataset.celula_id;           
+            limpaSelects();
+            $(".message_modal").html('');
+            setDadosCelula(data_id);
+            $("#modalCelula").modal('show');
+    });
+
+    /**
+     * Fim das funções para Na views/pendenciasinfostudent/main
      */
 
 })();

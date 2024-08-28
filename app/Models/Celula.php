@@ -326,4 +326,37 @@ class Celula extends Model
         Mail::send(new NotificacaoAluno($this));
         //Implementar outras notificações se Necessário: WhatsApp
     }
+
+    /**
+     * Método que retorna células que não foram preenchidas a presença nas informações extras de aluno na célula
+     * @param string $start data inicial período
+     * @param string $end data final período
+     * @param int $teacher_id professor a pesquisar
+     * @return \Illuminate\Support\Collection células com pendências de preenchimento em presença
+     */
+    public static function getPendenciasInfoStudentOnCelula($start, $end, $teacher_id=null)
+    {
+        $query=Celula::join('celula_student','celulas.id','=','celula_student.celula_id')
+        ->join('students','celula_student.student_id','=','students.id')
+        ->join('aulas','celulas.aula_id','=','aulas.id')     
+        ->join('teachers','celulas.teacher_id','=','teachers.id')
+        ->select('celulas.id', 'celulas.dia','celulas.horario','celulas.aula_id','celulas.teacher_id',
+        'aulas.sigla as aula_sigla',
+        'celula_student.student_id','celula_student.presenca',
+        'teachers.nome as teacher_nome')
+        ->whereNull('celula_student.presenca');
+        if($teacher_id){
+            $query->where('celulas.teacher_id',$teacher_id);
+        }
+
+        if($start){
+            $query->where('celulas.dia','>=',$start);
+        }
+        if($end){
+            $query->where('celulas.dia','<=',$end);
+        }
+        $result=$query->orderBy('celulas.dia','asc')->orderBy('celulas.horario','asc')->get();
+        return $result->unique('id')->values();
+        
+    }
 }

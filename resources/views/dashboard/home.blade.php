@@ -34,4 +34,10 @@
     @include('dashboard.teacher')
 @endif
 <br>
+@if($celulasInfo && $celulasInfo->count())
+    @include('pendenciasinfostudent.modal')
+@endif
+
 @endsection
+
+

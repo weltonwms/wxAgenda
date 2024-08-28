@@ -73,6 +73,9 @@ Route::group(['middleware' => ['auth','teacher']], function () {
     Route::delete('celulas/{celula}/{student}', '\App\Http\Controllers\CelulaController@desmarcarStudent')->middleware('adm');   
     Route::patch('celulas/{celula}/aulaLink', '\App\Http\Controllers\CelulaController@saveAulaLinkOnCelula');   
 
+    Route::get('pendenciasInfoStudentOnCelula', '\App\Http\Controllers\HomeController@pendenciasInfoStudentOnCelula')->name('pendenciasInfo.main');    
+
+    
 });
 
 
