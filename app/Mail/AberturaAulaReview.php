@@ -19,14 +19,19 @@ class AberturaAulaReview extends Mailable
      */
     public $celula;
 
+    public $student;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Celula $celula)
+    public function __construct(Celula $celula, $student=null)
     {
         $this->celula = $celula;
+        if($student){
+            $this->student = $student;
+        }
     }
 
     /**

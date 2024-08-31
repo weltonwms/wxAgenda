@@ -12,6 +12,7 @@ class ReviewInfo extends Model
 {
 	protected $appends = ['tipo_review_name'];
 	private $disciplina;
+	private $student;
 
 	public function celula()
 	{
@@ -24,12 +25,15 @@ class ReviewInfo extends Model
        
     }
 
-	public function setAll($request)
+	public function setAll($request,$student=null)
 	{
 		$this->disciplina = Disciplina::find($request->disciplina_id);
 		$this->celula_id = $request->celula_id;
 		$this->tipo_review = $request->tipo_review;
 		$this->descricao_review = $request->descricao_review;
+		if($student){
+			$this->student = $student;
+		}
 	}
 	private function validate()
 	{
@@ -68,8 +72,8 @@ class ReviewInfo extends Model
 
 	private function onAberturaCelulaReview()
 	{
-		TelegramHelper::notificarAberturaAulaReview($this->celula);        
-        Mail::send(new AberturaAulaReview($this->celula));
+		//TelegramHelper::notificarAberturaAulaReview($this->celula, $this->student);        
+        Mail::send(new AberturaAulaReview($this->celula, $this->student) );
         //Implementar outras notificações se Necessário: WhatsApp
 	}
 

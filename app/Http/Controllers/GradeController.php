@@ -117,7 +117,7 @@ class GradeController extends Controller
                 $student = auth()->user()->student;
                 $aula_id = EscolhaAutomaticaAulaHelper::run($student, $request);
                 $reviewInfo = new ReviewInfo();
-                $reviewInfo->setAll($request); //info extra view
+                $reviewInfo->setAll($request,$student); //info extra aula review
                 $reviewInfo->verify(); //validar campos obrigratórios antes de salvar
                 $celulaInfo = Celula::storeStudent($student, $request->celula_id, $aula_id, $request->aula_individual,$reviewInfo);
                 return $celulaInfo;
@@ -148,25 +148,6 @@ class GradeController extends Controller
                 $student->pivot->feedback = '';
             }
         }
-    }
-
-    public function teste()
-    {
-        /*
-        $obj= new \stdClass();
-        $obj->celula_id = 19956;
-        $obj->tipo_review = 1;
-        $obj->descricao_review = "Preciso ter revisões de tudo que aprendi";
-        $obj->disciplina_id= 12;
-
-        $review = new ReviewInfo();
-        $review->setAll($obj);
-        $review->verifyAndSave();
-        dd($review);
-        */
-        
-        ReviewInfo::deleteByCelula(19956);
-        exit('tetse');
     }
 
 }
