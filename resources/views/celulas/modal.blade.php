@@ -27,6 +27,10 @@
                         <div class="col-sm-4">
                             <b>Aula: </b> <span id="modalCelula_aula"></span>
                         </div>
+
+                        <div class="col-sm-12 mt-1" id="modalCelula_reviewInfo">
+
+                        </div>
                         <div class="col-sm-12">
 
 

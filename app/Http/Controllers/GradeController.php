@@ -12,6 +12,7 @@ use App\Models\Disciplina;
 use App\Models\Aula;
 use App\Helpers\FilterAgendaHelper;
 use App\Helpers\EscolhaAutomaticaAulaHelper;
+use App\Models\ReviewInfo;
 
 class GradeController extends Controller
 {
@@ -33,7 +34,7 @@ class GradeController extends Controller
 
     public function getCelula(Celula $celula)
     {
-        $celulaWithStudents = $celula->load('students.module', 'aula');
+        $celulaWithStudents = $celula->load('students.module', 'aula','reviewInfo');
         if(auth()->user()->isStudent){
             $this->hideInfoStudents($celulaWithStudents->students);
         }        
@@ -115,7 +116,10 @@ class GradeController extends Controller
             $celulaInfo = \DB::transaction(function () use ($request) {
                 $student = auth()->user()->student;
                 $aula_id = EscolhaAutomaticaAulaHelper::run($student, $request);
-                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $aula_id, $request->aula_individual);
+                $reviewInfo = new ReviewInfo();
+                $reviewInfo->setAll($request); //info extra view
+                $reviewInfo->verify(); //validar campos obrigratórios antes de salvar
+                $celulaInfo = Celula::storeStudent($student, $request->celula_id, $aula_id, $request->aula_individual,$reviewInfo);
                 return $celulaInfo;
                 //return response()->json($request->all());
 
@@ -144,6 +148,25 @@ class GradeController extends Controller
                 $student->pivot->feedback = '';
             }
         }
+    }
+
+    public function teste()
+    {
+        /*
+        $obj= new \stdClass();
+        $obj->celula_id = 19956;
+        $obj->tipo_review = 1;
+        $obj->descricao_review = "Preciso ter revisões de tudo que aprendi";
+        $obj->disciplina_id= 12;
+
+        $review = new ReviewInfo();
+        $review->setAll($obj);
+        $review->verifyAndSave();
+        dd($review);
+        */
+        
+        ReviewInfo::deleteByCelula(19956);
+        exit('tetse');
     }
 
 }

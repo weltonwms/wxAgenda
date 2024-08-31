@@ -236,3 +236,9 @@ table .showCelula{
    text-decoration: underline;
 }
 
+@media (max-width: 575.98px) { /* Dispositivos com largura menor que 576px */
+  .mt-neg-10-mobile {
+      margin-top: -12px;
+  }
+}
+

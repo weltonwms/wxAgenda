@@ -71,5 +71,20 @@ class TelegramHelper
 
     }
 
+    public static function notificarAberturaAulaReview($celula)
+    {
+        $horario = $celula->horario;
+        $dia = $celula->getDiaFormatado();
+        $teacher = $celula->teacher->nome;
+        $student = $celula->student->nome;
+        $aula= $celula->aula->sigla;
+
+        $message= "Nova Solicitação de Aula Review; Aluno: $student; \n";
+        $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: $teacher; \n";
+        $message.="Tipo de Review Solicitada: {$celula->review_info->tipo_review} \n";
+        $message.="Descrição da Review Solicitada:: {$celula->review_info->descricao_review} \n";
+
+    }
+
     
 }

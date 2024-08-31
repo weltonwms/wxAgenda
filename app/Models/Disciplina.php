@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Disciplina extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome', 'base'];
+    protected $fillable = ['nome', 'base','review'];
 
     public function aulas()
     {
@@ -62,6 +62,10 @@ class Disciplina extends Model
     public function getNomeBase()
     {
        return $this->base?'<span class="badge badge-success f100">Sim</span>':"Não";
+    }
+    public function getNomeReview()
+    {
+       return $this->review?'<span class="badge badge-success f100">Sim</span>':"Não";
     }
 
     /**

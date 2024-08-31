@@ -12,6 +12,7 @@ use App\Helpers\ConfiguracoesHelper;
 use App\Helpers\TelegramHelper;
 use App\Mail\NotificacaoAluno;
 use Illuminate\Support\Facades\Mail;
+use App\Models\ReviewInfo;
 
 class Celula extends Model
 {
@@ -34,6 +35,10 @@ class Celula extends Model
     public function teacher()
     {
         return $this->belongsTo(Teacher::class);
+    }
+    public function reviewInfo()
+    {
+        return $this->hasOne(ReviewInfo::class);
     }
 
     public function getHorarioAttribute($value)
@@ -194,7 +199,7 @@ class Celula extends Model
         return $eventsCelula;
     }
 
-    public static function storeStudent($student, $celula_id, $aula_id,$aula_individual=0)
+    public static function storeStudent($student, $celula_id, $aula_id,$aula_individual=0,$reviewInfo=null)
     {
         //validar se pode
         //ações em créditos
@@ -211,6 +216,9 @@ class Celula extends Model
             $celula->aula_level=$helper->getLevelStudent($celula);
             $celula->aula_individual=$aula_individual;
             $celula->save();
+            if($reviewInfo):
+                 $reviewInfo->verifyAndSave(); 
+            endif;           
             Systemcount::run($celula->aula_id);
         }
         else{
@@ -234,6 +242,7 @@ class Celula extends Model
             $celula->aula_link=null;
             $celula->aula_level=null;
             $celula->aula_individual=0; //padrão
+            ReviewInfo::deleteByCelula($celula->id); //limpando para nova abertura
             $celula->save();
         }
         return $retorno;

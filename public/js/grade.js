@@ -128,6 +128,14 @@
                     $("#modalCelula_aula_link").html(linkAula);
                 }
 
+                $("#modalCelula_reviewInfo").html("");
+                if (resp.review_info) {
+                    var reviewInfoText = '<b>Tipo de Review:</b> '+resp.review_info.tipo_review_name+'<br>';
+                    reviewInfoText += '<b>Descrição de Review:</b> '+createPopOverLink(resp.review_info.descricao_review,65);
+                    $("#modalCelula_reviewInfo").html(reviewInfoText);
+                    startPopOverLink();      
+                }
+
                 var student_id = parseInt($("#student_id").val());
                 var isActiveAgenda = isPossivelAgendar(resp.dia, resp.horario, student_id, resp.students) && !resp.aula_individual;
                 if (isActiveAgenda) {
@@ -221,12 +229,16 @@
             success: function (resp) {
                 var string = "<select class='form-control form-control-sm'><option value=''>--Disciplina--</option>";
                 var mapDisciplinas = resp.map(function (disciplina) {
-                    return '<option value="' + disciplina.id + '" data-base="' + disciplina.base + '">' + disciplina.nome + '</option>';
+                    return '<option value="' + disciplina.id + '" '+
+                    'data-review="' + disciplina.review + '" ' +
+                    'data-base="' + disciplina.base + '">' + 
+                    disciplina.nome + '</option>';
                 });
                 string += mapDisciplinas.join('');
                 string += "</select>";
                 $("#selectDisciplina").html(string);
                 $("#selectDisciplina select").on('change', gatilhoMountSelectAulas);
+                $("#selectDisciplina select").on('change', onChangeDisciplina);
                 $('#selectDisciplina select').select2({
                     dropdownParent: $('#selectDisciplina'),
                     width: '100%'
@@ -331,6 +343,23 @@
         $("#selectAula").html('');
         $("#blocoConfirm").html("");
         $("#selectTipoAula").html("");
+        //fields to infoReview
+        $("#selectTipoReview select").val('');
+        $("#fieldDescricaoReview textarea").val('');
+        $(".row.reviewInfo").hide();
+    }
+
+    function onChangeDisciplina(event) {
+        var review = $("#selectDisciplina select").find(":selected").data('review');
+        if (review) {
+            $(".row.reviewInfo").show();            
+        }
+        else {
+            $(".row.reviewInfo").hide();
+            $("#selectTipoReview select").val('');
+            $("#fieldDescricaoReview textarea").val('');
+        }
+        //alert('mudança em disciplina');
     }
 
     function mountBlocoConfirm() {
@@ -518,6 +547,10 @@
         var module_id = $("#selectModule select").val() || null;
         var disciplina_id = $("#selectDisciplina select").val() || null;
         var aula_individual = $("#selectTipoAula select").val() || 0;
+
+        
+        var tipo_review = $("#selectTipoReview select").val() || null;
+        var descricao_review = $("#fieldDescricaoReview textarea").val() || null;
         var sendAjax = function () {
             $.ajax({
                 url: asset + "gradeEscola/agenda",
@@ -528,7 +561,9 @@
                     aula_id: aula_id,
                     module_id: module_id,
                     disciplina_id: disciplina_id,
-                    aula_individual: aula_individual
+                    aula_individual: aula_individual,
+                    tipo_review: tipo_review,
+                    descricao_review: descricao_review
 
                 },
                 beforeSend: function (data) {
@@ -719,7 +754,7 @@
             });
             $("#modalCelula_students tbody").html(mapStudents.join(''));
             $(".btnDesmarcarAula").click(sendDesmarcarAula);
-            $("[data-toggle='popover']").popover();
+            startPopOverLink()
         }
     } //Fim Class ListStudent
 

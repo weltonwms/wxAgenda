@@ -19,8 +19,9 @@
 <thead>
     <tr>
         <th><input class="checkall" type="checkbox"></th>
-        <th width="85%">Nome</th>
+        <th width="80%">Nome</th>
         <th>Base</th>
+        <th>Review</th>
         <th>ID</th>
     </tr>
 </thead>
@@ -31,6 +32,7 @@
         <td></td>
         <td><a href="{{route('disciplinas.edit', $disciplina->id)}}">{{$disciplina->nome}}</a></td>
         <td>{!!$disciplina->getNomeBase()!!}</td>
+        <td>{!!$disciplina->getNomeReview()!!}</td>
         <td>{{$disciplina->id}}</td>
     </tr>
     @endforeach

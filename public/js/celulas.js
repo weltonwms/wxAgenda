@@ -133,6 +133,13 @@
                     var msgIndividual = '<p class="mb-3"> <b style="color: red">Sala de Aula Individual</b></p>';
                     $("#info_aula_individual").html(msgIndividual);
                 }
+                $("#modalCelula_reviewInfo").html("");
+                if (resp.review_info) {
+                    var reviewInfoText = '<b>Tipo de Review:</b> '+resp.review_info.tipo_review_name+'<br>';
+                    reviewInfoText += '<b>Descrição de Review:</b> '+createPopOverLink(resp.review_info.descricao_review,65);
+                    $("#modalCelula_reviewInfo").html(reviewInfoText);
+                    startPopOverLink();      
+                }
                 hideBtnDeleteCelula();
             }
         });
@@ -585,7 +592,7 @@
             $("#modalCelula_students tbody").html(mapStudents.join(''));
             $(".btnDeleteAluno").click(this.deleteAluno);
             $(".btnEditAluno").click(this.openEditAluno);
-            $("[data-toggle='popover']").popover();
+            startPopOverLink();
         }
     } //Fim Class ListStudent
 

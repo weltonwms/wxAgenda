@@ -35,6 +35,13 @@ function setDadosCelula(celula_id) {
                 var linkAula = '<a target="_blank" href="' + resp.aula_link + '"> Link da Aula </a> ';
                 $("#modalCelula_aula_link").html(linkAula);
             }
+            $("#modalCelula_reviewInfo").html("");
+            if (resp.review_info) {
+                var reviewInfoText = '<b>Tipo de Review:</b> '+resp.review_info.tipo_review_name+'<br>';
+                reviewInfoText += '<b>Descrição de Review:</b> '+createPopOverLink(resp.review_info.descricao_review,65);
+                $("#modalCelula_reviewInfo").html(reviewInfoText);
+                startPopOverLink();      
+            }
 
         }
     });
@@ -99,7 +106,7 @@ function ListStudents() {
         });
         $("#modalCelula_students tbody").html(mapStudents.join(''));
 
-        $("[data-toggle='popover']").popover();
+        startPopOverLink()
     }
 } //Fim Class ListStudent
 

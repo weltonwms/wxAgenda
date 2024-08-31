@@ -191,20 +191,40 @@ function createPopOverLink(text, size = 30) {
     var shortText = text.slice(0, size); // pegar os primeiros 10 caracteres
     shortText = shortText + "..." //Indicativo que Tem mais texto
     var fullText = text; // armazenar o texto completo
-
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    var dataTrigger = isMobile?"click":'focus';
     var link = $("<a>")
         .addClass("pop-over-link")
         .prop("href", "#")
         .attr("data-toggle", "popover")
-        .attr("data-trigger", "focus")
+        .attr("data-trigger", dataTrigger)
         .attr("data-placement", "auto")
         .attr("data-content", fullText)
-        .text(shortText);
+        .text(shortText);        
 
     // Obter a string HTML do link
     var linkString = $("<div>").append(link).html();
 
     return linkString;
+}
+
+/**
+ * /função para ser usada junto com função createPopOverLink()
+ */
+function startPopOverLink(){
+    $("[data-toggle='popover'].pop-over-link").popover();
+    $("[data-toggle='popover'].pop-over-link").on('click', function(e) {
+        e.preventDefault();
+    });
+    // Adicione o event listener para dispositivos móveis, limitado a popovers específicos
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        $(document).on('click touchend', function (e) {
+            if (!$(e.target).closest('.popover').length && !$(e.target).closest('.pop-over-link').length) {
+                $('.pop-over-link').popover('hide');
+            }
+        });
+    }
 }
 
 function isMobile(){

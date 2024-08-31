@@ -79,7 +79,7 @@ class CelulaController extends Controller
      */
     public function show(Celula $celula)
     {
-        return response()->json($celula->load('students.module', 'aula'));
+        return response()->json($celula->load('students.module', 'aula','reviewInfo'));
     }
 
 

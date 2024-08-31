@@ -115,4 +115,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('isAulaJaFeitaByAuthStudent/{aula_id}','\App\Http\Controllers\AgendadosController@isAulaJaFeitaByAuthStudent');
     Route::get('andamentoAulas','\App\Http\Controllers\AgendadosController@andamento')->name('andamento_aulas');
 
+    Route::get('testegrade','\App\Http\Controllers\GradeController@teste');
+
+
 });
