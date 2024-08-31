@@ -75,15 +75,44 @@ class TelegramHelper
     {
         $horario = $celula->horario;
         $dia = $celula->getDiaFormatado();
-        $teacher = $celula->teacher->nome;
+        $teacher = $celula->teacher;
         $studentNome = $student?$student->nome:'';
         $infoStudentNome = $studentNome?" Aluno: $studentNome; ":'';
         $aula= $celula->aula->sigla;
 
         $message= "Nova Solicitação de Aula Review; $infoStudentNome \n";
-        $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: $teacher; \n";
+        $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: {$teacher->nome}; \n";
         $message.="Tipo de Review Solicitada: {$celula->reviewInfo->tipo_review_name} \n";
         $message.="Descrição da Review Solicitada:: {$celula->reviewInfo->descricao_review} \n";
+
+        //TelegramHelper::sendMessage($teacher->chat_id, $message); 
+    }
+
+    public static function notificarAulaAgendada($celula, $student)
+    {
+        $horario = $celula->horario;
+        $dia = $celula->getDiaFormatado();
+        $teacher = $celula->teacher;        
+        $aula= $celula->aula->sigla;
+
+        $message= "Aula Agendada por Aluno: {$student->nome} \n";
+        $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: {$teacher->nome}; \n";
+        
+        //TelegramHelper::sendMessage($teacher->chat_id, $message); 
+
+    }
+
+    public static function notificarAulaDesmarcada($celula, $student)
+    {
+        $horario = $celula->horario;
+        $dia = $celula->getDiaFormatado();
+        $teacher = $celula->teacher;        
+        $aula= $celula->aula->sigla;
+
+        $message= "Aula Desmarcada por Aluno: {$student->nome} \n";
+        $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: {$teacher->nome}; \n";
+        
+        //TelegramHelper::sendMessage($teacher->chat_id, $message); 
 
     }
 

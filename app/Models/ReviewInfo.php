@@ -27,7 +27,9 @@ class ReviewInfo extends Model
 
 	public function setAll($request,$student=null)
 	{
-		$this->disciplina = Disciplina::find($request->disciplina_id);
+		if($request->disciplina_id){
+			$this->disciplina = Disciplina::find($request->disciplina_id);
+		}		
 		$this->celula_id = $request->celula_id;
 		$this->tipo_review = $request->tipo_review;
 		$this->descricao_review = $request->descricao_review;
@@ -54,14 +56,14 @@ class ReviewInfo extends Model
 
 	public function verify()
 	{
-		if ($this->disciplina->review) {
+		if ($this->disciplina && $this->disciplina->review) {
 			$this->validate();
 		}
 	}
 
 	public function verifyAndSave()
 	{
-		if ($this->disciplina->review) {
+		if ($this->disciplina && $this->disciplina->review) {
 			$this->validate();
 			$this->save();
 			$this->onAberturaCelulaReview();//notificar professor

@@ -13,6 +13,8 @@ use App\Helpers\TelegramHelper;
 use App\Mail\NotificacaoAluno;
 use Illuminate\Support\Facades\Mail;
 use App\Models\ReviewInfo;
+use App\Events\AulaAgendada;
+use App\Events\AulaDesmarcada;
 
 class Celula extends Model
 {
@@ -229,6 +231,7 @@ class Celula extends Model
         
         $celula->students()->attach($student->id);
         $student->onMarcacaoAula($celula,$aula_individual);
+        event(new AulaAgendada($celula, $student));
         return $celula->info();
     }
 
@@ -245,6 +248,7 @@ class Celula extends Model
             ReviewInfo::deleteByCelula($celula->id); //limpando para nova abertura
             $celula->save();
         }
+        event(new AulaDesmarcada($celula,$student));
         return $retorno;
 
     }
