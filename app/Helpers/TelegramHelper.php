@@ -9,6 +9,9 @@ class TelegramHelper
 
     public static function sendMessage($chat_id, $message)
     {
+        if(!$chat_id){
+            return false; //não tem como mandar sem chat_id;
+        }
         $base_url = env('TELEGRAM_BASE_URL', '');
         $token = env('TELEGRAM_TOKEN', '');
         $url = $base_url . "/bot" . $token . "/sendMessage";
@@ -85,7 +88,7 @@ class TelegramHelper
         $message.="Tipo de Review Solicitada: {$celula->reviewInfo->tipo_review_name} \n";
         $message.="Descrição da Review Solicitada:: {$celula->reviewInfo->descricao_review} \n";
 
-        //TelegramHelper::sendMessage($teacher->chat_id, $message); 
+        TelegramHelper::sendMessage($teacher->chat_id, $message); 
     }
 
     public static function notificarAulaAgendada($celula, $student)
@@ -98,7 +101,7 @@ class TelegramHelper
         $message= "Aula Agendada por Aluno: {$student->nome} \n";
         $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: {$teacher->nome}; \n";
         
-        //TelegramHelper::sendMessage($teacher->chat_id, $message); 
+        TelegramHelper::sendMessage($teacher->chat_id, $message); 
 
     }
 
@@ -107,12 +110,12 @@ class TelegramHelper
         $horario = $celula->horario;
         $dia = $celula->getDiaFormatado();
         $teacher = $celula->teacher;        
-        $aula= $celula->aula->sigla;
+        $InfoAula= $celula->aula?"Aula: {$celula->aula->sigla}; ":'';
 
         $message= "Aula Desmarcada por Aluno: {$student->nome} \n";
-        $message.="Aula: $aula; Dia: $dia; Horário: $horario; Professor: {$teacher->nome}; \n";
+        $message.="{$InfoAula}Dia: $dia; Horário: $horario; Professor: {$teacher->nome}; \n";
         
-        //TelegramHelper::sendMessage($teacher->chat_id, $message); 
+        TelegramHelper::sendMessage($teacher->chat_id, $message); 
 
     }
 

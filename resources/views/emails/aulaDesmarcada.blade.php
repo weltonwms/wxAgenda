@@ -1,5 +1,8 @@
 @component('mail::message')
-# Aula Desmarcada: {{$celula->aula->sigla}} : {{$celula->getDiaFormatado()}} {{$celula->horario}}
+<?php 
+    $siglaAula = $celula->aula?$celula->aula->sigla:'';
+?>
+# Aula Desmarcada: {{$siglaAula}} : {{$celula->getDiaFormatado()}} {{$celula->horario}}
 
 Desmarcação Realizada por: <br>
 Aluno: {{$student->nome}}<br>

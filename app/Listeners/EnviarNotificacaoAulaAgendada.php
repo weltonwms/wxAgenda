@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificacaoAulaAgendada;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\TelegramHelper;
 
 class EnviarNotificacaoAulaAgendada
 {
@@ -39,7 +40,7 @@ class EnviarNotificacaoAulaAgendada
 
     private function notificarTeacherMarcacaoAula($celula, $student)
     {
-         //TelegramHelper::notificarAulaAgendada($celula, $student);        
+         TelegramHelper::notificarAulaAgendada($celula, $student);        
          Mail::send(new NotificacaoAulaAgendada($celula, $student) );
          //Implementar outras notificações se Necessário: WhatsApp
         Log::warning('nova marcação realizada.', ['objeto' => json_encode($celula)]);

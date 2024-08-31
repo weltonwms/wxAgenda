@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificacaoAulaDesmarcada;
+use App\Helpers\TelegramHelper;
 
 class EnviarNotificacaoAulaDesmarcada
 {
@@ -38,7 +39,7 @@ class EnviarNotificacaoAulaDesmarcada
 
     private function notificarTeacherDesmarcacaoAula($celula, $student)
     {
-        //TelegramHelper::notificarAulaDesmarcada($celula, $student);        
+        TelegramHelper::notificarAulaDesmarcada($celula, $student);        
         Mail::send(new NotificacaoAulaDesmarcada($celula, $student) );
         //Implementar outras notificações se Necessário: WhatsApp
         Log::warning('desmarcacao realizada.', ['objeto' => json_encode($celula)]);
