@@ -244,4 +244,22 @@ class User extends Authenticatable
     {
         return $this->getMessagesNotRead()->count();
     }
+
+    public static function getEntidadeByEmail($email)
+    {
+        //uma entidade(student, teacher ou administrator) pode ser um User.
+        $student = \App\Models\Student::where('email', $email)->first();
+        if ($student) {
+            return $student;
+        }
+        $teacher = \App\Models\Teacher::where('email', $email)->first();
+        if ($teacher) {
+            return $teacher;
+        }
+
+        return null; 
+
+    }
+
+
 }

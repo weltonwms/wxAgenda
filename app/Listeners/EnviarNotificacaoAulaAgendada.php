@@ -42,9 +42,6 @@ class EnviarNotificacaoAulaAgendada
     {
          TelegramHelper::notificarAulaAgendada($celula, $student);        
          Mail::send(new NotificacaoAulaAgendada($celula, $student) );
-         //Implementar outras notificações se Necessário: WhatsApp
-        Log::warning('nova marcação realizada.', ['objeto' => json_encode($celula)]);
-
-
+         //Implementar outras notificações se Necessário: WhatsApp    
     }
 }

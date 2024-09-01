@@ -32,7 +32,7 @@ class EnviarNotificacaoAulaDesmarcada
     {
         $celula = $event->celula;
         $student = $event->student;
-        if($celula->HoursToStart() <=8){
+        if($celula->HoursToStart() <= 8){
             $this->notificarTeacherDesmarcacaoAula($celula, $student);
         }       
     }
@@ -42,9 +42,6 @@ class EnviarNotificacaoAulaDesmarcada
         TelegramHelper::notificarAulaDesmarcada($celula, $student);        
         Mail::send(new NotificacaoAulaDesmarcada($celula, $student) );
         //Implementar outras notificações se Necessário: WhatsApp
-        Log::warning('desmarcacao realizada.', ['objeto' => json_encode($celula)]);
-
-
     }
 
     

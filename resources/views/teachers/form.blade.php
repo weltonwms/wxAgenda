@@ -28,6 +28,10 @@
                 {{ Form::bsText('telefone',null,['label'=>"Telefone ",'class'=>""]) }}
 
             </div>
+            
+            <div class="col-md-12">
+                {{ Form::bsText('chat_id',null,['label'=>"Telegram Chat Id",'class'=>"",'readonly'=>'readonly']) }}
+            </div>
 
 
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Student;
+use App\Models\User;
 use App\Helpers\TelegramHelper;
 
 class TelegramController extends Controller
@@ -18,21 +19,21 @@ class TelegramController extends Controller
        
         if($text=='/start'){
             $mensagem="Para se inscrever digite seu email, conforme no sistema da IdiomClub";
-            TelegramHelper::sendMessage($chat_id,$mensagem);
+            TelegramHelper::sendMessage($chat_id, $mensagem);
             return response()->json(['ok'=>true]);
             // Exit com código 200
         }
-        $student= $this->saveChatIdAluno($text, $chat_id);
-        if(!$student){
+        $entidade = $this->saveChatIdEntidade($text, $chat_id);
+        if(!$entidade){
             $mensagem="Email não encontrado no sistema da IdiomClub";
-            TelegramHelper::sendMessage($chat_id,$mensagem);
+            TelegramHelper::sendMessage($chat_id, $mensagem);
             return response()->json(['ok'=>true]);
             // Exit com código 200
         }
 
-        $mensagem="Parabéns {$student->nome}! Sua inscrição foi realizada com Sucesso!";
-        $mensagem.=" Agora você poderá receber por esse canal os links das Aulas.";
-        TelegramHelper::sendMessage($chat_id,$mensagem);
+        $mensagem="Parabéns {$entidade->nome}! Sua inscrição foi realizada com Sucesso!";
+        $mensagem.=" Agora você poderá receber por esse canal notificações da IdiomClub.";
+        TelegramHelper::sendMessage($chat_id, $mensagem);
         return response()->json(['ok'=>true]);
         // Exit com código 200
     }
@@ -41,18 +42,19 @@ class TelegramController extends Controller
 
 
 
-    private function saveChatIdAluno($email,$chat_id)
+    private function saveChatIdEntidade($email,$chat_id)
     {
-        $student= Student::where('email',$email)->first();       
-        if($student){
-            //gravar no banco de dados o student com seu chat id
-            $student->chat_id=$chat_id;
-            $retorno=$student->save();
+        $entidade = User::getEntidadeByEmail($email);
+             
+        if($entidade){
+            //gravar no banco de dados a entidade(student ou teacher) com seu chat id
+            $entidade->chat_id = $chat_id;
+            $retorno = $entidade->save();
             if(!$retorno){
                 return false;
             }
         }
-        return $student;
+        return $entidade;
     }
 
     public function teste()
