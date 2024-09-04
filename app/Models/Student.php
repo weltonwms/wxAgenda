@@ -268,6 +268,7 @@ class Student extends Model
         }       
         $obj->mapeamento = $ct->map(function($item){
             $obj = new \stdClass();
+            $obj->aula_id = $item->aula_id;
             $obj->sigla = $item->sigla;
             $obj->value = $item->contador > 0? 1: 0;
             return $obj;

@@ -372,4 +372,16 @@ class Celula extends Model
         return $result->unique('id')->values();
         
     }
+
+    public static function getPivotsByStudentAndAula($student_id, $aula_id)
+    {
+        $query = \DB::table('celula_student')
+            ->join('celulas','celulas.id','=','celula_student.celula_id')
+            ->select('celula_student.*', 'celulas.dia','celulas.horario','celulas.aula_id')
+            ->where('celula_student.student_id',$student_id)
+            ->where('celula_student.presenca',1)
+            ->where('celulas.aula_id',$aula_id);
+        $query->orderBy('celulas.dia','asc')->orderBy('celulas.horario','asc');
+        return $query->get();
+    }
 }

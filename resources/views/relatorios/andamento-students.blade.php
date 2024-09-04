@@ -88,6 +88,7 @@
                        </td>
                        <td>
                            <a href="#" class="detalhes_andamento"
+                           data-student_id ="{{$student->id}}"
                            data-nome="{{$student->nome}}"
                            data-detalhes="{{base64_encode($andamento->mapeamento->toJson() )}}"
                            >
@@ -107,6 +108,7 @@
                             </td>
                             <td>
                                 <a href="#" class="detalhes_andamento"
+                                data-student_id ="{{$aluno->id}}"
                                 data-nome="{{$aluno->nome}}"
                                 data-detalhes="{{base64_encode($relatorio->mapeamento($aluno->aulasTarget)->toJson() )}}"
                                 >

@@ -150,4 +150,12 @@ class GradeController extends Controller
         }
     }
 
+    public function getPivotsByStudentAndAula(Request $request)
+    {
+        $student_id = $request->student_id;
+        $aula_id = $request->aula_id;
+        $result = Celula::getPivotsByStudentAndAula($student_id,$aula_id);
+        return response()->json($result);
+    }
+
 }

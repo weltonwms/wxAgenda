@@ -104,6 +104,7 @@ class RelatorioAndamentoHelper
     {
         $map= $this->aulasTargetModel->map(function($aula) use($aulasTargetObject){
             $obj = new \stdClass();
+            $obj->aula_id = $aula->id;
             $obj->sigla = $aula->sigla;
             $obj->value = isset($aulasTargetObject[$aula->id])?$aulasTargetObject[$aula->id]:0;
             return $obj;

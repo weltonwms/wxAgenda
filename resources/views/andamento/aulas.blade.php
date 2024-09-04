@@ -79,6 +79,7 @@
                         </td>
                         <td>
                             <a href="#" class="detalhes_andamento"
+                            data-student_id ="{{$student->id}}"
                             data-nome="{{$student->nome}}"
                             data-detalhes="{{base64_encode($andamento->mapeamento->toJson() )}}"
                             >

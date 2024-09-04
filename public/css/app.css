@@ -235,6 +235,9 @@ table .showCelula{
    font-weight: bold;
    text-decoration: underline;
 }
+.show.aula-realizada{
+  cursor: pointer;
+}
 
 @media (max-width: 575.98px) { /* Dispositivos com largura menor que 576px */
   .mt-neg-10-mobile {
