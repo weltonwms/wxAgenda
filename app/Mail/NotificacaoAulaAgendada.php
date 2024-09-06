@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Celula;
 use App\Models\Student;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Notificação para o Teacher que um aluno agendou aula com pouco tempo
@@ -45,5 +46,15 @@ class NotificacaoAulaAgendada extends Mailable
                     ->subject('Nova Aula Agendada: ')
                     ->markdown('emails.aulaAgendada');
        
+    }
+
+    public function send($mailer)
+    {
+        try {
+            parent::send($mailer);
+        } catch (\Exception $e) {
+            // Trate a exceção e registre no log
+            Log::channel('daily_email_logs')->error('Erro no envio do e-mail: ' . $e->getMessage());
+        }
     }
 }

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\ReviewInfo;
 use App\Events\AulaAgendada;
 use App\Events\AulaDesmarcada;
+use App\Events\EntryAulaOnCelula;
+use App\Events\ExitAulaOnCelula;
 
 class Celula extends Model
 {
@@ -222,6 +224,7 @@ class Celula extends Model
                  $reviewInfo->verifyAndSave(); 
             endif;           
             Systemcount::run($celula->aula_id);
+            event(new EntryAulaOnCelula($celula, $student));
         }
         else{
             //Se não for abertura de célula não pode ter aula_individual=1
@@ -247,6 +250,7 @@ class Celula extends Model
             $celula->aula_individual=0; //padrão
             ReviewInfo::deleteByCelula($celula->id); //limpando para nova abertura
             $celula->save();
+            event(new ExitAulaOnCelula($celula, $student));
         }
         event(new AulaDesmarcada($celula,$student));
         return $retorno;

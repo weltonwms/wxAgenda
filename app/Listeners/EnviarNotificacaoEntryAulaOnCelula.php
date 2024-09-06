@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\AulaAgendada;
+use App\Events\EntryAulaOnCelula;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -10,7 +10,7 @@ use App\Mail\NotificacaoAulaAgendada;
 use Illuminate\Support\Facades\Log;
 use App\Helpers\TelegramHelper;
 
-class EnviarNotificacaoAulaAgendada
+class EnviarNotificacaoEntryAulaOnCelula
 {
     /**
      * Create the event listener.
@@ -25,10 +25,10 @@ class EnviarNotificacaoAulaAgendada
     /**
      * Handle the event.
      *
-     * @param  \App\Events\AulaAgendada  $event
+     * @param  \App\Events\EntryAulaOnCelula  $event
      * @return void
      */
-    public function handle(AulaAgendada $event)
+    public function handle(EntryAulaOnCelula $event)
     {
         $celula = $event->celula;
         $student = $event->student;

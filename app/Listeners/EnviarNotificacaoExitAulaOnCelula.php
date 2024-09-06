@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\AulaDesmarcada;
+use App\Events\ExitAulaOnCelula;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\NotificacaoAulaDesmarcada;
 use App\Helpers\TelegramHelper;
 
-class EnviarNotificacaoAulaDesmarcada
+class EnviarNotificacaoExitAulaOnCelula
 {
     /**
      * Create the event listener.
@@ -25,10 +25,10 @@ class EnviarNotificacaoAulaDesmarcada
     /**
      * Handle the event.
      *
-     * @param  \App\Events\AulaDesmarcada  $event
+     * @param  \App\Events\ExitAulaOnCelula  $event
      * @return void
      */
-    public function handle(AulaDesmarcada $event)
+    public function handle(ExitAulaOnCelula $event)
     {
         $celula = $event->celula;
         $student = $event->student;
