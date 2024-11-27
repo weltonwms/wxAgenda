@@ -80,6 +80,22 @@ $modulesList->prepend('Todos','all');
             'class'=>'form-control-sm']) }}
             </div>
 
+            <div class="col-sm-2">
+                {!!Form::bsSelect('ordenado_por', [1=>"Dia/Horário", 2=>"Aula Sigla", 3=> 'Nome Professor'],
+                request('ordenado_por'),
+                ["class"=>"select2",
+                "label"=>"Ordenado Por"]
+                )!!}
+            </div>
+
+            <div class="col-sm-2">
+                {!!Form::bsSelect('ordem', [1=>"Decrescente", 2=>"Crescente"],
+                request('ordem'),
+                ["class"=>"select2",
+                "label"=>"Ordem"]
+                )!!}
+            </div>
+
 
         </div>
 

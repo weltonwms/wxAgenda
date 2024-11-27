@@ -313,7 +313,17 @@ class Celula extends Model
        if($end){
         $query->where('celulas.dia','<=',$end);
        }
-       $result=$query->orderBy('celulas.dia','desc')->orderBy('celulas.horario','desc')->get();
+       $ordem = request('ordem')== 2 ? 'asc': 'desc';
+       $ordenadorPor = request('ordenado_por',1);
+       if($ordenadorPor == 1){
+        $query->orderBy('celulas.dia', $ordem)
+        ->orderBy('celulas.horario', $ordem);
+       }
+       else{
+        $column = $ordenadorPor == 2 ? 'aula_sigla': 'teacher_nome';
+        $query->orderBy($column, $ordem);
+       }
+       $result = $query->get();
        return $result;
     }
 
