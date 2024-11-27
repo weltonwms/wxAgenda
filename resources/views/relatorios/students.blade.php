@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('breadcrumb')
-@breadcrumbs(['title'=>'Relatório: Alunos', 'icon'=>'fa-circle-o',
+@breadcrumbs(['title'=>'Relatório: Alunos - Presença', 'icon'=>'fa-circle-o',
 'route'=>route('relatorio.students'),'subtitle'=>'Atividades de Agendamento'])
 
 @endbreadcrumbs
@@ -69,7 +69,11 @@
                         <tr>
                             <td>{{++$key}}</td>
                             <td>{{$item->id}}</td>
-                            <td>{{$item->nome}}</td>
+                            <td>
+                                <a target="_blank" href="{{route('students.edit', $item->id)}}">
+                                    {{$item->nome}}
+                                </a>
+                            </td>
                             <td>{{$item->celulas_count}}</td>
                         </tr>
                         @endforeach

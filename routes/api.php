@@ -22,3 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('telegram/subscribe','\App\Http\Controllers\TelegramController@subscribe');
 Route::get('telegram/teste','\App\Http\Controllers\TelegramController@teste');
+
+Route::post('payments', function (Request $request) {
+    return ["message"=>"Endpoint em construção", 'request'=>$request->all()];
+});
