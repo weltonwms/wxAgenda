@@ -388,15 +388,23 @@
     function prepareSendAgendarAula() {
         var celula_id = $("#modalCelula_celula_id").val();
         var aula_id = $("#modalCelula_aula_id").val();
-        var isAberturaCelula = aula_id ? false : true;
-
+        var isAberturaCelula = aula_id ? false : true;       
+        
         if (isAberturaCelula) {
             verificaOferecimentoDeAula(celula_id);
 
         } else {
-            VerificaSeAulaJaFeitaByAluno(aula_id);
+            var hasReview = !!$("#modalCelula_reviewInfo").html();             
+            if(hasReview){
+                //confiando que não é abertura de celula e já é uma aula review pois 
+                //possui informação de review: mandar direto para o agendamento
+                sendAgendarAula();
+            }
+            else{
+                //verificação não executada para aula review
+                VerificaSeAulaJaFeitaByAluno(aula_id);
+            }            
         }
-
     }
 
     function verificaOferecimentoDeAula(celula_id) {
