@@ -36,7 +36,7 @@ class GradeController extends Controller
     {
         $celulaWithStudents = $celula->load('students.module', 'aula','reviewInfo');
         if(auth()->user()->isStudent){
-            $this->hideInfoStudents($celulaWithStudents->students);
+            $this->hideInfoStudents($celulaWithStudents->students,$celula);
         }        
         return response()->json($celulaWithStudents);
     }
@@ -135,8 +135,9 @@ class GradeController extends Controller
 
     /**
      * Proteger Informações de notas e feedback de colegas. Informação somente para o aluno autenticado
+     * Proteger também o link da aula em aulas individuais.
      */
-    private function hideInfoStudents($students)
+    private function hideInfoStudents($students, $celula)
     {
         $authStudent = auth()->user()->student;
         foreach ($students as $student) {
@@ -147,6 +148,10 @@ class GradeController extends Controller
                 $student->pivot->n4 = '';
                 $student->pivot->feedback = '';
             }
+        }
+        //Se for aula individual e nessa aula não conter o aluno autenticado, esconder aula_link
+        if($celula->aula_individual && !$students->contains('id',$authStudent->id)){
+           $celula->aula_link='';
         }
     }
 
