@@ -13,6 +13,11 @@
             aria-controls="creditos_t" aria-selected="false">Créditos</a>
     </li>
 
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="observacoes_t-tab" data-toggle="tab" href="#observacoes_t" role="tab"
+            aria-controls="observacoes_t" aria-selected="false">Observações</a>
+    </li>
+
 </ul>
 <div class="tab-content" id="myTabContent">
 
@@ -32,6 +37,15 @@
         @include('students.credits.index')
     </div>
 
+    <div class="tab-pane fade" id="observacoes_t" role="tabpanel" aria-labelledby="observacoes_t-tab">
+        <br>
+        <p>
+            <i class="fa fa-commenting text-success" aria-hidden="true"></i>
+            Comentários gerais sobre o aluno
+        </p>
+        {{ Form::textarea('observacao', null, ['class' => "form-control"]) }}
+    </div>
+
 </div>
 
 
@@ -39,7 +53,6 @@
 @push('scripts')
 <script>
 $('input#email').change(function(e) {
-
     $('input#username').val(e.currentTarget.value)
 });
 </script>

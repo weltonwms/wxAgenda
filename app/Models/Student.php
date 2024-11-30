@@ -13,7 +13,7 @@ class Student extends Model
 {
     use HasFactory;
     protected $fillable = ['nome', 'email','telefone','module_id','cidade',
-    'endereco','cidade','uf','horas_contratadas','active'];
+    'endereco','cidade','uf','horas_contratadas','active','observacao'];
 
     private $modules;
 
