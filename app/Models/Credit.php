@@ -39,6 +39,9 @@ class Credit extends Model
 
         $credit->saldo_anterior = $student->saldo_atual;
         $credit->saldo_posterior = $novoSaldo;
+        if(isset($request->payment_id) && $request->payment_id){
+            $credit->payment_id = $request->payment_id;
+        }
         $credit->save();
 
         $student->saldo_atual = $novoSaldo;

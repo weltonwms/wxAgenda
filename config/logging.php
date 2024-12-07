@@ -80,6 +80,11 @@ return [
             'level' => 'debug',
             'days' => 14,
         ],
+        'payment' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/payment.log'),
+            'level' => 'info',
+        ],
 
         'slack' => [
             'driver' => 'slack',
