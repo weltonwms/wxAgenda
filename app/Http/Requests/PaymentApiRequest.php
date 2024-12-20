@@ -26,7 +26,6 @@ class PaymentApiRequest extends FormRequest
      */
     public function rules()
     {
-        Log::channel("payment")->info("Stage Request",$this->all());
         return [
             'invoice.id' => 'required|integer|unique:payments,pedido_id', 
             'invoice.user.email' => 'required|email', 
@@ -43,6 +42,7 @@ class PaymentApiRequest extends FormRequest
         return [
             'invoice.id.required' => 'O ID da invoice é obrigatório.',
             'invoice.id.unique' => 'O ID da invoice já foi processado.',
+            'invoice.date.date' => 'Data inválida de invoice.date.',
             'invoice.user.email.required' => 'O e-mail do usuário é obrigatório.',
             'invoice.user.email.email' => 'O e-mail deve ser um endereço válido.',
             'invoice.product_info.course_credits.required' => 'Campo course_credits dentro de product_info obrigatório.',
@@ -53,11 +53,12 @@ class PaymentApiRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        Log::channel("payment")->error("Stage Request",[$validator->errors()->first()]);
+        $first= $validator->errors()->first();
+        Log::channel("payment")->error("Stage Request failedValidation",[$first]);
         throw new HttpResponseException(response()->json(
             [
             'success'=> false,
-            'message' => $validator->errors()->first()
+            'message' => $first
         ], 422));
     }
 }

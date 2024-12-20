@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StaticTokenMiddleware
 {
@@ -16,6 +17,9 @@ class StaticTokenMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        file_put_contents(storage_path('logs/payment.log'), "\n=============================================================================================================\n", FILE_APPEND);
+        Log::channel('payment')->info("Request Captured Before Middleware:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
+
         $staticToken = env('STATIC_TOKEN_API');
         // Token pode ser passado no header ou como query parameter
         $providedToken = $request->header('Authorization') ?: $request->query('token');
