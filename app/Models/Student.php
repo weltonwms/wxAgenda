@@ -12,7 +12,7 @@ use App\Helpers\ConfiguracoesHelper;
 class Student extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome', 'email','telefone','module_id','cidade',
+    protected $fillable = ['nome', 'email','telefone','cpf','module_id','cidade',
     'endereco','cidade','uf','horas_contratadas','active','observacao'];
 
     private $modules;

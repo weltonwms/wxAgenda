@@ -45,8 +45,12 @@ $estadosBrasileiros = array(
         {{ Form::bsText('nome',null,['label'=>"Nome *",'class'=>""]) }}
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-4">
         {{ Form::bsText('email',null,['label'=>"Email *",'class'=>""]) }}
+    </div>
+
+    <div class="col-md-2">
+        {{ Form::bsText('cpf',null,['label'=>"CPF ",'oninput'=>"this.value = this.value.replace(/[^0-9]/g, '')"]) }}
     </div>
 
    

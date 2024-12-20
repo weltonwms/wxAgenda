@@ -30,7 +30,8 @@ class StudentRequest extends FormRequest
             "nome"=>"required",
             "telefone"=>"required",
             "email"=>"required|email|unique:students,email,$id",
-            'username'=>"required|unique:users,username,$userId"
+            'username'=>"required|unique:users,username,$userId",
+            "cpf"=>"nullable|digits:11|unique:students,cpf,$id",
         ];
     }
 }
