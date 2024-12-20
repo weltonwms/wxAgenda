@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\PerfilRequest;
+use App\Http\Requests\PerfilStudentRequest;
 
 class PerfilController extends Controller
 {
-    public function showChangePassword()
+    public function showEdit()
     {
-        return view('users.change-password');
+        return view('perfil.master');
     }
 
     public function updatePassword(PerfilRequest $request)
@@ -21,6 +22,19 @@ class PerfilController extends Controller
         $user->save();
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('Senha Alterada com Sucesso!')]);
         return back();
+    }
+
+    public function updateDadosStudent(PerfilStudentRequest $request)
+    {
+        $user = \Auth::user();
+        $student = $user->student;
+        $student->nome = $request->input('nome');
+        $student->cpf = $request->input('cpf');
+        $student->telefone = $request->input('telefone');       
+        $student->save();
+        \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('Dados Salvos com Sucesso!')]);
+        return back();
+
     }
 
     public function getAuthStudent()

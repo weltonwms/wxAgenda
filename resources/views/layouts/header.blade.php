@@ -42,7 +42,7 @@
             <li><a class="dropdown-item" href="{{route('messages.index')}}"><i class="fa fa-envelope-o fa-lg"></i>
                     Mensagens</a></li>
 
-            <li><a class="dropdown-item" href="{{route('changePassword.show')}}"><i class="fa fa-user fa-lg"></i>
+            <li><a class="dropdown-item" href="{{route('perfil.edit')}}"><i class="fa fa-user fa-lg"></i>
                     Perfil</a></li>
             <li>
                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();

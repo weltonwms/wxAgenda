@@ -89,8 +89,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/agendados', [App\Http\Controllers\AgendadosController::class , 'index'])->name('agendados.index');
     Route::get('/aulasToAgenda', [App\Http\Controllers\AgendaController::class , 'aulasToAgenda']);
     Route::delete('agendados/{celula}/desmarcar', '\App\Http\Controllers\AgendadosController@desmarcar')->name('agendados.desmarcar');
-    Route::get('perfil/changePassword','\App\Http\Controllers\PerfilController@showChangePassword')->name('changePassword.show');
+    
+    Route::get('perfil/edit','\App\Http\Controllers\PerfilController@showEdit')->name('perfil.edit');
+    Route::post('perfil/saveDadosStudent','\App\Http\Controllers\PerfilController@updateDadosStudent');
     Route::post('perfil/changePassword','\App\Http\Controllers\PerfilController@updatePassword')->name('changePassword.update');
+   
     Route::get('getAuthStudent','\App\Http\Controllers\PerfilController@getAuthStudent');
     Route::get('getAulasAgendadasStudent','\App\Http\Controllers\PerfilController@getAulasAgendadas');
     Route::get('gradeEscola','\App\Http\Controllers\GradeController@index')->name('gradeEscola.index');
