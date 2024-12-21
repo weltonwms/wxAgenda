@@ -29,3 +29,11 @@ Route::middleware('static.token.api')->group(function () {
     Route::post("payments","\App\Http\Controllers\PaymentApiController@store");
    
 });
+
+Route::middleware('static.token.student')->group(function () {
+    Route::get("students/discount","\App\Http\Controllers\StudentApiController@getDiscount");
+    Route::get("students/actives","\App\Http\Controllers\StudentApiController@getActives");
+   
+});
+
+

@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'teacher' => \App\Http\Middleware\Teacher::class,
         'message' => \App\Http\Middleware\Message::class,
         'static.token.api' => \App\Http\Middleware\StaticTokenMiddleware::class,
+        'static.token.student' => \App\Http\Middleware\StaticTokenStudent::class,
     ];
 }
