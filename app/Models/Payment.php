@@ -32,7 +32,7 @@ class Payment extends Model
         $requestStoreCredit = new \stdClass();
         $requestStoreCredit->operacao = "+";
         $requestStoreCredit->qtd = $payment->course_credits;
-        $requestStoreCredit->obs = "Pg Automático Academy";
+        $requestStoreCredit->obs = "Pg Automático Academy Nr: {$payment->pedido_id}";
         $requestStoreCredit->student_id = $student->id;
         $requestStoreCredit->payment_id = $payment->id;
         Credit::storeCredit($requestStoreCredit);
