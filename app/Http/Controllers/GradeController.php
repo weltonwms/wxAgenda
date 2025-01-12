@@ -13,6 +13,8 @@ use App\Models\Aula;
 use App\Helpers\FilterAgendaHelper;
 use App\Helpers\EscolhaAutomaticaAulaHelper;
 use App\Models\ReviewInfo;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class GradeController extends Controller
 {
@@ -125,8 +127,19 @@ class GradeController extends Controller
 
             });
             return response()->json($celulaInfo);
-        } catch (\Exception $e) {
-            $statusCode = $e->getCode() ? $e->getCode() : 500;
+        } 
+        catch (QueryException $e){
+            $sql = $e->getSql();
+            $bindings = json_encode($e->getBindings());
+            Log::error("Erro na query Store Agenda: {$e->getMessage()}, SQL: {$sql}, Bindings: {$bindings}");
+            return response()->json(['error' => "Erro em Query Banco de Dados"],500);
+           
+        }
+        catch (\Exception $e) {
+            $statusCode = 500;
+            if($e->getCode() >=400 && $e->getCode()<600){
+                $statusCode = $e->getCode();
+            }            
             return response()->json(['error' => $e->getMessage()], $statusCode);
         }
 

@@ -9,6 +9,8 @@ use App\Http\Requests\CelulaStoreStudentRequest;
 use App\Http\Requests\CelulasBathRequest;
 use App\Http\Requests\CelulaAulaLinkRequest;
 use App\Http\Requests\CelulaInfoStudentRequest;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\Celula;
 use App\Models\Teacher;
@@ -60,15 +62,32 @@ class CelulaController extends Controller
      */
     public function store(CelulaStoreRequest $request)
     {
-        $request->validarDiaHorario();
-        $celula = new Celula();
-        $celula->dia = $request->dia;
-        $celula->horario = $request->horario;
-        $celula->teacher_id = $request->teacher_id;
-        $celula->save();
-
-
-        return response()->json($celula);
+        try{
+            $request->validarDiaHorario();
+            $celula = new Celula();
+            $celula->dia = $request->dia;
+            $celula->horario = $request->horario;
+            $celula->teacher_id = $request->teacher_id;         
+            $celula->save();           
+            return response()->json($celula);
+        }
+        catch(QueryException $e){
+            $msg = "Erro de Query Banco de dados";
+            if($e->getCode() == 23000){
+                $msg = "Tentativa de Salvar Registro Duplicado";
+                return response()->json(['error' => $msg], 500);
+            }
+            $sql = $e->getSql();
+            $bindings = json_encode($e->getBindings());
+            Log::error("Erro Store Celula: {$e->getMessage()}, SQL: {$sql}, Bindings: {$bindings}");
+            return response()->json(['error' => $msg], 500);
+        }
+        catch(\Exception $e){
+            $msg = "Erro Genérico ao Criar Célula. Informe ao Administrador!";
+            Log::error("Erro ao Salvar Célula: Linha {$e->getLine()} File {$e->getFile()} {$e->getMessage()}");
+            return response()->json(['error' => $msg], 500);
+        }
+        
     }
 
     /**
