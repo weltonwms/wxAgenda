@@ -19,7 +19,8 @@ Route::get('/', function () {
 
 Auth::routes(['register' => false]);
 
-
+Route::get('/sso/verify', [App\Http\Controllers\SSOController::class, 'verify'])
+->name("sso.verify");
 
 Route::get('/home', [App\Http\Controllers\HomeController::class , 'index'])
 ->name('home');

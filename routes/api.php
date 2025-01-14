@@ -23,7 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('telegram/subscribe','\App\Http\Controllers\TelegramController@subscribe');
 Route::get('telegram/teste','\App\Http\Controllers\TelegramController@teste');
 
-
+Route::post('/sso/authenticate', [App\Http\Controllers\SSOController::class, 'authenticate']);
+Route::get('/sso/teste', [App\Http\Controllers\SSOController::class, 'teste']);
 
 Route::middleware('static.token.api')->group(function () {
     Route::post("payments","\App\Http\Controllers\PaymentApiController@store");
