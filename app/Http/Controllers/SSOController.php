@@ -25,24 +25,24 @@ class SSOController extends Controller
         $encryptedData = $request->input('data');
 
         if (!$encryptedData) {
-            return response()->json(['error' => 'Parâmetro data não encontrado'], 400);
+            return response()->json(['success'=>false, 'message' => 'Parâmetro data não encontrado'], 400);
         }
         // Descriptografa os dados usando a chave secreta
         try {
             $decryptedData = CriptografiaHelper::decryptData($encryptedData, "{$this->secretKey}");
-            $userData = $decryptedData;
+
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Falha na descriptografia'], 400);
+            return response()->json(['success'=>false, 'message' => 'Falha na descriptografia'], 400);
         }
 
         // Verifica se o payload contém os campos necessários
         if (!isset($userData['email'])) {
-            return response()->json(['error' => 'Email não fornecido'], 400);
+            return response()->json(['success'=>false, 'message' => 'Email não fornecido'], 400);
         }
-        $student = Student::where('email', $userData['email'])->first();
-        //dd($student);
+        $student = Student::where('email', $decryptedData['email'])->first();
+
         if (!$student) {
-            return response()->json(['error' => 'Aluno nao encontrado'], 400);
+            return response()->json(['success'=>false, 'message' => 'Aluno nao encontrado'], 400);
         }
 
         // Gera um sessionId temporário (UUID)
@@ -51,13 +51,13 @@ class SSOController extends Controller
         // Armazena o sessionId no cache com tempo de expiração de 1 minutos
         Cache::put("session_{$sessionId}", $student->id, 60);
 
-        // Retorna a URL de verificação com o sessionId
-        $result = CriptografiaHelper::encryptData(
+        //Encrypta Data de Response
+        $encryptedDataResponse = CriptografiaHelper::encryptData(
             ['sessionId' => $sessionId, 'email' => $student->email],
             $this->secretKey
         );
         $verificationUrl = route('sso.verify', [
-            'data' => urlencode($result)
+            'data' => urlencode($encryptedDataResponse)
         ]);
 
         // Retorna a URL de verificação com o sessionId
@@ -69,51 +69,40 @@ class SSOController extends Controller
         // Recebe o parâmetro 'data' criptografado na URL
         $encryptedData = $request->query('data');
         if (!$encryptedData) {
-            return response()->json(['error' => 'Parâmetro data não encontrado'], 400);
+            return response()->json(['success'=>false, 'message' => 'Parâmetro data não encontrado'], 400);
         }
         // Descriptografa os dados usando a chave secreta
         try {
             $encryptedData = urldecode($encryptedData);
-            $decryptedData = CriptografiaHelper::decryptData($encryptedData, "{$this->secretKey}");
-            $sessionData = $decryptedData;
+            $decryptedData = CriptografiaHelper::decryptData($encryptedData, "{$this->secretKey}");           
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Falha na descriptografia'], 400);
+            return response()->json(['success'=>false, 'message' => 'Falha na descriptografia'], 400);
         }
-
         // Verifica se tem sessionId
-        if (!isset($sessionData['sessionId'])) {
-            return response()->json(['error' => 'Session ID não encontrado'], 400);
+        if (!isset($decryptedData['sessionId'])) {
+            return response()->json(['success'=>false, 'message' => 'Session ID não encontrado'], 400);
         }
 
-        $sessionId = $sessionData['sessionId'];
-        $userId = Cache::get("session_{$sessionId}");
-    
-        if (!$userId) {
-            return response()->json(['error' => 'Session ID expirado ou inválido'], 400);
+        $sessionId = $decryptedData['sessionId'];
+        $studentId = Cache::get("session_{$sessionId}");
+
+        if (!$studentId) {
+            return response()->json(['success'=>false, 'message' => 'Session ID expirado ou inválido'], 400);
         }
-
-        $student = Student::find($userId);
-
+        $student = Student::find($studentId);
         if (!$student) {
-            return response()->json(['error' => 'Aluno nao encontrado'], 400);
+            return response()->json(['success'=>false, 'message' => 'Aluno nao encontrado'], 400);
         }
-       
 
         //autenticar usuário
         Auth::login($student->user);
-
         // Limpa o sessionId do cache para evitar reutilização
         Cache::forget("session_{$sessionId}");
-        return redirect('/home');
-        //return response()->json(['success' => true, 'student' => $student]);
+        return redirect('/home');       
     }
 
     public function teste()
     {
-        $x = CriptografiaHelper::encryptData(
-            ['nome' => "fulano", 'email' => 'fulano@gmail.br'],
-            $this->secretKey
-        );
-        return $x;
+        return response()->json(['success' => true, 'message' => "Teste"]);
     }
 }

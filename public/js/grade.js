@@ -389,7 +389,7 @@
         var celula_id = $("#modalCelula_celula_id").val();
         var aula_id = $("#modalCelula_aula_id").val();
         var isAberturaCelula = aula_id ? false : true;       
-        
+        $("#btnBlocoConfirm").attr('disabled', true); //evitar duplicacidade de ação
         if (isAberturaCelula) {
             verificaOferecimentoDeAula(celula_id);
 
@@ -405,6 +405,10 @@
                 VerificaSeAulaJaFeitaByAluno(aula_id);
             }            
         }
+        setTimeout(function(){
+            //chutando mais ou menos 4s para término do fluxo
+            $("#btnBlocoConfirm").attr('disabled', false);
+        },4000)
     }
 
     function verificaOferecimentoDeAula(celula_id) {
@@ -575,7 +579,7 @@
 
                 },
                 beforeSend: function (data) {
-                    $(".message_modal").html('Loading...');
+                    $(".message_modal").html('Loading...');                    
                 },
                 success: function (resp) {
                     var textoSuccess = "Agendamento realizado com Sucesso!<br>";
@@ -586,6 +590,7 @@
                     $.notify(textoSuccess, { type: 'success' });
                     showMessage('.message_modal', textoSuccess, 'success');
                     setDadosAluno();
+                    $("#btnBlocoConfirm").attr('disabled', false);
 
                 },
                 error: function (resp) {
@@ -595,6 +600,7 @@
                     //$.notify(resposta,{type:'danger'})
                     //showGlobalMessage(resposta,'danger');
                     setDadosAluno();
+                    $("#btnBlocoConfirm").attr('disabled', false);
                 }
             });
         }
