@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Student;
 use App\Models\Credit;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewStudent;
 
 class Payment extends Model
 {
@@ -20,9 +22,13 @@ class Payment extends Model
     public static function savePaymentAndCredits(Payment $payment)
     {        
         //procurar student
+        $isNewStudent = false;
         $student = Student::where('email', $payment->user_email)->first();
         if (!$student):
-            throw new \Exception("Nenhum aluno com o email: {$payment->user_email} encontrado", 404);
+            $isNewStudent = true;
+           // throw new \Exception("Nenhum aluno com o email: {$payment->user_email} encontrado", 404);
+          $student = self::cadastrarNewStudentFromAPI($payment);
+          //para reverter criação: destruir: student, user, payment, credit
         endif;
 
         //salvar payment
@@ -35,7 +41,12 @@ class Payment extends Model
         $requestStoreCredit->obs = "Pg Automático Academy Nr: {$payment->pedido_id}";
         $requestStoreCredit->student_id = $student->id;
         $requestStoreCredit->payment_id = $payment->id;
-        Credit::storeCredit($requestStoreCredit);
+        Credit::storeCredit($requestStoreCredit); 
+        if($isNewStudent){
+            $requestStoreCredit->qtd = 1;
+            $requestStoreCredit->obs = "Bônus Novo Aluno Nr: {$payment->pedido_id}";
+            Credit::storeCredit($requestStoreCredit); 
+        }     
     }
 
     /**
@@ -58,7 +69,46 @@ class Payment extends Model
         $payment->product_id = optional($invoice->product_info)->product_id;
         $payment->price = $invoice->price ?? null;
 
+        $payment->user_phone = optional($invoice->user)->phone;
+        $payment->user_document = optional($invoice->user)->document;
+
         return $payment;
+
+    }
+
+    private static function cadastrarNewStudentFromAPI(Payment $payment)
+    {
+        
+        if(!$payment->user_name){
+            throw new \Exception("Campo name de user Obrigatorio", 422);
+        }
+        if(!$payment->user_phone){
+            throw new \Exception("Campo phone de user Obrigatorio", 422);
+        }
+       $module =  \App\Models\Module::orderBy('ordem', 'asc')->first();
+
+        $student = new Student();
+        $student->nome = $payment->user_name;
+        $student->email = $payment->user_email;
+        $student->telefone = $payment->user_phone;
+        $student->cpf = $payment->user_document;
+        $student->module_id = $module->id;
+        $student->horas_contratadas = $payment->course_credits;
+
+        $senhaTemporaria = \Illuminate\Support\Str::random(12);
+        $user = new  \App\Models\User();
+        $user->username = $student->email;
+        $user->password = bcrypt($senhaTemporaria);
+        $user->tipo = "student";
+       
+        $user->save();
+        $student->user_id = $user->id;
+        $student->save();
+
+        //Enviar Email com Senha Temporária
+        Mail::send(new NewStudent($student, $senhaTemporaria) );
+       
+        return $student;
 
     }
 }

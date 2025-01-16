@@ -30,7 +30,10 @@ class PaymentApiController extends Controller
              500);
         }
         catch (\Exception $e) {
-            $statusCode = $e->getCode() ? $e->getCode() : 500;
+            $statusCode = 500;
+            if($e->getCode() >=400 && $e->getCode()<600){
+                $statusCode = $e->getCode();
+            }    
             Log::channel("payment")->error("Stage Store Exception",[$e->getMessage()]);
             return response()->json(['success'=>false, 'message' => $e->getMessage()],
              $statusCode);
