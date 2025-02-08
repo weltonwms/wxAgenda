@@ -261,5 +261,15 @@ class User extends Authenticatable
 
     }
 
+    public function validateUltimaRecargaStudent()
+    {
+        //validação apenas para Student
+        if($this->isStudent){
+            return $this->student->validateUltimaRecargaStudent();
+        }
+        return true;
+        
+    }
+
 
 }

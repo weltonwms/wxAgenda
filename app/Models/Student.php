@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Celula;
 use App\Models\Cancellation;
+use App\Models\Credit;
 use Carbon\Carbon;
 use App\Helpers\ConfiguracoesHelper;
 
@@ -276,4 +277,44 @@ class Student extends Model
         return $obj;
 
     }
+
+    public function getLastCredit()
+    {
+        $credit = Credit::where('student_id', $this->id)
+        ->where('operacao','+')
+        ->orderBy('data_acao', 'desc')
+        ->first();
+        return $credit;
+    }
+
+    public function validateUltimaRecargaStudent()
+    {
+        $lastCredit = $this->getLastCredit();
+        if (!$lastCredit) {
+            return false;        
+        }
+    
+        $dataAcao = $lastCredit->data_acao->startOfDay(); // Carbon instance
+        $hoje = Carbon::now()->startOfDay();        
+        $diasDiferenca = $dataAcao->diffInDays($hoje,false);
+           
+        if ($diasDiferenca >= 35) {
+            return false;
+        }    
+        
+        if ($diasDiferenca >= 23 && $diasDiferenca <= 29) {
+            $diasParaBloqueio = 30 - $diasDiferenca;
+            session()->put('warningUltimaRecarga', 'Você tem ' . $diasParaBloqueio . 
+            ' dia(s) para ser bloqueado, ' . 
+            'realize uma recarga assim que possível.');
+        }
+
+        if ($diasDiferenca >= 30 && $diasDiferenca <= 34) {            
+            session()->put('warningUltimaRecarga', 'Você será bloqueado em breve,'.
+                        ' realize uma recarga assim que possível.');
+        }
+        // Em outros casos, retorna true
+        return true;
+    }
+
 }

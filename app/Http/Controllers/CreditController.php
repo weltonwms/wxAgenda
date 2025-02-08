@@ -39,10 +39,7 @@ class CreditController extends Controller
         if(!$student):
             return response()->json(['error'=> 'Usuário autenticado não é Aluno'],400);
         endif;
-        $credit= Credit::where('student_id', $student->id)
-        ->where('operacao','+')
-        ->orderBy('data_acao', 'desc')
-        ->first();
+        $credit = $student->getLastCredit();
         return response()->json($credit);
 
     }

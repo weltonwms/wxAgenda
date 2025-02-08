@@ -46,6 +46,9 @@ class LoginController extends Controller
         return "username";
     }
 
+    /**
+     * @override
+     */
     protected function validateLogin(Request $request)
     {
         $user= User::where('username', $request->username)->first();       
@@ -53,6 +56,13 @@ class LoginController extends Controller
         if( $user && !$user->isActive()){
             throw ValidationException::withMessages([$this->username() => 'Usuário Desativado.']);
         }
+
+        
+        if($user && !$user->validateUltimaRecargaStudent()){
+            $msg = "Você passou mais de 30 dias sem efetuar recarga. Faça uma recarga para continuar seus estudos";
+            throw ValidationException::withMessages([$this->username() => $msg]);
+        }
+
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',

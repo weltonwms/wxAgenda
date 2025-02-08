@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+@if(Request::session()->has('warningUltimaRecarga'))
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" 
+                aria-hidden="true">&times;</button>
+        {!!session('warningUltimaRecarga')!!}
+    </div>
+@endif
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
