@@ -36,7 +36,7 @@ class SSOController extends Controller
         }
 
         // Verifica se o payload contém os campos necessários
-        if (!isset($userData['email'])) {
+        if (!isset($decryptedData['email'])) {
             return response()->json(['success'=>false, 'message' => 'Email não fornecido'], 400);
         }
         $student = Student::where('email', $decryptedData['email'])->first();
