@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageRequest;
 use App\Models\Message;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -112,6 +113,16 @@ class MessageController extends Controller
     {
         $retorno = Message::markAsDeleted(request('ids'),request('sent') );
         return response()->json(['registros_afetados'=>$retorno]);
+    }
+
+    public function sendBath(Request $request)
+    {
+        $request->validate([
+            'subject'=> 'required|string',
+            'body' => 'required|string',
+        ]);
+        $ok = Message::sendBath($request->ids, $request->subject, $request->body);
+        return response()->json(['success'=>$ok], $ok ? 200 : 400);  
     }
 
 }

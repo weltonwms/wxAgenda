@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Mail\NotificacaoMessage;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\TelegramHelper;
+use App\Models\Student;
 
 class Message extends Model
 {
@@ -121,7 +122,12 @@ class Message extends Model
         $condicaoDisparoMail =  !($this->recipient->isStudent && $this->sender->isStudent);
         $condicaoDisparoMail = $condicaoDisparoMail && $this->recipient->email;
         if($condicaoDisparoMail):
-            Mail::send(new NotificacaoMessage($this));
+            try{
+                Mail::send(new NotificacaoMessage($this));
+            }
+            catch(\Exception $e){
+                //não fazer nada se der erro. Já foi salvo no log
+            }           
         endif;
 
         $condicaoTelegram = $this->recipient->chat_id;
@@ -129,6 +135,30 @@ class Message extends Model
             TelegramHelper::notificarMessage($this); 
         endif;
 
+    }
+
+    /**
+     * Envia mensagem para vários alunos de uma vez
+     * @param array $ids id dos alunos
+     * @param string $subject assunto
+     * @param string $body  texto
+     * @return boolean
+     */
+    public static function sendBath($ids,$subject, $body)
+    {
+        if (!$ids) {
+            return false;
+        }
+        try{
+            $listaRecipients =  Student::getEmailsByIds($ids);;
+            $message = new Message();
+            $message->subject = $subject;
+            $message->body = $body;
+            Mail::send(new NotificacaoMessage($message, $listaRecipients));
+            return true;
+        }catch(\Exception $e){
+            return false;
+        }
     }
 
 }

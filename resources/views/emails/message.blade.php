@@ -4,7 +4,10 @@
 
 ## {{$message->subject}}
 
-### De: {{$message->sender->nome}}                        {{date('d/m/Y H:i')}}
+<?php
+$sender = $message->sender? $message->sender->nome: Auth::user()->username 
+?>
+### De: {{$sender}}                              {{date('d/m/Y H:i')}}
 
 {{$message->body}}
 

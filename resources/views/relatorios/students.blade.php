@@ -43,19 +43,34 @@
             <div class="row">
                 <div class="col-md-12 ">
                     @if($relatorio->items)
-                    <span class="text-primary"><b>Mostrando {{$relatorio->items->count()}} Registro(s)</b></span>
+                    <span class="text-primary d-block d-md-inline"><b>Mostrando {{$relatorio->items->count()}} Registro(s)</b></span>
                     @endif
-                    <button class="btn btn-outline-success pull-right"> Total Alunos:
+                    <button class="btn btn-outline-success float-md-right"> Total Alunos:
                         {{$relatorio->total_alunos}}
                     </button>
-                   
+
+                    @if($relatorio->total_alunos)
+                    <button class="btn btn-outline-primary float-md-right mr-2" id="btnOpenEnviarEmail">
+                        <i class="fa fa-envelope-o fa-lg" aria-hidden="true"></i> Enviar Email
+                    </button>
+                    @endif
+
                 </div>
             </div>
 
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
                     <thead>
-                        <th>#</th>
+                        <th width="1%">
+                            @if($relatorio->total_alunos)
+                            <div class="animated-checkbox">
+                                <label>
+                                    <input type="checkbox" id="check-all"><span class="label-text"></span>
+                                </label>
+                            </div>
+                            @endif
+                        </th>
+                        <th width="2%">#</th>
                         <th width="15%">Cód Aluno</th>
                         <th>Nome Aluno</th>
                         <th>Qtd Células de Aula</th>
@@ -67,6 +82,14 @@
                     <tbody>
                         @foreach($relatorio->items as $key=>$item)
                         <tr>
+                            <td>
+                                <div class="animated-checkbox">
+                                    <label>
+                                        <input type="checkbox" class="check-item" data-id="{{$item->id}}">
+                                        <span class="label-text"> </span>
+                                    </label>
+                                </div>
+                            </td>
                             <td>{{++$key}}</td>
                             <td>{{$item->id}}</td>
                             <td>
@@ -86,4 +109,91 @@
 
 </div>
 
+@include('messages.modal-bath')
 @endsection
+
+@push('scripts')
+<script>
+ckeckAllOnTable();
+
+$("#btnOpenEnviarEmail").click(function() {
+    if(!getIdsSelecionados().length){
+        alert('nenhum registro Selecionado');
+        return false;
+    }
+    // Limpa mensagens de erro anteriores
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    $("#message-status").addClass("d-none");
+    $("#loading").hide(); 
+    $('#modalMessageBath').modal('show');
+});
+
+$("#btnSubmitEnviarEmail").click(function() {
+    var ids = getIdsSelecionados();
+    if(!ids.length){
+        alert('nenhum registro Selecionado');
+        return false;
+    }
+
+    var token = $('meta[name="csrf-token"]').attr('content');
+    // Limpa mensagens de erro anteriores
+    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+    var subject = $("#subject").val();
+    var body = $("#body").val();
+
+    $.ajax({
+      url: asset + "messages/send_bath",
+      type: "POST",
+      data: {
+        ids: ids,
+        _token:token,
+        subject: subject,
+        body: body
+        
+      },
+      beforeSend: function() {
+        $("#loading").show(); // Exibe o preloader antes de iniciar a requisição
+        $("#message-status").addClass("d-none"); // Esconde a mensagem anterior
+      },      
+      success: function(response) {
+        console.log(response);
+        $("#message-status")
+            .removeClass("d-none alert-danger")
+            .addClass("alert alert-success")
+            .text("📨 E-mails enviados com sucesso!");
+      },
+      error: function(response) {  
+        console.log(response)     
+        if (response.status == 422 && response.responseJSON && response.responseJSON.errors) {
+            var errors = response.responseJSON.errors;
+            Object.keys(errors).forEach(field => {
+                document.getElementById(`error-${field}`).textContent = errors[field][0];
+            });
+        }
+        if(response.status != 422){
+            $("#message-status")
+            .removeClass("d-none alert-success")
+            .addClass("alert alert-danger")
+            .text("❌ Ocorreu um erro ao enviar os e-mails.");
+        }        
+      },
+      complete: function() {
+            $("#loading").hide(); // Oculta o preloader após a resposta
+      }
+    });
+   
+});
+
+function getIdsSelecionados(){
+    var ids = [];  
+    // Percorra todas as checkboxes de linha
+    $(".check-item:checked").each(function() {
+      // Adicione o ID de cada registro selecionado ao array
+      ids.push($(this).data("id"));
+    });
+    return ids;
+}
+
+</script>
+
+@endpush

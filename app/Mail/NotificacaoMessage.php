@@ -21,13 +21,21 @@ class NotificacaoMessage extends Mailable
     public $message;
 
     /**
+     * Lista de destinatários.
+     *
+     * @var array
+     */
+    public $recipients;
+
+    /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Message $message)
+    public function __construct(Message $message, array $recipients = [])
     {
         $this->message = $message;
+        $this->recipients = !empty($recipients) ? $recipients : ($message->recipient->email ?? []);
     }
 
     /**
@@ -36,11 +44,16 @@ class NotificacaoMessage extends Mailable
      * @return $this
      */
     public function build()
-    {
-        $email = $this->message->recipient->email;
+    {        
         $assunto = $this->message->subject;
-
-        return $this->to($email)
+        $recipients = is_array($this->recipients) ? $this->recipients : [$this->recipients];
+       
+        // Se não houver destinatários, loga um erro e lança erro
+        if (empty($recipients)) {
+            Log::channel('daily_email_logs')->error('Tentativa de envio de e-mail sem destinatário.');
+            throw new \Exception('Não há destinatários para o envio do e-mail.');
+        }
+        return $this->bcc($recipients)
                     ->subject('Nova Mensagem: '.$assunto)
                     ->markdown('emails.message');
     }
@@ -52,6 +65,7 @@ class NotificacaoMessage extends Mailable
         } catch (\Exception $e) {
             // Trate a exceção e registre no log
             Log::channel('daily_email_logs')->error('Erro no envio do e-mail: ' . $e->getMessage());
+            throw $e;
         }
     }
 }

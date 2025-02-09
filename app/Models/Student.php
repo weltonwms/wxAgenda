@@ -317,4 +317,18 @@ class Student extends Model
         return true;
     }
 
+    /**
+     * Retorna uma lista de email de estudante a partir de uma lista de id
+     * @param array $listIds
+     * @return array
+     */
+    public static function getEmailsByIds(array $listIds)
+    {
+        if( empty($listIds)){
+            return [];
+        }
+        return Student::whereIn('id', $listIds)->pluck('email')->toArray();
+
+    }
+
 }
