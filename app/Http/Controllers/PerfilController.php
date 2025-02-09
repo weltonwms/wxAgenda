@@ -30,7 +30,10 @@ class PerfilController extends Controller
         $student = $user->student;
         $student->nome = $request->input('nome');
         $student->cpf = $request->input('cpf');
-        $student->telefone = $request->input('telefone');       
+        $student->telefone = $request->input('telefone');
+        $student->endereco = $request->input('endereco'); 
+        $student->cidade = $request->input('cidade'); 
+        $student->uf = $request->input('uf');      
         $student->save();
         \Session::flash('mensagem', ['type' => 'success', 'conteudo' => trans('Dados Salvos com Sucesso!')]);
         return back();
