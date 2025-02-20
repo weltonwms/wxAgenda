@@ -114,85 +114,13 @@
 
 @push('scripts')
 <script>
+    
 ckeckAllOnTable();
 
-$("#btnOpenEnviarEmail").click(function() {
-    if(!getIdsSelecionados().length){
-        alert('nenhum registro Selecionado');
-        return false;
-    }
-    // Limpa mensagens de erro anteriores
-    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-    $("#message-status").addClass("d-none");
-    $("#loading").hide(); 
-    $('#modalMessageBath').modal('show');
+//início script Enviar Email.
+configurarEnvioEmail("#btnOpenEnviarEmail", "#btnSubmitEnviarEmail", function() {
+    return $(".check-item:checked").map(function() { return $(this).data("id"); }).get();
 });
-
-$("#btnSubmitEnviarEmail").click(function() {
-    var ids = getIdsSelecionados();
-    if(!ids.length){
-        alert('nenhum registro Selecionado');
-        return false;
-    }
-
-    var token = $('meta[name="csrf-token"]').attr('content');
-    // Limpa mensagens de erro anteriores
-    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-    var subject = $("#subject").val();
-    var body = $("#body").val();
-
-    $.ajax({
-      url: asset + "messages/send_bath",
-      type: "POST",
-      data: {
-        ids: ids,
-        _token:token,
-        subject: subject,
-        body: body
-        
-      },
-      beforeSend: function() {
-        $("#loading").show(); // Exibe o preloader antes de iniciar a requisição
-        $("#message-status").addClass("d-none"); // Esconde a mensagem anterior
-      },      
-      success: function(response) {
-        console.log(response);
-        $("#message-status")
-            .removeClass("d-none alert-danger")
-            .addClass("alert alert-success")
-            .text("📨 E-mails enviados com sucesso!");
-      },
-      error: function(response) {  
-        console.log(response)     
-        if (response.status == 422 && response.responseJSON && response.responseJSON.errors) {
-            var errors = response.responseJSON.errors;
-            Object.keys(errors).forEach(field => {
-                document.getElementById(`error-${field}`).textContent = errors[field][0];
-            });
-        }
-        if(response.status != 422){
-            $("#message-status")
-            .removeClass("d-none alert-success")
-            .addClass("alert alert-danger")
-            .text("❌ Ocorreu um erro ao enviar os e-mails.");
-        }        
-      },
-      complete: function() {
-            $("#loading").hide(); // Oculta o preloader após a resposta
-      }
-    });
-   
-});
-
-function getIdsSelecionados(){
-    var ids = [];  
-    // Percorra todas as checkboxes de linha
-    $(".check-item:checked").each(function() {
-      // Adicione o ID de cada registro selecionado ao array
-      ids.push($(this).data("id"));
-    });
-    return ids;
-}
 
 </script>
 

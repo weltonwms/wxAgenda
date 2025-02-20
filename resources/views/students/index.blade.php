@@ -10,6 +10,7 @@
 @toolbar
 <a class="btn btn-sm btn-success mr-1 mb-1" href="{{route('students.create')}}" > <i class="fa fa-plus-circle"></i>Novo</a>
 <button class="btn btn-sm btn-outline-secondary mr-1 mb-1" type="button" data-type="link" data-route="{{url('students/{id}/edit')}}" onclick="dataTableSubmit(event)"> <i class="fa fa-pencil"></i>Editar</button>
+<button class="btn btn-sm btn-outline-primary mr-1 mb-1" type="button" id="btnOpenEnviarEmail"> <i class="fa fa-envelope-o fa-lg"></i>Enviar Email</button>
 <button class="btn btn-sm btn-outline-danger mr-1 mb-1" type="button" data-type="delete" data-route="{{route('students_bath.destroy')}}" onclick="dataTableSubmit(event)"> <i class="fa fa-trash"></i>Excluir</button>
 @endtoolbar
 @endsection
@@ -66,7 +67,7 @@
 </tbody>
 @enddatatables
 
-
+@include('messages.modal-bath')
 @endsection
 
 @push('scripts')
@@ -80,6 +81,11 @@ $(document).ready(function() {
     Tabela.getInstance({colId:8}); //instanciando dataTable e informando a coluna do id
 });
    //fim start Datatable//
+
+//início script Enviar Email.
+configurarEnvioEmail("#btnOpenEnviarEmail", "#btnSubmitEnviarEmail", function() {
+   return Tabela.getSelectedTable();
+});
 </script>
 @endpush
 

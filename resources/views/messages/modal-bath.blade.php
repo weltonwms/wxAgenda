@@ -46,3 +46,66 @@
             </div>
         </div>
     </div>
+@push('scripts')
+<script>
+function configurarEnvioEmail(seletorAbrir, seletorEnviar, getIdsFunc) {
+    $(seletorAbrir).click(function() {
+        if(!getIdsFunc().length){
+            alert('Nenhum registro selecionado');
+            return false;
+        }
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        $("#message-status").addClass("d-none");
+        $("#loading").hide(); 
+        $('#modalMessageBath').modal('show');
+    });
+
+    $(seletorEnviar).click(function() {
+        var ids = getIdsFunc();
+        if(!ids.length){
+            alert('Nenhum registro selecionado');
+            return false;
+        }
+
+        var token = $('meta[name="csrf-token"]').attr('content');
+        document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        var subject = $("#subject").val();
+        var body = $("#body").val();
+
+        $.ajax({
+            url: asset + "messages/send_bath",
+            type: "POST",
+            data: { ids, _token: token, subject, body },
+            beforeSend: function() {
+                $("#loading").show();
+                $("#message-status").addClass("d-none");
+            },      
+            success: function(response) {
+                console.log(response);
+                $("#message-status")
+                    .removeClass("d-none alert-danger")
+                    .addClass("alert alert-success")
+                    .text("📨 E-mails enviados com sucesso!");
+            },
+            error: function(response) {  
+                console.log(response);
+                if (response.status == 422 && response.responseJSON?.errors) {
+                    Object.keys(response.responseJSON.errors).forEach(field => {
+                        document.getElementById(`error-${field}`).textContent = response.responseJSON.errors[field][0];
+                    });
+                }
+                if(response.status != 422){
+                    $("#message-status")
+                    .removeClass("d-none alert-success")
+                    .addClass("alert alert-danger")
+                    .text("❌ Ocorreu um erro ao enviar os e-mails.");
+                }        
+            },
+            complete: function() {
+                $("#loading").hide();
+            }
+        });
+    });
+}
+</script>
+@endpush

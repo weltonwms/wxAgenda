@@ -9,7 +9,8 @@ $sender = $message->sender? $message->sender->nome: Auth::user()->username
 ?>
 ### De: {{$sender}}                              {{date('d/m/Y H:i')}}
 
-{{$message->body}}
+{{-- Texto do body com quebra de linha e proibição de tag html(e) --}}
+{!! nl2br(e($message->body)) !!}
 
 {{-- Nota de Rodapé --}}
 @component('mail::footer')
