@@ -27,9 +27,11 @@ Route::post('/sso/authenticate', [App\Http\Controllers\SSOController::class, 'au
 Route::get('/sso/teste', [App\Http\Controllers\SSOController::class, 'teste']);
 
 Route::middleware('static.token.api')->group(function () {
-    Route::post("payments","\App\Http\Controllers\PaymentApiController@store");
+    Route::post("payments","\App\Http\Controllers\PaymentApiController@storeEv");
    
 });
+Route::post('/paymentswoo', [App\Http\Controllers\PaymentApiController::class, 'storeWoo'])
+    ->middleware('woocommerce.auth');
 
 Route::middleware('static.token.student')->group(function () {
     Route::get("students/discount","\App\Http\Controllers\StudentApiController@getDiscount");

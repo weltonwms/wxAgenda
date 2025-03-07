@@ -38,7 +38,7 @@ class Payment extends Model
         $requestStoreCredit = new \stdClass();
         $requestStoreCredit->operacao = "+";
         $requestStoreCredit->qtd = $payment->course_credits;
-        $requestStoreCredit->obs = "Pg Automático Academy Nr: {$payment->pedido_id}";
+        $requestStoreCredit->obs = "Pg Automático {{$payment->plataforma}} Nr: {$payment->pedido_id}";
         $requestStoreCredit->student_id = $student->id;
         $requestStoreCredit->payment_id = $payment->id;
         Credit::storeCredit($requestStoreCredit); 
@@ -71,9 +71,39 @@ class Payment extends Model
 
         $payment->user_phone = optional($invoice->user)->phone;
         $payment->user_document = optional($invoice->user)->document;
-
+        $payment->plataforma = "Academy EV";
         return $payment;
 
+    }
+
+    public static function extractDataRequestWooToDataPayment(array $requestArray)
+    {
+       // Pega todos os dados da requisição como um stdClass
+       $data = json_decode(json_encode($requestArray));
+       $billing = $data->billing;
+       $products = $data->products;
+       $status = mb_strtolower($data->status);
+    
+       if($status != "processing") {            
+            throw new \Exception("Status diferente de processing", 400);
+       }
+
+       $payment = new Payment();
+       $payment->pedido_id = $data->pedidoId;
+       $payment->user_email = $data->email;       
+       $payment->user_name = "{$billing->first_name} {$billing->last_name}";
+       $payment->user_phone = $billing->phone;
+       $payment->user_document =  $billing->cpf ?? null;
+       $payment->pedido_date = $data->data_criacao ?? null;
+       $payment->price = $data->total ?? null;
+       
+       foreach($products as $product):
+            $payment->product_id = $product->produto_id ?? null;
+            $payment->course_credits += $product->creditos;
+       endforeach;
+       $payment->plataforma = "Woocommerce";
+
+       return $payment;
     }
 
     private static function cadastrarNewStudentFromAPI(Payment $payment)

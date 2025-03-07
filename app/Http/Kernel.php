@@ -68,5 +68,7 @@ class Kernel extends HttpKernel
         'message' => \App\Http\Middleware\Message::class,
         'static.token.api' => \App\Http\Middleware\StaticTokenMiddleware::class,
         'static.token.student' => \App\Http\Middleware\StaticTokenStudent::class,
+        'woocommerce.auth' => \App\Http\Middleware\ValidateWooCommerceRequest::class,
+
     ];
 }

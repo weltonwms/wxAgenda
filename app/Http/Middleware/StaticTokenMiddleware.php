@@ -21,6 +21,10 @@ class StaticTokenMiddleware
         Log::channel('payment')->info("Request Captured Before Middleware:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
 
         $staticToken = env('STATIC_TOKEN_API');
+
+        if (!$staticToken) {
+            return response()->json(['success' => false, 'message' => 'STATIC_TOKEN_API not configured'], 500);
+        }
         // Token pode ser passado no header ou como query parameter
         $providedToken = $request->header('Authorization') ?: $request->query('token');
         // Verifica se o token no cabeçalho segue o formato "Bearer {token}"
