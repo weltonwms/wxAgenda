@@ -32,4 +32,22 @@
         </div>
 
     </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Como Utilizar o Material Didático 
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
+                </div>
+                <div class="card-body">
+
+                    <a href="https://youtu.be/007hoLRN7dI" target="_blanck"> 
+                        <i class="fa fa-youtube" aria-hidden="true"></i>
+                        https://youtu.be/007hoLRN7dI
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
