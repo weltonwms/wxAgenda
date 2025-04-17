@@ -31,6 +31,11 @@ class Payment extends Model
           //para reverter criação: destruir: student, user, payment, credit
         endif;
 
+        if (!$student->active) {
+            $student->active = 1;
+            $student->save();
+        }
+
         //salvar payment
         $payment->save();
 
@@ -85,7 +90,7 @@ class Payment extends Model
        $status = mb_strtolower($data->status);
     
        if($status != "processing") {            
-            throw new \Exception("Status diferente de processing", 400);
+            throw new \Exception("Status diferente de processing", 200);
        }
 
        $payment = new Payment();

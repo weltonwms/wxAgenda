@@ -63,7 +63,7 @@ class PaymentWooApiRequest extends FormRequest
                 'success' => false,
                 'message' => $first
             ],
-            422
+            200
         ));
     }
 
