@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 
 class Teacher
 {
@@ -35,11 +37,23 @@ class Teacher
                 if ($celula->students->count() > 0) {
                     return response()->json(['error' => "Não Permitido Apagar Células com Aluno(s)"], 403);
                 }
+                if($this->isCurrentWeek($celula)) {
+                    return response()->json(['error' => "Não é permitido Apagar Células da Semana Corrente"], 403);
+                }
 
             }
             return $next($request);
         }
 
         return response()->json(['error' => "Não Autorizado"], 403);
+    }
+
+    private function isCurrentWeek($celula) {
+        $dia = Carbon::parse($celula->dia);
+
+        $startOfWeek = Carbon::now()->startOfWeek(CarbonInterface::SUNDAY);
+        $endOfWeek = Carbon::now()->endOfWeek(CarbonInterface::SATURDAY);
+    
+        return $dia->between($startOfWeek, $endOfWeek);
     }
 }

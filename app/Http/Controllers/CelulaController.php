@@ -62,8 +62,8 @@ class CelulaController extends Controller
      */
     public function store(CelulaStoreRequest $request)
     {
-        try{
-            $request->validarDiaHorario();
+        $request->validarDiaHorario();
+        try{           
             $celula = new Celula();
             $celula->dia = $request->dia;
             $celula->horario = $request->horario;
