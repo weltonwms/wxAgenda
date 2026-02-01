@@ -20,19 +20,20 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        /*$schedule
-        ->command(InativarAlunosSemRecarga::class)
-        ->dailyAt('05:00')
-        ->withoutOverlapping()
-        ->onOneServer()
-        ->runInBackground();*/
+        $schedule
+            ->command(InativarAlunosSemRecarga::class)
+            ->dailyAt('05:00')
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground();
 
-         $schedule
+        /*$schedule
         ->command(TesteLog::class)
         ->everyMinute()
         ->withoutOverlapping()
         ->onOneServer()
         ->runInBackground();
+        */
     }
 
     /**
@@ -42,7 +43,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
