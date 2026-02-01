@@ -85,6 +85,11 @@ return [
             'path' => storage_path('logs/payment.log'),
             'level' => 'info',
         ],
+        'inactive_students' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/inactive_students.log'),
+            'level' => 'info',
+        ],
 
         'slack' => [
             'driver' => 'slack',

@@ -4,6 +4,10 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\InativarAlunosSemRecarga;
+use App\Console\Commands\TesteLog;
+
+
 
 class Kernel extends ConsoleKernel
 {
@@ -16,6 +20,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        /*$schedule
+        ->command(InativarAlunosSemRecarga::class)
+        ->dailyAt('05:00')
+        ->withoutOverlapping()
+        ->onOneServer()
+        ->runInBackground();*/
+
+         $schedule
+        ->command(TesteLog::class)
+        ->everyMinute()
+        ->withoutOverlapping()
+        ->onOneServer()
+        ->runInBackground();
     }
 
     /**
