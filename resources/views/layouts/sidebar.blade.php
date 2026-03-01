@@ -70,7 +70,9 @@
         <span class="app-menu__label">Administradores</span>
       </a>
     </li>
+    @endif
 
+    @if(auth()->user()->isTeacher || auth()->user()->isAdm)
     <li class="treeview">
       <a class="app-menu__item {{Request::segment(1)=='relatorio'?'active':null}}" href="#" data-toggle="treeview">
         <i class="app-menu__icon fa fa-th-list"></i><span class="app-menu__label">Relatórios</span>
@@ -84,6 +86,7 @@
           </a>
         </li>
 
+        @if(auth()->user()->isAdm)
         <li>
           <a class="treeview-item {{Request::segment(2)=='students'?'active':null}}" href="{{route('relatorio.students')}}">
             <i class="icon fa fa-circle-o"></i> Alunos - Presença
@@ -103,7 +106,7 @@
             <i class="icon fa fa-circle-o"></i> Andamento de Alunos
           </a>
         </li>
-
+        @endif
        
 
       </ul>

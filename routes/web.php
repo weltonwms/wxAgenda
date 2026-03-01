@@ -49,7 +49,6 @@ Route::group(['middleware' => ['auth','adm']], function () {
     Route::post('confgurations',[App\Http\Controllers\ConfigurationController::class , 'save'])->name('configurations.save');
     Route::get('showSystemCounter',[App\Http\Controllers\AulaController::class ,'showSystemCounter'])->name('showSystemCounter');
     
-    Route::match(['get', 'post'],"relatorio/teachers",'\App\Http\Controllers\RelatorioController@teachers')->name('relatorio.teachers');
     Route::match(['get', 'post'],"relatorio/students",'\App\Http\Controllers\RelatorioController@students')->name('relatorio.students');
     Route::match(['get', 'post'],"relatorio/students2",'\App\Http\Controllers\RelatorioController@students2')->name('relatorio.students2');
     Route::match(['get', 'post'],"relatorio/andamento",'\App\Http\Controllers\RelatorioController@andamento')->name('relatorio.andamento');
@@ -77,6 +76,8 @@ Route::group(['middleware' => ['auth','teacher']], function () {
     Route::patch('celulas/{celula}/aulaLink', '\App\Http\Controllers\CelulaController@saveAulaLinkOnCelula');   
 
     Route::get('pendenciasInfoStudentOnCelula', '\App\Http\Controllers\HomeController@pendenciasInfoStudentOnCelula')->name('pendenciasInfo.main');    
+
+    Route::match(['get', 'post'],"relatorio/teachers",'\App\Http\Controllers\RelatorioController@teachers')->name('relatorio.teachers');
 
     
 });

@@ -31,8 +31,18 @@
                 </div>
 
                 <div class="col-md-4">
+                    @if(auth()->user()->isAdm)
                     {{ Form::bsSelect('teacher_id',$teachers,request('teacher_id'),['label'=>"Professor", 
-                    'class'=>'select2',"placeholder"=>"-Selecione-"]) }}
+                    'class'=>'select2',"placeholder"=>"-Selecione-"]) }} 
+                    @endif
+
+                    @if(auth()->user()->isTeacher)
+                    <div class="form-group">
+                        <label class="control-label">Professor: </label>
+                        <input class="form-control" type="text" value="{{auth()->user()->nome}}" readonly>
+                    </div>
+                    @endif
+
                 </div>
             </div>
             </form>

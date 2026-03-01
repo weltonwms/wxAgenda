@@ -29,9 +29,7 @@ class RelatorioTeacher extends Model
                 $queryBase->where('celulas.dia', '<=', $dt);
             endif;
 
-            if (request('teacher_id')):
-                $queryBase->where('celulas.teacher_id', request('teacher_id'));
-            endif;
+            $this->setTeacherIdOnQueryRelatorio($queryBase);
 
             $queryBase->withCount('students');
             $queryBase->orderBy('celulas.dia')->orderBy('celulas.horario');
@@ -50,5 +48,22 @@ class RelatorioTeacher extends Model
     {
         $this->total_celulas=count($this->items);
 
+    }
+
+    private function setTeacherIdOnQueryRelatorio($query)
+    {
+        $user = auth()->user();
+        // Regra 1: Professor só vê seus próprios dados
+        if ($user->isTeacher) {
+            return $query->where('celulas.teacher_id', $user->getIdTeacher());
+        }
+
+        // Regra 2: Admin pode filtrar por teacher_id (opcional)
+        if ($user->isAdm && request()->filled('teacher_id')) {
+            return $query->where('celulas.teacher_id', request('teacher_id'));
+        }
+
+        // Regra 3: Admin sem filtro -> vê tudo (não aplica where)
+        return $query;
     }
 }
