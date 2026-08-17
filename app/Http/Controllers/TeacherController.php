@@ -26,8 +26,11 @@ class TeacherController extends Controller
     public function create()
     {
         $horariosList=\App\Models\Horario::getList();
-       
-        return view('teachers.create',compact('horariosList'));
+
+        return view('teachers.create',[
+            'horariosList' => $horariosList,
+            'teacher' => new Teacher(),
+        ]);
     }
 
     /**

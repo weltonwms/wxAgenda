@@ -23,13 +23,13 @@
 
                         <div class="form-group">
                             <label for="subject">Assunto *</label>
-                            {{ Form::text('subject', null, ['class' => "form-control", 'id' => 'subject']) }}
+                            <input type="text" name="subject" id="subject" class="form-control">
                             <div class="text-danger error-message" id="error-subject"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="body">Texto *</label>
-                            {{Form::textarea('body', null, ['rows' => 3, 'class' => 'form-control', 'id' => 'body'])}}
+                            <textarea name="body" id="body" rows="3" class="form-control"></textarea>
                             <div class="text-danger error-message" id="error-body"></div>
                         </div>
 

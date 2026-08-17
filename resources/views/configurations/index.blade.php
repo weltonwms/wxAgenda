@@ -10,39 +10,38 @@
                 <div class="card-body">
                     <div class="form-row">
 
-                        {!! Form::open(['route'=>'configurations.save','class'=>'','id'=>'ConfigurationForm'])!!}
+                        <form method="POST" action="{{ route('configurations.save') }}" id="ConfigurationForm">
+                        @csrf
                         <div class="col-md-12">
                             <label for="" class="control-label yesno">Agendamento Ativo</label>
-                            {{ Form::bsYesno('agendamento_ativo',$configuracoes['agendamento_ativo']) }}
+                            <x-form.yesno name="agendamento_ativo" :value="$configuracoes['agendamento_ativo']" />
                         </div>
                         <div class="col-md-12 mt-3">
 
-                            {{ Form::bsNumber('celula_limit',$configuracoes['celula_limit'],['label'=>"Limite de Alunos por Célula de Aula",'min'=>'1']) }}
+                            <x-form.number name="celula_limit" :value="$configuracoes['celula_limit']" label="Limite de Alunos por Célula de Aula" min="1" />
                         </div>
 
                         <div class="col-md-12 mt-3">
                             <label for="" class="control-label yesno">Desmarcação Permitida</label>
-                            {{ Form::bsYesno('desmarcacao_permitida',$configuracoes['desmarcacao_permitida']) }}
+                            <x-form.yesno name="desmarcacao_permitida" :value="$configuracoes['desmarcacao_permitida']" />
                         </div>
 
 
                         <div class="col-md-12 mt-3 bloco_desmarcacao_permitida">
 
-                            {{ Form::bsNumber('desmarcacao_limit_by_month',$configuracoes['desmarcacao_limit_by_month'],
-                            ['label'=>"Limite de Desmarcação de Aulas por Mês",'min'=>'0']) }}
+                            <x-form.number name="desmarcacao_limit_by_month" :value="$configuracoes['desmarcacao_limit_by_month']" label="Limite de Desmarcação de Aulas por Mês" min="0" />
                         </div>
 
                         <div class="col-md-12 mt-3 bloco_desmarcacao_permitida">
 
-                            {{ Form::bsNumber('desmarcacao_hours_before',$configuracoes['desmarcacao_hours_before'],
-                            ['label'=>"Horas de Antecedência para desmarcar Aula",'min'=>'0']) }}
+                            <x-form.number name="desmarcacao_hours_before" :value="$configuracoes['desmarcacao_hours_before']" label="Horas de Antecedência para desmarcar Aula" min="0" />
                         </div>
 
                         <div class="col-md-12 mt-5">
                             <button type="submit" class="btn btn-primary">Salvar Configurações</button>
                         </div>
 
-                        {!! Form::close() !!}
+                        </form>
                     </div>
 
 

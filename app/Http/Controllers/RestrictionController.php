@@ -27,8 +27,9 @@ class RestrictionController extends Controller
         $dados = [
             'modulesList'=> \App\Models\Module::getList(),
             'disciplinasList' => \App\Models\Disciplina::getList(),
+            'restriction' => new Restriction(),
         ];
-        
+
         return view('restrictions.create', $dados);
     }
 

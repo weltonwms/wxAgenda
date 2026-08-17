@@ -1,25 +1,28 @@
-{{-- resources/views/components/form/time.blade.php --}}
-<?php
-//Nesse Componente não é necessário passar id ou label. O label repete o name com ucFirst, 
-//porém se o label for diferente terá que passar como atributo
+@props([
+    'name',
+    'value' => null,
+    'label' => null,
+])
 
-$class_erro = $errors->has($name) ? 'has-danger' : '';
-$label=null; //valor padrão para o Form::label automatizar o for label e valor.
-if (isset($attributes['label']) ):
-    $label=$attributes['label'];
-    unset($attributes['label']);
-endif;
-$classes='';
-if (isset($attributes['class']) ):
-    $classes=$attributes['class'];
-    unset($attributes['class']);
-endif;
+@php
+    if ($value instanceof \DateTimeInterface) {
+        $value = $value->format('H:i');
+    }
+    $current = old($name, $value);
+    $hasError = $errors->has($name);
+    $labelText = $label ?: str_replace('_', ' ', ucfirst($name));
+@endphp
 
-?>
-<div class="form-group {{$class_erro}} ">
-    {{ Form::label($name, $label, ['class' => 'control-label']) }}
-    {{ Form::time($name, $value, array_merge(['class' => "form-control $classes"], $attributes)) }}
-    @if($class_erro)
-    <div class='invalid-feedback'> {{$errors->first($name)}}</div>
+<div class="form-group {{ $hasError ? 'has-danger' : '' }}">
+    <label class="control-label" for="{{ $name }}">{{ $labelText }}</label>
+    <input
+        type="time"
+        name="{{ $name }}"
+        id="{{ $name }}"
+        value="{{ $current }}"
+        {{ $attributes->merge(['class' => 'form-control']) }}
+    >
+    @if ($hasError)
+        <div class="invalid-feedback">{{ $errors->first($name) }}</div>
     @endif
 </div>

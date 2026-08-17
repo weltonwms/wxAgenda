@@ -49,17 +49,14 @@ type="button" href="#">
 </a>
 
 <div class="collapse" id="formReply">
-{!! Form::open(['route'=>'replies.store','class'=>'','id'=>'adminForm'])!!}
+<form method="POST" action="{{ route('replies.store') }}" id="adminForm">
+@csrf
 <input type="hidden" value="{{$message->id}}" name="message_id">
     <div class="row">
         <div class="col-lg-12">
             <div class="form-group">
-                <label for="replyText">Texto</label>
-                {{Form::textarea('reply_text',null, ['rows'=>3,'class'=>'form-control','id'=>'reply_text'])}}
-                
-                @if($errors->has('reply_text'))
-                <div class='invalid-feedback'> {{$errors->first('reply_text')}}</div>
-                @endif
+                <label for="reply_text">Texto</label>
+                <x-form.textarea name="reply_text" rows="3" id="reply_text" />
             </div>           
         </div>
     </div>
@@ -78,7 +75,7 @@ type="button" href="#">
             </div>
         </div>
     </div>
-    {!! Form::close() !!}
+    </form>
 </div>
 
 @push('scripts')

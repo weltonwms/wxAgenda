@@ -19,18 +19,18 @@
         <div class="row">
             <div class="col-sm-12">
                 <label for="" class="control-label yesno">Professor Ativo *</label>
-                {{ Form::bsYesno('active','1') }} 
+                <x-form.yesno name="active" :value="$teacher->active ?? null" default="1" />
             </div>
 
             <div class="col-lg-12">
-                {{ Form::bsText('nome',null,['label'=>"Nome *",'class'=>""]) }}
-                {{ Form::bsText('email',null,['label'=>"Email ",'class'=>""]) }}
-                {{ Form::bsText('telefone',null,['label'=>"Telefone ",'class'=>""]) }}
+                <x-form.text name="nome" :value="$teacher->nome ?? null" label="Nome *" />
+                <x-form.text name="email" :value="$teacher->email ?? null" label="Email " />
+                <x-form.text name="telefone" :value="$teacher->telefone ?? null" label="Telefone " />
 
             </div>
-            
+
             <div class="col-md-12">
-                {{ Form::bsText('chat_id',null,['label'=>"Telegram Chat Id",'class'=>"",'readonly'=>'readonly']) }}
+                <x-form.text name="chat_id" :value="$teacher->chat_id ?? null" label="Telegram Chat Id" readonly="readonly" />
             </div>
 
 

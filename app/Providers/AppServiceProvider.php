@@ -29,12 +29,5 @@ class AppServiceProvider extends ServiceProvider
         Blade::aliasComponent('components.toolbar', 'toolbar');
         Blade::aliasComponent('components.datatables', 'datatables');
         Blade::aliasComponent('components.formgroup', 'formgroup');
-        \Form::component('bsText', 'components.form.text', ['name', 'value' => null, 'attributes' => []]);
-        \Form::component('bsNumber', 'components.form.number', ['name', 'value' => null, 'attributes' => []]);
-        \Form::component('bsDate', 'components.form.date', ['name', 'value' => null, 'attributes' => []]);
-        \Form::component('bsTime', 'components.form.time', ['name', 'value' => null, 'attributes' => []]);
-        \Form::component('bsPassword', 'components.form.password', ['name',  'attributes' => []]);
-        \Form::component('bsSelect', 'components.form.select', ['name', 'list'=>[],'value'=>null, 'attributes' => []]);
-        \Form::component('bsYesno', 'components.form.yesno',['name','default'=>null] );
     }
 }

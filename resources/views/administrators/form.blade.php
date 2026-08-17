@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-lg-12">
-        {{ Form::bsText('nome',null,['label'=>"Nome *",'class'=>""]) }}
-         
+        <x-form.text name="nome" :value="$administrator->nome ?? null" label="Nome *" />
+
         @include('users.form')
     </div>
 
-    
+
 </div>

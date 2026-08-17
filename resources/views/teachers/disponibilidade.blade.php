@@ -37,7 +37,7 @@ $horarios_escola=$horariosList;
 </div>
 
 
-{{ Form::hidden('disponibilidade',null,['class'=>"form-control", 'id'=>'disponibilidade']) }}
+<input type="hidden" name="disponibilidade" id="disponibilidade" class="form-control" value="{{ old('disponibilidade', $teacher->disponibilidade ?? '') }}">
 
 
 @push('scripts')

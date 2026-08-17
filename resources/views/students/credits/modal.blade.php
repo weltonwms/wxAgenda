@@ -11,10 +11,10 @@
             </div>
             <div class="modal-body">
                 <div class="ajaxError" style="color:red"></div>
-                {!! Form::open(['route'=>'credits.store','class'=>'','id'=>'adminForm2'])!!}
-                
+                <form method="POST" action="{{ route('credits.store') }}" id="adminForm2">
+                    @csrf
                     @include('students.credits.form')
-                {!! Form::close() !!}
+                </form>
 
 
             </div>

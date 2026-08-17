@@ -29,8 +29,9 @@ class AulaController extends Controller
         $dados = [
             'modulesList'=> \App\Models\Module::getList(),
             'disciplinasList' => \App\Models\Disciplina::getList(),
+            'aula' => new Aula(),
         ];
-        
+
         return view('aulas.create', $dados);
     }
 

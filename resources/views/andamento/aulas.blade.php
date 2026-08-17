@@ -37,18 +37,25 @@
     <form action="{{route('andamento_aulas')}}">
         <div class='row'>
             <div class="col-sm-2">
-                {!!Form::bsSelect('module_id', $modulesList,
-                $requestModuleId,
-                ['onchange'=>"this.form.submit()","class"=>"select2",
-                "label"=>"Módulo"]
-                )!!}
+                <x-form.select
+                    name="module_id"
+                    :list="$modulesList"
+                    :value="$requestModuleId"
+                    label="Módulo"
+                    class="select2"
+                    onchange="this.form.submit()"
+                />
             </div> 
             <div class="col-sm-2">
-                {!!Form::bsSelect('disciplina_id', $disciplinasList,
-                request('disciplina_id'),
-                ['onchange'=>"this.form.submit()","class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Disciplina"]
-                )!!}
+                <x-form.select
+                    name="disciplina_id"
+                    :list="$disciplinasList"
+                    :value="request('disciplina_id')"
+                    label="Disciplina"
+                    placeholder="-Selecione-"
+                    class="select2"
+                    onchange="this.form.submit()"
+                />
             </div>
         </div>
     </form>

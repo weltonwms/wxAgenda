@@ -1,11 +1,12 @@
 <h5 class="text-center">Mudar sua Senha</h5>
 
-{{ Form::open(array('url' => 'perfil/changePassword')) }}
+<form method="POST" action="{{ url('perfil/changePassword') }}">
+    @csrf
 
 <div class="row">
     <div class="col-md-6 offset-md-3">
-        {{ Form::bsPassword('password',['label'=>'Entre com a Nova Senha:']) }}
-        {{ Form::bsPassword('password_confirmation',['label'=>'Confirme a Nova Senha:']) }}
+        <x-form.password name="password" label="Entre com a Nova Senha:" />
+        <x-form.password name="password_confirmation" label="Confirme a Nova Senha:" />
     </div>
 </div>
 
@@ -15,5 +16,5 @@
 </div>
 
 
-{!! Form::close() !!}
+</form>
 <br>

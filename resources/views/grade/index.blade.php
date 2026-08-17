@@ -25,7 +25,7 @@
 <input type="hidden" id="horarios_validos" value="{{$horariosList}}" class="form-control">
 <div class="tile row">
     <div class="col-sm-12">
-    {{ Form::bsSelect('teacher_id',$teachersList,old('teacher_id'),['label'=>"Escolha o Professor:"]) }}
+    <x-form.select name="teacher_id" :list="$teachersList" :value="old('teacher_id')" label="Escolha o Professor:" />
     </div>
 
 

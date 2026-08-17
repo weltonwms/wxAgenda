@@ -22,15 +22,12 @@
 @section('content')
 
 <div class="tile tile-nomargin">
-{!! Form::open(['route'=>'relatorio.andamento','id'=>'form_pesquisa'])!!}
+<form method="POST" action="{{ route('relatorio.andamento') }}" id="form_pesquisa">
+        @csrf
         <div class='row'>
 
             <div class="col-sm-12">
-                {!!Form::bsSelect('student_id', $studentsList,
-                request('student_id'),
-                ["class"=>"select2", "placeholder"=>"-Selecione-",
-                "label"=>"Aluno"]
-                )!!}
+                <x-form.select name="student_id" :list="$studentsList" :value="request('student_id')" label="Aluno" placeholder="-Selecione-" class="select2" />
                 <small style="margin-top:-1rem; margin-bottom:0.7rem;" 
                     class="form-text text-muted">
                     Não Selecione Aluno se quiser ver todos de seus módulos Correntes
@@ -40,21 +37,13 @@
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('module_id', $modulesList,
-                    $requestModuleId,
-                    ["class"=>"select2",
-                    "label"=>"Módulo"]
-                )!!}
+                <x-form.select name="module_id" :list="$modulesList" :value="$requestModuleId" label="Módulo" class="select2" />
             </div>           
 
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('disciplina_id', $disciplinasList,
-                request('disciplina_id'),
-                ["class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Disciplina"]
-                )!!}
+                <x-form.select name="disciplina_id" :list="$disciplinasList" :value="request('disciplina_id')" label="Disciplina" placeholder="-Selecione-" class="select2" />
             </div>
 
         </div>

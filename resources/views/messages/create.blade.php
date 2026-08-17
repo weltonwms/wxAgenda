@@ -1,17 +1,14 @@
 <div class="tile">
-    {!! Form::open(['route'=>['messages.store',request()->query()],'class'=>'','id'=>'adminForm'])!!}
+    <form method="POST" action="{{ route('messages.store', request()->query()) }}" id="adminForm">
+    @csrf
     <div class="row">
         <div class="col-lg-12">
-        {{ Form::bsSelect('recipient_id',$usersList,null,['label'=>"Para *", 'placeholder' => '--Selecione--','class'=>'select2']) }}
-        {{ Form::bsText('subject',null,['label'=>"Assunto *",'class'=>""]) }}
+        <x-form.select name="recipient_id" :list="$usersList" label="Para *" placeholder="--Selecione--" class="select2" />
+        <x-form.text name="subject" label="Assunto *" />
 
             <div class="form-group">
                 <label for="body">Texto</label>
-                {{Form::textarea('body',null, ['rows'=>3,'class'=>'form-control','id'=>'body'])}}
-                
-                @if($errors->has('body'))
-                <div class='invalid-feedback'> {{$errors->first('body')}}</div>
-                @endif
+                <x-form.textarea name="body" rows="3" id="body" />
             </div>
 
            
@@ -36,5 +33,5 @@
     </div>
 
 
-    {!! Form::close() !!}
+    </form>
 </div>

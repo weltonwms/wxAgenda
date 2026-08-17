@@ -24,7 +24,9 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        return view('modules.create');
+        return view('modules.create', [
+            'module' => new Module(),
+        ]);
     }
 
     /**

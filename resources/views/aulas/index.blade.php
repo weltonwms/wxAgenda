@@ -23,21 +23,31 @@
         <div class='row'>
             <div class="col-xl-2 col-md-4">
 
-                {!!Form::bsSelect('module_id', $modulesList,
-                request('module_id'),
-                ['onchange'=>"this.form.submit()","class"=>"select2", 'style'=>'width:100%',
-                "placeholder"=>"-Selecione-", "label"=>"Filtro Módulo"]
-                )!!}
+                <x-form.select
+                    name="module_id"
+                    :list="$modulesList"
+                    :value="request('module_id')"
+                    label="Filtro Módulo"
+                    placeholder="-Selecione-"
+                    class="select2"
+                    style="width:100%"
+                    onchange="this.form.submit()"
+                />
             </div>
 
            
             <div class="col-xl-2 col-md-4">
 
-                {!!Form::bsSelect('disciplina_id', $disciplinasList,
-                request('disciplina_id'),
-                ['onchange'=>"this.form.submit()","class"=>"select2", 'style'=>'width:100%',
-                "placeholder"=>"-Selecione-","label"=>"Filtro Disciplina"]
-                )!!}
+                <x-form.select
+                    name="disciplina_id"
+                    :list="$disciplinasList"
+                    :value="request('disciplina_id')"
+                    label="Filtro Disciplina"
+                    placeholder="-Selecione-"
+                    class="select2"
+                    style="width:100%"
+                    onchange="this.form.submit()"
+                />
             </div>
 
             <div class="col-xl-8 col-md-4">

@@ -1,28 +1,23 @@
-{{-- resources/views/components/form/yesno.blade.php --}}
-<?php
+@props([
+    'name',
+    'value' => null,
+    'default' => null,
+])
 
+@php
+    $current = old($name, $value);
+    if ($current === null || $current === '') {
+        $current = $default;
+    }
+    $isYes = (string) $current === '1';
+    $isNo = (string) $current === '0';
+@endphp
 
-$vlModel=Form::getValueAttribute($name);
-if(!is_numeric($vlModel)){
-    $vlModel=$default;
-}
-
-
-$activeYes=$vlModel=="1"?'active':'';
-$activeNo=$vlModel=="0"?'active':'';
-
-$valueYes=$vlModel=="1"?true:null;
-$valueNo=$vlModel=="0"?true:null;
-
-?>
-<div class="btn-group groupyesno btn-group-toggle" data-toggle="buttons">
-    
-    <label class="btn yes btn-outline-secondary {{$activeYes}}">
-        {{Form::radio($name, '1', $valueYes)}}Sim
-      
+<div {{ $attributes->class(['btn-group', 'groupyesno', 'btn-group-toggle']) }} data-toggle="buttons">
+    <label class="btn yes btn-outline-secondary {{ $isYes ? 'active' : '' }}">
+        <input type="radio" name="{{ $name }}" value="1" @checked($isYes)> Sim
     </label>
-    <label class="btn no btn-outline-secondary  {{$activeNo}} ">
-        {{Form::radio($name, '0', $valueNo)}}
-         Não
+    <label class="btn no btn-outline-secondary {{ $isNo ? 'active' : '' }}">
+        <input type="radio" name="{{ $name }}" value="0" @checked($isNo)> Não
     </label>
-  </div>
+</div>

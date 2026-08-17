@@ -2,9 +2,9 @@
 
 @section('edit-content')
 
-{!! Form::model($module,['route'=>['modules.update',$module->id],'class'=>'','id'=>'adminForm','method'=>'PUT'])!!}
-        @include('modules.form')
-
-
-{!! Form::close() !!}
+<form method="POST" action="{{ route('modules.update', $module->id) }}" id="adminForm">
+    @csrf
+    @method('PUT')
+    @include('modules.form')
+</form>
 @endsection

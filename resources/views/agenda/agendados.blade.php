@@ -67,42 +67,51 @@ $modulesList->prepend('Todos','all');
         <div class='row'>
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('module_id', $modulesList,
-                $requestModuleId,
-                ['onchange'=>"this.form.submit()","class"=>"select2",
-                "label"=>"Módulo"]
-                )!!}
+                <x-form.select
+                    name="module_id"
+                    :list="$modulesList"
+                    :value="$requestModuleId"
+                    label="Módulo"
+                    class="select2"
+                    onchange="this.form.submit()"
+                />
             </div>
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('teacher_id', $teachersList,
-                request('teacher_id'),
-                ['onchange'=>"this.form.submit()","class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Professor"]
-                )!!}
+                <x-form.select
+                    name="teacher_id"
+                    :list="$teachersList"
+                    :value="request('teacher_id')"
+                    label="Professor"
+                    placeholder="-Selecione-"
+                    class="select2"
+                    onchange="this.form.submit()"
+                />
             </div>
 
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('disciplina_id', $disciplinasList,
-                request('disciplina_id'),
-                ['onchange'=>"this.form.submit()","class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Disciplina"]
-                )!!}
+                <x-form.select
+                    name="disciplina_id"
+                    :list="$disciplinasList"
+                    :value="request('disciplina_id')"
+                    label="Disciplina"
+                    placeholder="-Selecione-"
+                    class="select2"
+                    onchange="this.form.submit()"
+                />
             </div>
 
 
             <div class="col-sm-3">
-                {{ Form::bsDate('start', request('start'),['label'=>'Período >=', 
-            'class'=>'form-control-sm','onchange'=>"this.form.submit()"]) }}
+                <x-form.date name="start" :value="request('start')" label="Período >=" class="form-control-sm" onchange="this.form.submit()" />
             </div>
 
 
             <div class="col-sm-3">
-                {{ Form::bsDate('end', request('end'),['label'=>'Período <=', 
-            'class'=>'form-control-sm','onchange'=>"this.form.submit()"]) }}
+                <x-form.date name="end" :value="request('end')" label="Período <=" class="form-control-sm" onchange="this.form.submit()" />
             </div>
 
 

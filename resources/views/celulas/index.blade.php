@@ -15,9 +15,10 @@
 <div class="tile row">
 
     <div class="col-sm-3">
-        {!! Form::open(['route'=>'celulasBath.store','class'=>'formDisponibilidade','id'=>'adminForm'])!!}
+        <form method="POST" action="{{ route('celulasBath.store') }}" class="formDisponibilidade" id="adminForm">
+        @csrf
 
-        {{ Form::bsSelect('teacher_id',$teachersList,old('teacher_id'),['label'=>"Escolha o Professor:"]) }}
+        <x-form.select name="teacher_id" :list="$teachersList" :value="old('teacher_id')" label="Escolha o Professor:" />
 
 
         <div class="bg-light border p-2 mb-3">
@@ -25,16 +26,16 @@
                 <h6 class="text-center">Construtor de Disponibilidade</h6>
             </div>
 
-            {{ Form::bsDate('periodo_inicio',null,['label'=>"Início:",'class'=>'form-control-sm ']) }}
-            {{ Form::bsDate('periodo_fim',null,['label'=>"Fim:",'class'=>'form-control-sm ']) }}
-            
+            <x-form.date name="periodo_inicio" label="Início:" class="form-control-sm " />
+            <x-form.date name="periodo_fim" label="Fim:" class="form-control-sm " />
+
 
             <div class="form-group">
                 <button class="btn btn-outline-primary">Executar</button>
             </div>
         </div>
 
-        {!! Form::close() !!}
+        </form>
 
     </div>
 

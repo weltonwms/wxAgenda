@@ -21,11 +21,15 @@
         <div class='row'>
             <div class="col-xl-2 col-md-4" style="margin-bottom:-16px">
 
-                {!!Form::bsSelect('filter_ativo', [1=>'Ativo',0=>'Inativo'],
-                    session('student_filter_ativo',1),
-                ['onchange'=>"this.form.submit()","class"=>"select2", 'style'=>'width:100%',
-                 "label"=>"Filtro Ativo"]
-                )!!}
+                <x-form.select
+                    name="filter_ativo"
+                    :list="[1 => 'Ativo', 0 => 'Inativo']"
+                    :value="session('student_filter_ativo', 1)"
+                    label="Filtro Ativo"
+                    class="select2"
+                    style="width:100%"
+                    onchange="this.form.submit()"
+                />
             </div>
 
         </div>

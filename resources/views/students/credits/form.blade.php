@@ -6,16 +6,16 @@ $operacoes=['+'=>'Add +','-'=>'Retirar -']
 <div class="row">
     <div class="col-sm-6 ">
 
-        {{ Form::bsNumber('qtd',null,['label'=>"Qtd *",'min'=>'1']) }}
+        <x-form.number name="qtd" label="Qtd *" min="1" />
 
     </div>
 
     <div class="col-sm-6">
-        {{ Form::bsSelect('operacao',$operacoes,null,['label'=>"Operação *"]) }}
+        <x-form.select name="operacao" :list="$operacoes" label="Operação *" />
     </div>
 
     <div class="col-sm-12">
-        {{ Form::bsText('obs',null,['label'=>"Observação *"]) }}
+        <x-form.text name="obs" label="Observação *" />
     </div>
 
 

@@ -25,11 +25,13 @@ Aulas'])
     <input type="hidden" id="horarios_validos" value="{{$horariosList}}" class="form-control">
    
     <div class="col-sm-3" >
-    {!!Form::bsSelect('module_id', $student->getModules()->pluck('nome','id'),
-        $student->module_id,
-        ["class"=>"s form-control-sm",
-        "label"=>"Módulo"]
-        )!!}
+    <x-form.select
+        name="module_id"
+        :list="$student->getModules()->pluck('nome','id')"
+        :value="$student->module_id"
+        label="Módulo"
+        class="s form-control-sm"
+    />
         <div id="jstree_list_aulas"></div>
     </div>
 

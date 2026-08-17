@@ -43,7 +43,7 @@
             <i class="fa fa-commenting text-success" aria-hidden="true"></i>
             Comentários gerais sobre o aluno
         </p>
-        {{ Form::textarea('observacao', null, ['class' => "form-control"]) }}
+        <x-form.textarea name="observacao" :value="$student->observacao ?? null" />
     </div>
 
 </div>

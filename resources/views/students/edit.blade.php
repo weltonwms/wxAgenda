@@ -2,11 +2,11 @@
 
 @section('edit-content')
 
-{!! Form::model($student,['route'=>['students.update',$student->id],'class'=>'','id'=>'adminForm','method'=>'PUT'])!!}
-        @include('students.form')
-
-
-{!! Form::close() !!}
+<form method="POST" action="{{ route('students.update', $student->id) }}" id="adminForm">
+    @csrf
+    @method('PUT')
+    @include('students.form')
+</form>
 
 @include('students.credits.modal')
 @endsection

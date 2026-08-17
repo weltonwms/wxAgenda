@@ -28,72 +28,59 @@ $modulesList->prepend('Todos','all');
 
 
 <div class="tile tile-nomargin">
-{!! Form::open(['route'=>'relatorio.students2','id'=>'form_pesquisa'])!!}
+<form method="POST" action="{{ route('relatorio.students2') }}" id="form_pesquisa">
+        @csrf
         <div class='row'>
         <div class="col-sm-12">
 
-            {!!Form::bsSelect('student_id', $studentsList,
-                request('student_id'),
-            ["class"=>"select2", "placeholder"=>"-Selecione-",
-            "label"=>"Aluno"]
-            )!!}
+            <x-form.select name="student_id" :list="$studentsList" :value="request('student_id')" label="Aluno" placeholder="-Selecione-" class="select2" />
         </div>
 
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('module_id', $modulesList,
-                    request('module_id'),
-                ["class"=>"select2",
-                "label"=>"Módulo"]
-                )!!}
+                <x-form.select name="module_id" :list="$modulesList" :value="request('module_id')" label="Módulo" class="select2" />
             </div>
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('teacher_id', $teachersList,
-                request('teacher_id'),
-                ["class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Professor"]
-                )!!}
+                <x-form.select name="teacher_id" :list="$teachersList" :value="request('teacher_id')" label="Professor" placeholder="-Selecione-" class="select2" />
             </div>
 
 
             <div class="col-sm-2">
 
-                {!!Form::bsSelect('disciplina_id', $disciplinasList,
-                request('disciplina_id'),
-                ["class"=>"select2",
-                "placeholder"=>"-Selecione-","label"=>"Disciplina"]
-                )!!}
+                <x-form.select name="disciplina_id" :list="$disciplinasList" :value="request('disciplina_id')" label="Disciplina" placeholder="-Selecione-" class="select2" />
             </div>
 
 
             <div class="col-sm-3">
-                {{ Form::bsDate('start', request('start'),['label'=>'Período >=', 
-            'class'=>'form-control-sm']) }}
+                <x-form.date name="start" :value="request('start')" label="Período >=" class="form-control-sm" />
             </div>
 
 
             <div class="col-sm-3">
-                {{ Form::bsDate('end', request('end'),['label'=>'Período <=', 
-            'class'=>'form-control-sm']) }}
+                <x-form.date name="end" :value="request('end')" label="Período <=" class="form-control-sm" />
             </div>
 
             <div class="col-sm-2">
-                {!!Form::bsSelect('ordenado_por', [1=>"Dia/Horário", 2=>"Aula Sigla", 3=> 'Nome Professor'],
-                request('ordenado_por'),
-                ["class"=>"select2",
-                "label"=>"Ordenado Por"]
-                )!!}
+                <x-form.select
+                    name="ordenado_por"
+                    :list="[1 => 'Dia/Horário', 2 => 'Aula Sigla', 3 => 'Nome Professor']"
+                    :value="request('ordenado_por')"
+                    label="Ordenado Por"
+                    class="select2"
+                />
             </div>
 
             <div class="col-sm-2">
-                {!!Form::bsSelect('ordem', [1=>"Decrescente", 2=>"Crescente"],
-                request('ordem'),
-                ["class"=>"select2",
-                "label"=>"Ordem"]
-                )!!}
+                <x-form.select
+                    name="ordem"
+                    :list="[1 => 'Decrescente', 2 => 'Crescente']"
+                    :value="request('ordem')"
+                    label="Ordem"
+                    class="select2"
+                />
             </div>
 
 

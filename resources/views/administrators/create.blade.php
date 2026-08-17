@@ -2,8 +2,8 @@
 
 @section('edit-content')
 
-{!! Form::open(['route'=>'administrators.store','class'=>'','id'=>'adminForm'])!!}
-                @include('administrators.form')
-
- {!! Form::close() !!}
+<form method="POST" action="{{ route('administrators.store') }}" id="adminForm">
+    @csrf
+    @include('administrators.form')
+</form>
 @endsection

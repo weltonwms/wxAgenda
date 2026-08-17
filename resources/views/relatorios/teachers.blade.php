@@ -21,19 +21,19 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tile">
-            {!! Form::open(['route'=>'relatorio.teachers','id'=>'form_pesquisa'])!!}
+            <form method="POST" action="{{ route('relatorio.teachers') }}" id="form_pesquisa">
+            @csrf
             <div class="row">
                 <div class="col-md-3">
-                    {{ Form::bsDate('periodo_inicio', request('periodo_inicio'),['label'=>'Período Início >=']) }}
+                    <x-form.date name="periodo_inicio" :value="request('periodo_inicio')" label="Período Início >=" />
                 </div>
                 <div class="col-md-3">
-                    {{ Form::bsDate('periodo_fim',request('periodo_fim'),['label'=>'Período Fim <=']) }}
+                    <x-form.date name="periodo_fim" :value="request('periodo_fim')" label="Período Fim <=" />
                 </div>
 
                 <div class="col-md-4">
                     @if(auth()->user()->isAdm)
-                    {{ Form::bsSelect('teacher_id',$teachers,request('teacher_id'),['label'=>"Professor", 
-                    'class'=>'select2',"placeholder"=>"-Selecione-"]) }} 
+                    <x-form.select name="teacher_id" :list="$teachers" :value="request('teacher_id')" label="Professor" class="select2" placeholder="-Selecione-" />
                     @endif
 
                     @if(auth()->user()->isTeacher)

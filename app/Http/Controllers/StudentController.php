@@ -27,6 +27,7 @@ class StudentController extends Controller
     {
         $dados=[
             'modulesList'=> \App\Models\Module::getList(),
+            'student' => new Student(),
         ];
         return view('students.create',$dados);
     }

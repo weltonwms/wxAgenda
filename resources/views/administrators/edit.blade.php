@@ -2,9 +2,9 @@
 
 @section('edit-content')
 
-{!! Form::model($administrator,['route'=>['administrators.update',$administrator->id],'class'=>'','id'=>'adminForm','method'=>'PUT'])!!}
-        @include('administrators.form')
-
-
-{!! Form::close() !!}
+<form method="POST" action="{{ route('administrators.update', $administrator->id) }}" id="adminForm">
+    @csrf
+    @method('PUT')
+    @include('administrators.form')
+</form>
 @endsection

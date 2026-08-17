@@ -1,4 +1,4 @@
-@if(isset($student))
+@if(isset($student) && $student->id)
 
 <div class="row">
     <div class="col-lg-6">

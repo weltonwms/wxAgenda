@@ -25,7 +25,9 @@ class AdministratorController extends Controller
      */
     public function create()
     {
-        return view('administrators.create');
+        return view('administrators.create', [
+            'administrator' => new Administrator(),
+        ]);
     }
 
     /**

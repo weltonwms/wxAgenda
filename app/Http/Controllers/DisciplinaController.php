@@ -24,7 +24,9 @@ class DisciplinaController extends Controller
      */
     public function create()
     {
-        return view('disciplinas.create');
+        return view('disciplinas.create', [
+            'disciplina' => new Disciplina(),
+        ]);
     }
 
     /**
