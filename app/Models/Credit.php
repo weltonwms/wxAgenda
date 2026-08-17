@@ -12,7 +12,9 @@ class Credit extends Model
 
     public $timestamps = false;
 
-    protected $dates = ['data_acao'];
+    protected $casts = [
+        'data_acao' => 'datetime',
+    ];
 
     protected $appends = ['data_acao_br'];
 
