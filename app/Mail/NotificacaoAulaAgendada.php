@@ -50,11 +50,32 @@ class NotificacaoAulaAgendada extends Mailable
 
     public function send($mailer)
     {
+        Log::channel('daily_email_logs')->info('Tentando enviar e-mail', [
+        'para'    => $this->celula->teacher->email,
+        'assunto' => 'Nova Aula Agendada',
+        'aluno'   => $this->student->name,
+        'celula'  => $this->celula->id,
+        ]);
+        
+        
         try {
             parent::send($mailer);
+            Log::channel('daily_email_logs')->info('E-mail enviado com sucesso', [
+            'para'   => $this->celula->teacher->email,
+            'aluno'  => $this->student->name,
+            'celula' => $this->celula->id,
+            ]);
         } catch (\Exception $e) {
             // Trate a exceção e registre no log
-            Log::channel('daily_email_logs')->error('Erro no envio do e-mail: ' . $e->getMessage());
+            //Log::channel('daily_email_logs')->error('Erro no envio do e-mail: ' . $e->getMessage());
+            Log::channel('daily_email_logs')->error('Erro no envio do e-mail', [
+            'para'    => $this->celula->teacher->email,
+            'aluno'   => $this->student->name,
+            'celula'  => $this->celula->id,
+            'erro'    => $e->getMessage(),
+            'arquivo' => $e->getFile(),
+            'linha'   => $e->getLine(),
+        ]);
         }
     }
 }
