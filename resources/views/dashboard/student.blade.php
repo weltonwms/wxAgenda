@@ -5,8 +5,8 @@
                 <div class="card-header">Link Student Google Drive</div>
 
                 <div class="card-body">
-                   <a href="{{env('STUDENT_LINK_DRIVE', '#')}}" target="_blank">
-                   {{env('STUDENT_LINK_DRIVE', '')}}
+                   <a href="{{ config('integrations.drive.student') ?: '#' }}" target="_blank">
+                   {{ config('integrations.drive.student') }}
                    </a>
                    <br><br>
                 </div>

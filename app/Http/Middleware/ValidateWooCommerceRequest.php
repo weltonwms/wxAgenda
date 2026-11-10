@@ -26,7 +26,7 @@ class ValidateWooCommerceRequest
             return response()->json(['success' => false, 'message' => 'Nenhum body enviado'], 400);
         }
        
-         $webhookSecret = env('WC_WEBHOOK_SECRET');
+         $webhookSecret = config('integrations.woocommerce.webhook_secret');
 
          if (!$webhookSecret) {
              return response()->json(['success' => false, 'message' => 'Webhook secret not configured'], 500);

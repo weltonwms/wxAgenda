@@ -16,7 +16,7 @@ class SSOController extends Controller
 
     public function __construct()
     {
-        $this->secretKey = env('SSO_SECRET_KEY');
+        $this->secretKey = config('integrations.sso.secret');
     }
 
     public function authenticate(Request $request)

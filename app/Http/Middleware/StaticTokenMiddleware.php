@@ -20,7 +20,7 @@ class StaticTokenMiddleware
         file_put_contents(storage_path('logs/payment.log'), "\n=============================================================================================================\n", FILE_APPEND);
         Log::channel('payment')->info("Request Captured Before Middleware:\n" . json_encode($request->all(), JSON_PRETTY_PRINT));
 
-        $staticToken = env('STATIC_TOKEN_API');
+        $staticToken = config('integrations.tokens.api');
 
         if (!$staticToken) {
             return response()->json(['success' => false, 'message' => 'STATIC_TOKEN_API not configured'], 500);

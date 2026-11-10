@@ -17,7 +17,7 @@ class StaticTokenStudent
     public function handle(Request $request, Closure $next)
     {
        
-        $staticToken = env('STATIC_TOKEN_STUDENTS_API');
+        $staticToken = config('integrations.tokens.students');
         // Token pode ser passado no header ou como query parameter
         $providedToken = $request->header('Authorization') ?: $request->query('token');
         // Verifica se o token no cabeçalho segue o formato "Bearer {token}"

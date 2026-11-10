@@ -12,8 +12,8 @@ class TelegramHelper
         if(!$chat_id){
             return false; //não tem como mandar sem chat_id;
         }
-        $base_url = env('TELEGRAM_BASE_URL', '');
-        $token = env('TELEGRAM_TOKEN', '');
+        $base_url = config('integrations.telegram.base_url', '');
+        $token = config('integrations.telegram.token', '');
         $url = $base_url . "/bot" . $token . "/sendMessage";
        
         $ch = curl_init($url);
